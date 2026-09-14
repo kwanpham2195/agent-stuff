@@ -152,7 +152,7 @@ The local `recall` skill is excluded until its upstream provenance and redistrib
 
 `pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers. Review the complete file before activating it. Pi may download and execute every third-party entry in `packages` when it loads the active settings.
 
-`pi/mcp.example.json` configures Linear through `mcp-remote` and a local zvec-grep server. Remove either server if you do not use it. Authentication remains in each service's credential storage and is not included here.
+`pi/mcp.example.json` configures Linear through `mcp-remote` and a local zvec-grep server. Remove either server if you do not use it. Authentication remains in each service's credential storage and is not included here. See [Set up zvec-grep](docs/zvec-grep.md) for installation, indexing, Pi MCP configuration, privacy, and removal.
 
 Activate either example explicitly after review:
 
