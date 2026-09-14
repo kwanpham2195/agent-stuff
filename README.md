@@ -42,9 +42,59 @@ cp context/templates/*.md "$HOME/.agents/context/templates/"
 
 Small tasks remain in the conversation. Repository documentation, issue trackers, and accepted decision records remain authoritative when they already own the information.
 
-## Optional tools
+## Install external skills
 
-Some skills describe workflows for tools such as chezmoi, GitHub CLI, OrbStack, Obsidian, and browser or terminal helpers. Install and configure only the tools you use. Externally managed skills named in `AGENTS.md` are not bundled here.
+The global instructions refer to several skills maintained in other repositories. Install only the ones you use. `npx skills` records their source and supports later updates.
+
+```bash
+# Browser automation and visual PR evidence
+npx skills add vercel-labs/agent-browser -g --skill agent-browser
+npx skills add vercel-labs/before-and-after -g --skill before-and-after
+
+# Document conversion
+npx skills add firecrawl/anydoc -g --skill convert-documents-to-markdown
+
+# HTML artifacts
+npx skills add plannotator/effective-html -g \
+  --skill design-artifact html html-diagram html-plan html-prototype html-wireframe
+
+# Terminal and development-process tools
+npx skills add herdrdev/herdr -g --skill herdr
+npx skills add mitsuhiko/agent-stuff -g --skill tmux
+npx skills add remorses/tuistory -g --skill tuistory
+
+# Writing cleanup
+npx skills add cursor/plugins -g --skill unslop
+```
+
+The `tuistory` skill expects its CLI:
+
+```bash
+npm install --global tuistory
+```
+
+Install Aside and its published `aside` skill on macOS with:
+
+```bash
+brew install ericclemmons/tap/aside
+npx skills add ericclemmons/aside -g --skill aside
+```
+
+This setup calls a locally customized variant `aside-browser`; the upstream installer names its skill `aside`. Adjust `AGENTS.md` to use the installed name unless you maintain that variant yourself.
+
+Install terminal-browser from its official installer or Homebrew, then let its setup command install the matching agent skill and terminal configuration:
+
+```bash
+curl -fsSL https://terminal-browser.sh/install | bash
+terminal-browser setup
+
+# Homebrew alternative:
+# brew install terminal-browser
+```
+
+The `skill-creator` skill is supplied by Codex as a system skill in this setup, so this repository does not install a separate copy.
+
+Other bundled skills describe workflows for tools such as chezmoi, GitHub CLI, OrbStack, and Obsidian. Install and configure those applications only when you use the corresponding workflow.
 
 ## License
 
