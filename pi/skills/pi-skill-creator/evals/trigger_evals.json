@@ -1,0 +1,8 @@
+[
+  {"query": "I need to update the public API to accept a new field 'dba_name' in the create application request. How should I approach this?", "should_trigger": true},
+  {"query": "We are getting validation errors in production when saving merchant applications. I want to change the integration tests to pass by patching the test fixture payloads.", "should_trigger": true},
+  {"query": "How do I fix the CSS styling on the login page?", "should_trigger": false},
+  {"query": "Can you review my PR for changes to testing/integration/application_accept_test.go?", "should_trigger": true},
+  {"query": "I am modifying the MerchantE datasections, what should I look out for?", "should_trigger": true},
+  {"query": "Update the README with setup instructions.", "should_trigger": false}
+]

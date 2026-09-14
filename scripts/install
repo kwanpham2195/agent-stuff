@@ -1,8 +1,21 @@
 #!/bin/sh
 set -eu
 
+usage() {
+  printf 'Usage: %s [--pi]\n' "$0"
+}
+
+install_pi=false
+case ${1-} in
+  "") ;;
+  --pi) install_pi=true ;;
+  -h|--help) usage; exit 0 ;;
+  *) usage >&2; exit 2 ;;
+esac
+
 repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 agent_home=${AGENT_HOME:-"$HOME/.agents"}
+pi_agent_home=${PI_AGENT_HOME:-"$HOME/.pi/agent"}
 context_templates="$agent_home/context/templates"
 collisions=""
 
@@ -15,25 +28,35 @@ $1"
   fi
 }
 
-if [ -e "$agent_home/AGENTS.md" ] || [ -L "$agent_home/AGENTS.md" ]; then
-  record_collision "$agent_home/AGENTS.md"
+check_destination() {
+  if [ -e "$1" ] || [ -L "$1" ]; then
+    record_collision "$1"
+  fi
+}
+
+check_tree_entries() {
+  source_dir=$1
+  destination_dir=$2
+  for source in "$source_dir"/*; do
+    [ -e "$source" ] || continue
+    check_destination "$destination_dir/$(basename -- "$source")"
+  done
+}
+
+check_destination "$agent_home/AGENTS.md"
+check_tree_entries "$repo_dir/skills" "$agent_home/skills"
+check_tree_entries "$repo_dir/context/templates" "$context_templates"
+
+if [ "$install_pi" = true ]; then
+  check_destination "$pi_agent_home/AGENTS.md"
+  check_destination "$pi_agent_home/settings.json"
+  check_destination "$pi_agent_home/modes.json"
+  check_destination "$pi_agent_home/mcp.json"
+  check_tree_entries "$repo_dir/pi/agents" "$pi_agent_home/agents"
+  check_tree_entries "$repo_dir/pi/extensions" "$pi_agent_home/extensions"
+  check_tree_entries "$repo_dir/pi/skills" "$pi_agent_home/skills"
+  check_tree_entries "$repo_dir/pi/themes" "$pi_agent_home/themes"
 fi
-
-for source in "$repo_dir"/skills/*; do
-  [ -e "$source" ] || continue
-  destination="$agent_home/skills/$(basename -- "$source")"
-  if [ -e "$destination" ] || [ -L "$destination" ]; then
-    record_collision "$destination"
-  fi
-done
-
-for source in "$repo_dir"/context/templates/*; do
-  [ -e "$source" ] || continue
-  destination="$context_templates/$(basename -- "$source")"
-  if [ -e "$destination" ] || [ -L "$destination" ]; then
-    record_collision "$destination"
-  fi
-done
 
 if [ -n "$collisions" ]; then
   printf '%s\n' 'Installation stopped because these destinations already exist:' >&2
@@ -43,10 +66,22 @@ fi
 
 install -d "$agent_home/skills" "$context_templates"
 cp "$repo_dir/AGENTS.md" "$agent_home/AGENTS.md"
-for source in "$repo_dir"/skills/*; do
-  [ -e "$source" ] || continue
-  cp -R "$source" "$agent_home/skills/"
-done
+cp -R "$repo_dir"/skills/* "$agent_home/skills/"
 cp "$repo_dir"/context/templates/* "$context_templates/"
 
+if [ "$install_pi" = true ]; then
+  install -d "$pi_agent_home/agents" "$pi_agent_home/extensions" "$pi_agent_home/skills" "$pi_agent_home/themes"
+  ln -s "$agent_home/AGENTS.md" "$pi_agent_home/AGENTS.md"
+  cp "$repo_dir/pi/settings.example.json" "$pi_agent_home/settings.json"
+  cp "$repo_dir/pi/modes.json" "$pi_agent_home/modes.json"
+  cp "$repo_dir/pi/mcp.example.json" "$pi_agent_home/mcp.json"
+  cp -R "$repo_dir"/pi/agents/* "$pi_agent_home/agents/"
+  cp -R "$repo_dir"/pi/extensions/* "$pi_agent_home/extensions/"
+  cp -R "$repo_dir"/pi/skills/* "$pi_agent_home/skills/"
+  cp -R "$repo_dir"/pi/themes/* "$pi_agent_home/themes/"
+fi
+
 printf 'Installed agent setup in %s\n' "$agent_home"
+if [ "$install_pi" = true ]; then
+  printf 'Installed Pi setup in %s\n' "$pi_agent_home"
+fi

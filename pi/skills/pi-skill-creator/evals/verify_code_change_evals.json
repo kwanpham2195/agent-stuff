@@ -1,0 +1,38 @@
+[
+  {
+    "query": "Please verify my code changes before we commit.",
+    "should_trigger": true
+  },
+  {
+    "query": "Run the format, lint, and tests pipeline.",
+    "should_trigger": true
+  },
+  {
+    "query": "I finished fixing the review comments, please run the verification gate.",
+    "should_trigger": true
+  },
+  {
+    "query": "run tests",
+    "should_trigger": true
+  },
+  {
+    "query": "run integration tests",
+    "should_trigger": true
+  },
+  {
+    "query": "run lint",
+    "should_trigger": true
+  },
+  {
+    "query": "Write a unit test for the application normalizer.",
+    "should_trigger": false
+  },
+  {
+    "query": "How do I format a date string in Go?",
+    "should_trigger": false
+  },
+  {
+    "query": "Review my PR for logic bugs and security issues.",
+    "should_trigger": false
+  }
+]

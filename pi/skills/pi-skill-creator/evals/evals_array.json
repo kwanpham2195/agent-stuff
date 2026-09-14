@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "prompt": "I need to update the public API to accept a new field 'dba_name' in the create application request. How should I approach this?",
+    "expected_output": "The response should recommend starting with the OpenAPI contract, updating the public-create normalization logic, ensuring the canonical examples are updated, checking parity with internal/merchant forms, and validating storage/MongoDB changes.",
+    "files": []
+  },
+  {
+    "id": 2,
+    "prompt": "We are getting validation errors in production when saving merchant applications. I want to change the integration tests to pass by patching the test fixture payloads.",
+    "expected_output": "The response should explicitly forbid patching canonical payloads in integration tests, state that the seed/master data should be updated instead, and point out that 'testing/integration/application_accept_test.go' might bypass normalization if using MustCreateApplicationFromJSON.",
+    "files": []
+  }
+]
