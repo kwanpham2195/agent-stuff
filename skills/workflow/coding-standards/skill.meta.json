@@ -1,0 +1,52 @@
+{
+  "applicability": [
+    "TypeScript coding standards",
+    "Go coding standards",
+    "domain modeling",
+    "typed errors",
+    "boundaries parsing tests and verification",
+    "Effect services layers schema streams scheduling and testing"
+  ],
+  "approved_cycles": [],
+  "context_weight": 3,
+  "do_not_use_when": [
+    "the task does not touch TypeScript Go design or code quality"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "code_context",
+    "design_context"
+  ],
+  "outputs": [
+    "coding_standard_guidance"
+  ],
+  "overlays": [],
+  "resources": [
+    "VOCABULARY.md",
+    "DOMAIN_MODELING.md",
+    "ERROR_HANDLING.md",
+    "OBSERVABILITY.md",
+    "DESIGNING_MODULES.md",
+    "BOUNDARIES_AND_PARSING.md",
+    "ASYNC_AND_WORKFLOWS.md",
+    "TESTING_AND_VERIFICATION.md",
+    "GO_CONTRACTS.md",
+    "GO_STYLE.md",
+    "TYPESCRIPT_CONTRACTS.md",
+    "CLOUDFLARE_ARCHITECTURE.md",
+    "EFFECT.md",
+    "EFFECT_SCHEMA_AND_DATA.md",
+    "EFFECT_SERVICES.md",
+    "EFFECT_CONFIGURATION.md",
+    "EFFECT_SCHEDULING_AND_RETRY.md",
+    "EFFECT_CACHING.md",
+    "EFFECT_STREAMS.md",
+    "EFFECT_HTTP_CLIENTS.md",
+    "EFFECT_TESTING.md",
+    "EFFECT_ALCHEMY.md"
+  ],
+  "role": "overlay",
+  "schema_version": 1,
+  "skill": "coding-standards",
+  "stop_when": "relevant topic files are selected and applied with the main skill"
+}

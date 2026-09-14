@@ -1,0 +1,52 @@
+#!/bin/sh
+set -eu
+
+repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+agent_home=${AGENT_HOME:-"$HOME/.agents"}
+context_templates="$agent_home/context/templates"
+collisions=""
+
+record_collision() {
+  if [ -z "$collisions" ]; then
+    collisions=$1
+  else
+    collisions="$collisions
+$1"
+  fi
+}
+
+if [ -e "$agent_home/AGENTS.md" ] || [ -L "$agent_home/AGENTS.md" ]; then
+  record_collision "$agent_home/AGENTS.md"
+fi
+
+for source in "$repo_dir"/skills/*; do
+  [ -e "$source" ] || continue
+  destination="$agent_home/skills/$(basename -- "$source")"
+  if [ -e "$destination" ] || [ -L "$destination" ]; then
+    record_collision "$destination"
+  fi
+done
+
+for source in "$repo_dir"/context/templates/*; do
+  [ -e "$source" ] || continue
+  destination="$context_templates/$(basename -- "$source")"
+  if [ -e "$destination" ] || [ -L "$destination" ]; then
+    record_collision "$destination"
+  fi
+done
+
+if [ -n "$collisions" ]; then
+  printf '%s\n' 'Installation stopped because these destinations already exist:' >&2
+  printf '%s\n' "$collisions" >&2
+  exit 1
+fi
+
+install -d "$agent_home/skills" "$context_templates"
+cp "$repo_dir/AGENTS.md" "$agent_home/AGENTS.md"
+for source in "$repo_dir"/skills/*; do
+  [ -e "$source" ] || continue
+  cp -R "$source" "$agent_home/skills/"
+done
+cp "$repo_dir"/context/templates/* "$context_templates/"
+
+printf 'Installed agent setup in %s\n' "$agent_home"

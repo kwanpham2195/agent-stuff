@@ -1,0 +1,28 @@
+{
+  "applicability": [
+    "fetch dependency source",
+    "inspect package internals",
+    "read upstream repository source"
+  ],
+  "approved_cycles": [],
+  "context_weight": 2,
+  "do_not_use_when": [
+    "official docs are sufficient and source internals are not needed"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "package_name",
+    "repository_name",
+    "version_context"
+  ],
+  "outputs": [
+    "local_source_path",
+    "upstream_source_findings"
+  ],
+  "overlays": [],
+  "resources": [],
+  "role": "leaf",
+  "schema_version": 1,
+  "skill": "librarian",
+  "stop_when": "dependency source path is available or fetch blocker is reported"
+}

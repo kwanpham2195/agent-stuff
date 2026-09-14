@@ -1,0 +1,25 @@
+{
+  "applicability": [
+    "OrbStack readiness",
+    "Docker on macOS",
+    "testcontainers local failures",
+    "inspect OrbStack machines"
+  ],
+  "approved_cycles": [],
+  "context_weight": 2,
+  "do_not_use_when": [],
+  "handoffs": [],
+  "inputs": [
+    "docker_or_orbstack_task"
+  ],
+  "outputs": [
+    "orbstack_status",
+    "docker_readiness"
+  ],
+  "overlays": [],
+  "resources": [],
+  "role": "leaf",
+  "schema_version": 1,
+  "skill": "orbstack",
+  "stop_when": "OrbStack or Docker state is confirmed or the startup blocker is reported"
+}

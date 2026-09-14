@@ -1,0 +1,31 @@
+{
+  "applicability": [
+    "manage dotfiles",
+    "PATH or shell configuration",
+    "Brewfile or package manager config",
+    "Codex config or local machine config drift"
+  ],
+  "approved_cycles": [],
+  "context_weight": 3,
+  "do_not_use_when": [
+    "the task edits project source code rather than machine configuration"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "config_task",
+    "machine_context",
+    "chezmoi_state"
+  ],
+  "outputs": [
+    "config_change",
+    "validation_report"
+  ],
+  "overlays": [],
+  "resources": [
+    "references/workflows.md"
+  ],
+  "role": "leaf",
+  "schema_version": 1,
+  "skill": "config-manager",
+  "stop_when": "configuration change is applied or a safe next action is reported"
+}

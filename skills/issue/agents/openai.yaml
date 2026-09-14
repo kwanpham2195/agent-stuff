@@ -1,0 +1,7 @@
+interface:
+  display_name: "Create Issue"
+  short_description: "Create and mature a tracker issue"
+  default_prompt: "Use $issue to capture this request as a durable issue and ask only the follow-up questions needed to make it ready."
+
+policy:
+  allow_implicit_invocation: true

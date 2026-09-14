@@ -1,0 +1,148 @@
+#!/usr/bin/env bash
+# obsidian-link — share one Obsidian config across many vaults.
+#
+# Ships with the `obsidian-vault-config` Claude Code skill; see the SKILL.md
+# next to this script for the full procedure and troubleshooting.
+#
+# Shared config lives in ~/.obsidian-shared (override with $OBSIDIAN_SHARED).
+# Shared:    plugins/ themes/ snippets/ + app appearance hotkeys core-plugins
+#            community-plugins  (all symlinked into each vault's .obsidian/)
+# Per-vault: workspace.json  graph.json  templates.json
+
+set -euo pipefail
+
+SHARED="${OBSIDIAN_SHARED:-$HOME/.obsidian-shared}"
+REGISTRY="$SHARED/vaults.txt"
+LINK_DIRS=(plugins themes snippets)
+LINK_FILES=(app.json appearance.json hotkeys.json core-plugins.json community-plugins.json)
+
+usage() {
+  cat <<USAGE
+obsidian-link — share one Obsidian config across many vaults
+
+  obsidian-link <vault> [vault...]   link (or re-link) vaults to the shared config
+  obsidian-link --relink-all         re-link every registered vault
+  obsidian-link --check              report link health, change nothing
+  obsidian-link --list               list registered vaults
+  obsidian-link --init               create an empty shared config (new machine)
+
+  --force   link even while Obsidian is running (it may clobber fresh links)
+
+Shared config: $SHARED
+USAGE
+}
+
+FORCE=0
+die() { echo "error: $*" >&2; exit 1; }
+
+obsidian_running() { pgrep -x Obsidian >/dev/null 2>&1; }
+
+register() {
+  touch "$REGISTRY"
+  grep -qxF "$1" "$REGISTRY" || echo "$1" >> "$REGISTRY"
+}
+
+# link_one <vault_abs> <name> <kind: dir|file> <backup_dir>
+link_one() {
+  local vault="$1" name="$2" backup="$3"
+  local dest="$vault/.obsidian/$name" src="$SHARED/$name"
+  [ -e "$src" ] || return 0
+
+  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
+    echo "    ok       $name"
+    return 0
+  fi
+  if [ -e "$dest" ] || [ -L "$dest" ]; then
+    mkdir -p "$backup"
+    mv "$dest" "$backup/"
+    echo "    backed up + relinked  $name"
+  else
+    echo "    linked   $name"
+  fi
+  ln -s "$src" "$dest"
+}
+
+link_vault() {
+  local vault
+  vault="$(cd "$1" 2>/dev/null && pwd)" || die "no such directory: $1"
+  echo "==> $vault"
+  mkdir -p "$vault/.obsidian"
+
+  local backup="$SHARED/backups/$(echo "${vault#$HOME/}" | tr '/' '_')-$(date +%Y%m%d-%H%M%S)"
+  local n
+  for n in "${LINK_DIRS[@]}" "${LINK_FILES[@]}"; do
+    link_one "$vault" "$n" "$backup"
+  done
+  [ -d "$backup" ] && echo "    backup:  $backup"
+  register "$vault"
+}
+
+init() {
+  mkdir -p "$SHARED"/{plugins,themes,snippets,backups}
+  touch "$REGISTRY"
+  echo "shared config ready at $SHARED"
+  echo "populate it from an existing vault, then: obsidian-link <vault>"
+}
+
+check() {
+  local bad=0 vault n dest
+  [ -s "$REGISTRY" ] || { echo "no vaults registered yet"; return 0; }
+  while IFS= read -r vault; do
+    [ -n "$vault" ] || continue
+    echo "==> $vault"
+    if [ ! -d "$vault/.obsidian" ]; then echo "    MISSING .obsidian"; bad=1; continue; fi
+    for n in "${LINK_DIRS[@]}" "${LINK_FILES[@]}"; do
+      [ -e "$SHARED/$n" ] || continue
+      dest="$vault/.obsidian/$n"
+      if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$SHARED/$n" ]; then
+        echo "    ok       $n"
+      elif [ -e "$dest" ]; then
+        echo "    DETACHED $n  (real file — Obsidian replaced the symlink)"; bad=1
+      else
+        echo "    absent   $n"; bad=1
+      fi
+    done
+  done < "$REGISTRY"
+  [ "$bad" -eq 0 ] && echo "all links healthy" || echo $'\nrun: obsidian-link --relink-all'
+  return 0
+}
+
+# --- arg parsing ---
+[ $# -gt 0 ] || { usage; exit 1; }
+
+VAULTS=()
+MODE=link
+for a in "$@"; do
+  case "$a" in
+    --force)      FORCE=1 ;;
+    --check)      MODE=check ;;
+    --list)       MODE=list ;;
+    --relink-all) MODE=relink ;;
+    --init)       MODE=init ;;
+    -h|--help)    usage; exit 0 ;;
+    -*)           die "unknown flag: $a" ;;
+    *)            VAULTS+=("$a") ;;
+  esac
+done
+
+case "$MODE" in
+  init)  init; exit 0 ;;
+  check) check; exit 0 ;;
+  list)  cat "$REGISTRY" 2>/dev/null || echo "no vaults registered yet"; exit 0 ;;
+esac
+
+[ -d "$SHARED" ] || die "shared config not found at $SHARED — run: obsidian-link --init"
+
+if obsidian_running && [ "$FORCE" -eq 0 ]; then
+  die "Obsidian is running — quit it first (it rewrites config on exit and would clobber fresh links). Override with --force."
+fi
+
+if [ "$MODE" = relink ]; then
+  [ -s "$REGISTRY" ] || die "no vaults registered yet"
+  while IFS= read -r v; do [ -n "$v" ] && link_vault "$v"; done < "$REGISTRY"
+else
+  [ ${#VAULTS[@]} -gt 0 ] || die "no vault paths given"
+  for v in "${VAULTS[@]}"; do link_vault "$v"; done
+fi
+
+echo $'\ndone.'

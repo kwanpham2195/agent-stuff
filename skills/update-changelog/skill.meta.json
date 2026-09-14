@@ -1,0 +1,28 @@
+{
+  "applicability": [
+    "update changelog",
+    "add release note",
+    "record user-facing change",
+    "prepare changelog before shipping"
+  ],
+  "approved_cycles": [],
+  "context_weight": 2,
+  "do_not_use_when": [
+    "the change is pure test or internal-only and repo rules do not require a changelog"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "git_history",
+    "release_baseline",
+    "change_summary"
+  ],
+  "outputs": [
+    "changelog_entry"
+  ],
+  "overlays": [],
+  "resources": [],
+  "role": "leaf",
+  "schema_version": 1,
+  "skill": "update-changelog",
+  "stop_when": "changelog is updated or no applicable changelog file is found"
+}
