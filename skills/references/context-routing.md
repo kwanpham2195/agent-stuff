@@ -17,6 +17,8 @@ Keep this check cheap: do not search the full vault, inspect unrelated workspace
 
 ## Accepted decisions
 
+A decision is a choice that constrains future action, such as scope, behavior, architecture, storage location, or model selection. A finding or completed command is evidence; an unresolved alternative is a proposal. Record consequential choices when accepted or superseded during durable work, including the reason and approval source. Do not create a decision file for every implementation detail or promote a one-time choice into standing policy.
+
 Store a task decision with its owning document: small-task decisions and approval in the work `index.md`, product scope and requirements in `prd.md`, technical choices and rationale in `design.md`, and execution sequencing in `plan.md`. These documents remain optional. If a repository ADR or shared decision document already owns the decision, reuse and link it.
 
 Create `knowledge/decisions/<decision-id>.md` only for a durable decision that spans future tasks in the same workspace and lacks a repository authority. The original owning document then links to that authority instead of maintaining a duplicate. Record state (`proposed`, `accepted`, or `superseded`), decision and scope, rationale and rejected alternatives worth retaining, approver/date/approval source or explicit delegated authority, evidence, and reconsideration conditions. Superseded records retain rationale and link their replacement.

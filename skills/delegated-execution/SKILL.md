@@ -5,11 +5,13 @@ description: "Use when delegating work, coordinating subagents, or consulting an
 
 Delegate when independent work or context isolation earns the coordination cost. Follow the user's delegation preference; handle small tasks inline. The active harness owns launch, permission, resume, and failure protocols.
 
+Before dispatch or resume, read [model policy](references/model-policy.md) for role defaults, exact model selection, thinking/effort, and unavailable-model handling.
+
 Read [work-lifecycle](../references/work-lifecycle.md) for feedback, checkpoint, resume, and acceptance rules. Include its absolute path in worker briefs that span sessions or implement a plan; pass the current entry artifact and tell the worker which records it owns.
 
 ## Bounded exploration
 
-The parent chooses independent substantial questions; do not delegate intake, quick fixes, or small factual gaps. Run at most three read-only explorers concurrently, with no further delegation. Each brief states workspace/repository/path scope, read-first sources and skills, one question, expected evidence, and a stop condition. For this user's exploration preference, use Sol with low reasoning only after discovering the harness's exact available model identifier; this is not a global override for workers, reviewers, or advisors.
+The parent chooses independent substantial questions; do not delegate intake, quick fixes, or small factual gaps. Run at most three read-only explorers concurrently, with no further delegation. Each brief states workspace/repository/path scope, read-first sources and skills, one question, expected evidence, and a stop condition. Select the model and thinking/effort from the model policy's exploration entry.
 
 The parent owns synthesis: verify consequential claims, reconcile contradictions, and distinguish observation, inference, and proposal. Runtime output bindings determine child report paths. Promote only useful evidence into durable research; never use hidden shared plan writers. When decomposing an accepted plan, reuse sufficient existing research.
 

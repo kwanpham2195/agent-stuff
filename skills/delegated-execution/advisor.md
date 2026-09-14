@@ -22,7 +22,7 @@ The user can choose:
 - **Automatic within scope:** launch for the decision triggers above without repeated approval, subject to granted scope and budgets. Announce the decision being examined.
 - Advisor/model and reasoning level; inherited context or an independent fresh brief; decision scope; time/cost limits; or a one-shot answer instead of dialogue.
 
-Do not make the user configure every option. Honor supplied choices; otherwise use the configured advisor defaults and disclose the selected agent/model at launch. Verify capabilities and exact model IDs through the harness; do not invent names or silently substitute an unavailable requested model. Ask before an alternative execution mode. Use one advisor unless the user requests multiple perspectives or a council.
+Do not make the user configure every option. Honor supplied choices; otherwise use the advisor entry in [model policy](references/model-policy.md). Follow its capability checks, launch disclosure, and substitution rules. Ask before an alternative execution mode. Use one advisor unless the user requests multiple perspectives or a council.
 
 A preference applies only as broadly as the user stated. Do not turn a one-time approval into a standing rule or persist a session preference globally without asking. Record applicable preferences in an existing checkpoint when work spans sessions. The user can stop, redirect, or narrow the consultation at any time.
 

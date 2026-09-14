@@ -21,6 +21,21 @@ Explicit task instructions override these defaults. Do not repeatedly ask about 
 
 Switch modes when scope grows, ownership changes, or unresolved decisions and evidence would be costly to reconstruct. Explain the switch briefly. Respect read-only requests: return a checkpoint inline or request permission to save it.
 
+## Recognize when to save
+
+A work item is a bounded outcome or question: a feature, bug investigation, comparison, migration, or design discussion. It can exist before implementation starts.
+
+At intake and when scope changes, check whether any of these applies:
+
+- The user asks to plan, checkpoint, resume later, queue, or hand off the work.
+- Work has unfinished steps that must survive another session or owner.
+- A review or unresolved decision pauses dependent work.
+- Findings, rejected approaches, or verification evidence would be costly to reconstruct.
+
+When a trigger applies, use the durable or tracked mode above. Reuse an existing entry; otherwise create the smallest authorized work record using context-routing. Do not wait for the user to say "save context" during authorized work. For a read-only request, offer the checkpoint inline or ask permission to save it. A quick lookup, completed small edit, or ordinary clarification stays inline when none of these triggers applies.
+
+Once work is durable, update its entry after a meaningful decision, discovery, verified slice, failed gate, review pause, or handoff. Record current state and the next authorized action before leaving the phase or ending the turn. Link existing policy, design, and tracker authorities instead of copying them.
+
 ## Keep working context bounded
 
 - Resolve the workspace and authoritative entry through [context-routing](context-routing.md) before mining history or creating records. Reuse the owning plan, issue, and accepted decisions. Small work stays inline; durable work has one entry point with links to the authorities for each concern.
