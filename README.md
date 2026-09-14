@@ -105,7 +105,7 @@ Pi discovers the shared `skills/` tree directly after the main installer copies 
 ./scripts/install --pi
 ```
 
-The Pi option creates `~/.pi/agent/AGENTS.md` as a link to the shared global instructions. It also installs the reviewed agents, extensions, themes, Pi-specific skills, settings, modes, and MCP configuration. The installer checks every destination before writing and stops without making changes when a destination exists.
+The Pi option creates `~/.pi/agent/AGENTS.md` as a link to the shared global instructions. It installs the reviewed agents, extensions, themes, Pi-specific skills, and modes. It copies settings and MCP configuration under their `.example.json` names without activating them. The installer checks every destination before writing and stops without making changes when a destination exists.
 
 If you want only the Pi package resources, install the repository through Pi:
 
@@ -150,9 +150,18 @@ The local `recall` skill is excluded until its upstream provenance and redistrib
 
 ### Settings and optional services
 
-`pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers.
+`pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers. Review the complete file before activating it. Pi may download and execute every third-party entry in `packages` when it loads the active settings.
 
-`pi/mcp.example.json` configures Linear through `mcp-remote` and a local zvec-grep server. The `--pi` installer copies it to `mcp.json`; remove either server before installation if you do not use it. Authentication remains in each service's credential storage and is not included here.
+`pi/mcp.example.json` configures Linear through `mcp-remote` and a local zvec-grep server. Remove either server if you do not use it. Authentication remains in each service's credential storage and is not included here.
+
+Activate either example explicitly after review:
+
+```bash
+cp "$HOME/.pi/agent/settings.example.json" "$HOME/.pi/agent/settings.json"
+cp "$HOME/.pi/agent/mcp.example.json" "$HOME/.pi/agent/mcp.json"
+```
+
+If an active file already exists, merge the settings you want instead of replacing it.
 
 `pi/modes.json` supplies the `default` and `fast` model presets used by `prompt-editor.ts`.
 
