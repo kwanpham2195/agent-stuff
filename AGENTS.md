@@ -41,7 +41,7 @@ State the intended action directly. Avoid adding what you won't do, what will re
 ## Developer Workflow
 - Clarify ambiguous user intent, scope, acceptance, or permission before acting on the uncertain part; do not silently choose an interpretation. Look up factual unknowns yourself. Ask a small batch of related questions with tradeoffs and a recommendation; ask sequentially when one answer determines the next question.
 - If product intent, scope, or success is ambiguous, use `define-outcome` to establish observable acceptance and required evidence. Reuse sufficient existing criteria; small tasks keep them inline.
-- For planning, developer review, work spanning sessions, or tracker handoffs, read `skills/references/work-lifecycle.md`. It defines checkpoints, resumption, feedback, and acceptance for both direct and delegated work. Keep small tasks inline.
+- When work needs planning, review, another session, handoff, or costly-to-reconstruct findings, read `skills/references/work-lifecycle.md` and create or update its authorized entry record. Recheck this trigger as scope grows; checkpoint meaningful decisions, discoveries, verified progress, and pauses before context is lost. Quick tasks stay inline; read-only requests require permission before saving.
 - For technical review/discussion, prefer `show-me`: diagrams, structural diffs, pseudocode, and concrete contracts, with short rationale. Use an existing document or PR when sufficient; keep proposals and accepted decisions distinct.
 - At a requested human review or unresolved user decision, present the ready artifact/response, name what needs approval and what waits, then end the turn. Resume dependent work only after a clear response; silence or closing a review UI is not approval. Follow `skills/references/work-lifecycle.md` for review and resumption.
 
@@ -149,6 +149,8 @@ Use `zvec_grep_search` when workspace-grounded wording or location is unknown, o
 - If the user's instructions conflict with any rule in this document, ask for explicit confirmation before overriding. Only then execute their instructions.
 
 ## Delegation
+
+- Before delegating or resuming a child, read `skills/delegated-execution/references/model-policy.md` and apply its model and thinking/effort selection rules for the child's harness and role.
 
 - For an explicit advisor request, or before offering one for consequential tradeoffs or a failing approach, read `skills/delegated-execution/advisor.md`. Default to asking before spawning; honor off/automatic preferences within their stated scope. Routine advice stays inline.
 
