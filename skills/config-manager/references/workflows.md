@@ -101,7 +101,7 @@ import subprocess
 from pathlib import Path
 
 roots = {
-    "agents": (Path.home() / ".agents" / "skills", {"terminal-browser", "**/.DS_Store", "**/.ruff_cache/**", "**/__pycache__/**", "**/*.pyc", "**/node_modules/**"}),
+    "agents": (Path.home() / ".agents" / "skills", {"**/.DS_Store", "**/.ruff_cache/**", "**/__pycache__/**", "**/*.pyc", "**/node_modules/**"}),
     "pi": (Path.home() / ".pi" / "agent" / "skills", {"**/.DS_Store", "**/.ruff_cache/**", "**/__pycache__/**", "**/*.pyc", "**/node_modules/**"}),
 }
 limit = 50

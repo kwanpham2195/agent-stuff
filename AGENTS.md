@@ -6,7 +6,7 @@ Codex CLI output: avoid Markdown tables by default; they render poorly there. Us
 
 - “Make a note” => edit AGENTS.md (shortcut; not a blocker). Ignore CLAUDE.md unless explicitly asked.
 - Skills are canonical for tool workflows. Keep this file to hard rules only.
-- Skills listed in `~/.agents/.skill-lock.json`, skills named `plannotator-*`, `aside-browser`, `herdr`, and `tuistory` are installed and updated externally; keep them live-only under `~/.agents/skills/`, outside this repository.
+- Skills listed in `~/.agents/.skill-lock.json`, skills named `plannotator-*`, `herdr`, and `tuistory` are installed and updated externally; keep them live-only under `~/.agents/skills/`, outside this repository.
 - Install skills from external sources with `npx skills`.
 - Config/dotfiles/packages/global tools: use `config-manager`.
 - ship => changelog, commit in groups, push, pull.
@@ -135,7 +135,7 @@ Use `zvec_grep_search` when workspace-grounded wording or location is unknown, o
 
 ### Browser and terminal routing
 
-- Default to `agent-browser` for browser automation. Use `aside-browser` only when explicitly invoked by the user; never select it automatically, including for logged-in sites. Use `terminal-browser` when requested or when continuing in a browser already opened there.
+- Use `agent-browser` for browser automation.
 - Prefer `herdr` for dev servers, watchers, logs, and pane management when running inside Herdr (`HERDR_ENV=1`); this is the user's standing preference. Fall back to `tmux` when Herdr is unavailable and a suitable tmux session exists. Otherwise ask which surface to use. Follow the selected tool's session and ownership safeguards.
 - Use `tuistory` for agent-driven TUI interaction and terminal UI tests. Do not select it merely to host a background server. Respect an existing project's process wrapper and reuse its sessions rather than starting duplicate processes.
 - Keep these selection preferences here; do not fork externally maintained skill bodies to encode them. Selection does not authorize installation, upgrades, stopping shared processes, or bypassing the governed subagent workflow.

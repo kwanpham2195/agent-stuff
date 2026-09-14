@@ -73,25 +73,6 @@ The `tuistory` skill expects its CLI:
 npm install --global tuistory
 ```
 
-Install Aside and its published `aside` skill on macOS with:
-
-```bash
-brew install ericclemmons/tap/aside
-npx skills add ericclemmons/aside -g --skill aside
-```
-
-This setup calls a locally customized variant `aside-browser`; the upstream installer names its skill `aside`. Adjust `AGENTS.md` to use the installed name unless you maintain that variant yourself.
-
-Install terminal-browser from its official installer or Homebrew, then let its setup command install the matching agent skill and terminal configuration:
-
-```bash
-curl -fsSL https://terminal-browser.sh/install | bash
-terminal-browser setup
-
-# Homebrew alternative:
-# brew install terminal-browser
-```
-
 The `skill-creator` skill is supplied by Codex as a system skill in this setup, so this repository does not install a separate copy.
 
 Other bundled skills describe workflows for tools such as chezmoi, GitHub CLI, OrbStack, and Obsidian. Install and configure those applications only when you use the corresponding workflow.
