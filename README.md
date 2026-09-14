@@ -97,6 +97,66 @@ cp context/templates/*.md "$HOME/.agents/context/templates/"
 
 Small tasks remain in the conversation. Repository documentation, issue trackers, and accepted decision records remain authoritative when they already own the information.
 
+## Pi setup
+
+Pi discovers the shared `skills/` tree directly after the main installer copies it to `~/.agents/skills`. Install the complete local setup, including Pi configuration, with:
+
+```bash
+./scripts/install --pi
+```
+
+The Pi option creates `~/.pi/agent/AGENTS.md` as a link to the shared global instructions. It also installs the reviewed agents, extensions, themes, Pi-specific skills, settings, modes, and MCP configuration. The installer checks every destination before writing and stops without making changes when a destination exists.
+
+If you want only the Pi package resources, install the repository through Pi:
+
+```bash
+pi install git:github.com/kwanpham2195/agent-stuff
+```
+
+The Pi package installs extensions, themes, and skills. It does not install `AGENTS.md`, settings, modes, MCP configuration, or subagent definitions.
+
+### Extensions
+
+- `answer.ts` extracts questions from the last assistant response and presents an interactive answer form.
+- `brain-index-injector.ts` injects a project-local `brain/index.md` into the system prompt when that file exists.
+- `btw.ts` opens a side conversation for a question without adding that thread to the main conversation.
+- `dirty-repo-guard.ts` blocks session replacement when the current Git working tree is dirty.
+- `files.ts` provides file browsing, opening, editing, and diff actions through `/files`.
+- `goal.ts` stores and enforces a long-running objective in the Pi session tree.
+- `handoff.ts` summarizes the active conversation into a handoff for a new session.
+- `head.ts` shows the beginning of the current conversation branch.
+- `no-sleep.ts` uses macOS `caffeinate` while the agent is active.
+- `notify.ts` sends an OSC desktop notification when Pi finishes and waits for input.
+- `permission-gate.ts` asks before dangerous shell commands such as recursive deletion or `sudo`.
+- `pickup.ts` resumes a handoff saved by `handoff.ts`.
+- `prompt-editor.ts` adds mode and model controls to the prompt editor.
+- `session-breakdown.ts` reports session, message, token, model, and cost activity over time.
+- `todos.ts` manages claimable file-based tasks under `.pi/todos` or `PI_TODO_PATH`.
+- `unified-edit.ts` replaces the built-in edit tool with row operations and unified patch support.
+- `uv.ts` redirects common Python environment and package commands through `uv`.
+
+`herdr-agent-state.ts` and `moshi-hooks.ts` are excluded because their owning applications generate them. Install those integrations through Herdr or moshi-hook instead of copying generated files.
+
+### Themes and Pi skills
+
+The Pi package includes `catppuccin-macchiato`, `dayowl`, `modern-dark`, and `nightowl` themes.
+
+Two Pi-specific skills are included:
+
+- `pi-skill-creator` creates, evaluates, and improves skills for Pi and OpenCode.
+- `tldraw-offline` controls an open tldraw Desktop canvas through its local API.
+
+The local `recall` skill is excluded until its upstream provenance and redistribution terms are resolved.
+
+### Settings and optional services
+
+`pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers.
+
+`pi/mcp.example.json` configures Linear through `mcp-remote` and a local zvec-grep server. The `--pi` installer copies it to `mcp.json`; remove either server before installation if you do not use it. Authentication remains in each service's credential storage and is not included here.
+
+`pi/modes.json` supplies the `default` and `fast` model presets used by `prompt-editor.ts`.
+
+## Install external skills
 ## Install external skills
 
 The global instructions refer to several skills maintained in other repositories. Install only the ones you use. `npx skills` records their source and supports later updates.

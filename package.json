@@ -1,0 +1,13 @@
+{
+  "name": "@kwanpham2195/agent-stuff",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal agent instructions, skills, context templates, and Pi extensions",
+  "license": "MIT",
+  "keywords": ["pi-package"],
+  "pi": {
+    "extensions": ["./pi/extensions"],
+    "skills": ["./skills", "./pi/skills"],
+    "themes": ["./pi/themes"]
+  }
+}

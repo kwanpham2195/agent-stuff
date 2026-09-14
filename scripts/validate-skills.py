@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS_DIR = ROOT / "skills"
+SKILLS_DIRS = (ROOT / "skills", ROOT / "pi" / "skills")
 LONG_DESCRIPTION_LIMIT = 350
 DEAD_SKILL_NAMES = ("github-pr-workflow",)
 
@@ -153,7 +153,7 @@ def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
     names: dict[str, Path] = {}
-    skill_paths = sorted(SKILLS_DIR.rglob("SKILL.md"))
+    skill_paths = sorted(path for directory in SKILLS_DIRS if directory.exists() for path in directory.rglob("SKILL.md"))
 
     for path in skill_paths:
         text = path.read_text(encoding="utf-8")

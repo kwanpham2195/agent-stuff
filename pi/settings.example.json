@@ -1,0 +1,53 @@
+{
+  "packages": [
+    "npm:@plannotator/pi-extension",
+    "git:github.com/earendil-works/pi-review",
+    "npm:pi-web-access",
+    "npm:pi-prompt-template-model",
+    "npm:pi-mcp-adapter",
+    "npm:glimpseui",
+    "npm:pi-subagents",
+    "npm:@ff-labs/pi-fff",
+    "npm:pi-intercom",
+    "npm:@howaboua/pi-auto-trees",
+    "npm:@howaboua/pi-memories",
+    "https://github.com/github/gh-stack"
+  ],
+  "steeringMode": "one-at-a-time",
+  "followUpMode": "one-at-a-time",
+  "hideThinkingBlock": false,
+  "theme": "catppuccin-macchiato",
+  "defaultThinkingLevel": "medium",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-luna",
+  "enabledModels": [
+    "openai-codex/gpt-5.6-luna",
+    "openai-codex/gpt-5.6-sol",
+    "openai-codex/gpt-5.6-terra",
+    "openai-codex/gpt-6-astra"
+  ],
+  "subagents": {
+    "agentOverrides": {
+      "oracle": { "model": "openai-codex/gpt-5.6-sol", "thinking": "high" },
+      "planner": { "model": "openai-codex/gpt-5.6-sol", "thinking": "high" },
+      "reviewer": { "model": "openai-codex/gpt-5.6-sol", "thinking": "high" },
+      "scout": { "model": "openai-codex/gpt-5.6-luna", "thinking": "medium" },
+      "context-builder": { "model": "openai-codex/gpt-5.6-luna" },
+      "researcher": { "model": "openai-codex/gpt-5.6-luna" },
+      "worker": { "model": "openai-codex/gpt-5.6-terra", "thinking": "medium" },
+      "artifact-locator": { "model": "openai-codex/gpt-5.6-luna", "thinking": "low" },
+      "artifact-pattern-finder": { "model": "openai-codex/gpt-5.6-luna", "thinking": "low" },
+      "artifact-web-researcher": { "model": "openai-codex/gpt-5.6-luna", "thinking": "medium" },
+      "artifact-analyzer": { "model": "openai-codex/gpt-5.6-luna", "thinking": "medium" }
+    }
+  },
+  "terminal": {
+    "showTerminalProgress": false,
+    "imageWidthCells": 120
+  },
+  "showCacheMissNotices": true,
+  "treeFilterMode": "default",
+  "markdown": { "mermaid": "final" },
+  "tuiMode": "regular",
+  "doubleEscapeAction": "tree"
+}

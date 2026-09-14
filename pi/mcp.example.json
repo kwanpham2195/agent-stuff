@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "linear": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.linear.app/mcp"
+      ],
+      "directTools": true
+    },
+    "zvec-grep": {
+      "url": "http://127.0.0.1:7999/mcp",
+      "lifecycle": "lazy",
+      "toolPrefix": "none",
+      "includeTools": ["zvec_grep_search"],
+      "directTools": ["zvec_grep_search"]
+    }
+  }
+}
