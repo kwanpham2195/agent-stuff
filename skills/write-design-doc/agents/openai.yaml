@@ -1,0 +1,6 @@
+interface:
+  display_name: "Write Design Doc"
+  short_description: "Write a design doc that settles hard-to-reverse decisions before anyone builds."
+  default_prompt: "Use $write-design-doc to write a design doc for this work."
+policy:
+  allow_implicit_invocation: false

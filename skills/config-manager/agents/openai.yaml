@@ -1,0 +1,4 @@
+interface:
+  display_name: "Config Manager"
+  short_description: "Manage dotfiles and global agent config"
+  default_prompt: "Use $config-manager to inspect and safely update my dotfiles or global agent configuration."

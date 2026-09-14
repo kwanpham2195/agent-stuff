@@ -1,0 +1,4 @@
+interface:
+  display_name: "OrbStack"
+  short_description: "Control OrbStack and Docker readiness"
+  default_prompt: "Use $orbstack to check OrbStack status and make Docker ready for local tests."

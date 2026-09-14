@@ -1,0 +1,6 @@
+interface:
+  display_name: "Write Exec Plan"
+  short_description: "Plan verifiable phases from prototype evidence"
+  default_prompt: "Use $write-exec-plan to resolve technical unknowns through bounded prototypes, then draft an evidence-backed phase plan for review."
+policy:
+  allow_implicit_invocation: false
