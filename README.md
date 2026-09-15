@@ -9,6 +9,80 @@ Personal agent instructions, reusable skills, and a local context management fra
 - `context/templates/` contains empty templates for private local work records.
 - `scripts/validate-skills.py` checks skill metadata and local references.
 
+## Day-to-day usage
+
+Describe the task in ordinary language. You do not need to invoke every skill or prescribe their order. With the instructions and skills loaded, the agent uses the task to select relevant guidance. The skill catalog below is a reference for discovering capabilities and requesting a particular method.
+
+Start with [installation](#install) and ensure your agent loads the global instructions and discovers the installed skills. The [Pi setup](#pi-setup) explains the supported installation paths and what each includes. Skills provide instructions; they do not install the tools or credentials a task may require.
+
+```text
+Your request
+  ├─ outcome: what should change or be explained?
+  ├─ constraints: what must remain true?
+  └─ stopping point: findings, proposal, implementation, or PR?
+        ↓
+Agent reads the project and selects relevant skills
+        ↓
+Work → verification → result, evidence, and remaining questions
+```
+
+### Prompts you can reuse
+
+For a small task, one sentence is enough:
+
+> Fix the typo in the settings label and run the relevant check.
+
+For a feature, describe observable behavior:
+
+> Add status filtering to the issues page. Keep the selection in the URL so reload and back navigation preserve it. Implement and verify it; stop before committing.
+
+For a bug, give the symptom and expected result:
+
+> Switching projects resets my filters. Reproduce it, find the cause, fix it, and verify the original scenario. Show me the failure path briefly.
+
+For a refactor, state what must stay the same:
+
+> Simplify notification state management without changing public behavior. Show the current and proposed structure before implementing, then wait for my approval.
+
+For an investigation, state the write boundary:
+
+> Trace how authentication expires and refreshes. Explain the failure cases with a sequence diagram. Keep application files unchanged; save useful findings in this workspace's local context.
+
+For a review, identify the comparison and whether edits are allowed:
+
+> Review this branch against the original request and repository standards. Report actionable findings with file references. Do not edit files.
+
+If the outcome is uncertain, start there:
+
+> I want onboarding to feel shorter. Help me define the outcome and compare options first. Stop before implementation.
+
+### Continue through feedback
+
+You can refine the same task without choosing another skill:
+
+```text
+You:   Show the proposed structure before implementing.
+Agent: Presents the structure, tradeoffs, and open questions.
+You:   Use option A, preserve the public API, then implement and verify.
+Agent: Makes the agreed change and reports the checks and limitations.
+```
+
+Be explicit about delegation and external actions when they are part of the task: "Subagents are allowed", "Commit the verified changes locally", or "Open a draft PR after checks pass". Permissions still depend on the installed tools and repository rules. Asking for a proposal ends at review; asking a follow-up question is not approval to implement it.
+
+For work that must survive another session:
+
+> Save a checkpoint with the decisions, verification results, blockers, and next step in this workspace's context. I will resume later.
+
+Then resume with:
+
+> Read the checkpoint for the notification refactor, reconcile it with the current branch, and continue the next authorized step.
+
+The agent may ask you to register or select a workspace before saving. Small tasks can stay in chat. "Read-only" requests need separate permission to save notes; see the [context model](#context-model).
+
+### When to name a skill
+
+Name a skill when you want its specific method or deliverable, for example: "Use show-me to explain this flow" or "Use write-exec-plan to plan this migration". Some skills require an explicit request or agreement. Use your agent's skill invocation mechanism when needed; command syntax and available tools depend on the agent. Naming one skill does not require listing every supporting skill it uses.
+
 ## Skills
 
 ### Planning and collaboration
