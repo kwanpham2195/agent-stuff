@@ -141,8 +141,7 @@ if [ "$install_cursor" = true ]; then
   install -d "$cursor_home/rules"
   {
     printf '%s\n' '---' 'description: Shared global instructions' 'alwaysApply: true' '---' ''
-    printf '%s\n' 'This text is copied from the shared AGENTS.md in the agent home. Edit that file, then copy it here again.' ''
-    cat "$agent_home/AGENTS.md"
+    printf 'Read `%s` before your first action in every session and follow it. Resolve its relative links from that directory.\n' "$agent_home/AGENTS.md"
   } > "$cursor_home/rules/agents.mdc"
 fi
 
