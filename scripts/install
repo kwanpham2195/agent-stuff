@@ -46,6 +46,7 @@ check_tree_entries() {
 check_destination "$agent_home/AGENTS.md"
 check_destination "$agent_home/model-policy.yaml"
 check_destination "$agent_home/scripts/model-policy.py"
+check_destination "$agent_home/scripts/find-sessions.py"
 check_tree_entries "$repo_dir/skills" "$agent_home/skills"
 check_tree_entries "$repo_dir/context/templates" "$context_templates"
 
@@ -73,6 +74,7 @@ if [ ! -e "$agent_home/USER.md" ] && [ ! -L "$agent_home/USER.md" ]; then
 fi
 cp "$repo_dir/model-policy.yaml" "$agent_home/model-policy.yaml"
 cp "$repo_dir/scripts/model-policy.py" "$agent_home/scripts/model-policy.py"
+cp "$repo_dir/scripts/find-sessions.py" "$agent_home/scripts/find-sessions.py"
 cp -R "$repo_dir"/skills/* "$agent_home/skills/"
 cp "$repo_dir"/context/templates/* "$context_templates/"
 
