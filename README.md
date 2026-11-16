@@ -153,7 +153,7 @@ The installer writes to `~/.agents`. Each harness needs to find the instructions
 | --- | --- | --- |
 | Claude Code | `--claude` | `~/.claude/CLAUDE.md` to `~/.agents/AGENTS.md`, and `~/.claude/skills` to `~/.agents/skills` |
 | Codex | `--codex` | `~/.codex/AGENTS.md` to `~/.agents/AGENTS.md`; Codex reads user skills from `~/.agents/skills` itself |
-| Cursor | `--cursor` | Writes `~/.cursor/rules/agents.mdc` as an always-apply rule containing a copy of `AGENTS.md`. Cursor reads user skills from `~/.agents/skills` itself. Cursor does not read a global `AGENTS.md` file, so re-run or re-copy after you edit the instructions |
+| Cursor | `--cursor` | Writes `~/.cursor/rules/agents.mdc` as an always-apply rule that tells the agent to read `~/.agents/AGENTS.md`. Cursor reads user skills from `~/.agents/skills` itself. Cursor has no global `AGENTS.md` file, and the rule points to the file instead of copying it, so edits to `AGENTS.md` apply without re-running the installer |
 | Pi | `--pi` | See the [Pi setup](#pi-setup) |
 
 Set `CLAUDE_HOME`, `CODEX_HOME` or `CURSOR_HOME` to use other locations. The installer stops instead of replacing an existing `CLAUDE.md`, `AGENTS.md`, `agents.mdc` or `skills` path there. To connect a harness after installing, create the same links by hand once you have reviewed the existing files, for example `ln -s ~/.agents/AGENTS.md ~/.codex/AGENTS.md`.
