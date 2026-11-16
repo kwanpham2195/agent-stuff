@@ -2,16 +2,22 @@
 set -eu
 
 usage() {
-  printf 'Usage: %s [--pi] [--experimental]\n' "$0"
+  printf 'Usage: %s [--pi] [--claude] [--codex] [--experimental]\n' "$0"
   printf '  --pi            also install the Pi agents, extensions, themes and skills\n'
+  printf '  --claude        also link Claude Code to the shared instructions and skills\n'
+  printf '  --codex         also link Codex to the shared instructions\n'
   printf '  --experimental  also install the skills under experimental/skills\n'
 }
 
 install_pi=false
 install_experimental=false
+install_claude=false
+install_codex=false
 for arg in "$@"; do
   case $arg in
     --pi) install_pi=true ;;
+    --claude) install_claude=true ;;
+    --codex) install_codex=true ;;
     --experimental) install_experimental=true ;;
     -h|--help) usage; exit 0 ;;
     *) usage >&2; exit 2 ;;
@@ -21,6 +27,8 @@ done
 repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 agent_home=${AGENT_HOME:-"$HOME/.agents"}
 pi_agent_home=${PI_AGENT_HOME:-"$HOME/.pi/agent"}
+claude_home=${CLAUDE_HOME:-"$HOME/.claude"}
+codex_home=${CODEX_HOME:-"$HOME/.codex"}
 context_templates="$agent_home/context/templates"
 collisions=""
 
@@ -69,6 +77,15 @@ if [ "$install_pi" = true ]; then
   check_tree_entries "$repo_dir/pi/themes" "$pi_agent_home/themes"
 fi
 
+if [ "$install_claude" = true ]; then
+  check_destination "$claude_home/CLAUDE.md"
+  check_destination "$claude_home/skills"
+fi
+
+if [ "$install_codex" = true ]; then
+  check_destination "$codex_home/AGENTS.md"
+fi
+
 if [ -n "$collisions" ]; then
   printf '%s\n' 'Installation stopped because these destinations already exist:' >&2
   printf '%s\n' "$collisions" >&2
@@ -101,7 +118,24 @@ if [ "$install_pi" = true ]; then
   cp -R "$repo_dir"/pi/themes/* "$pi_agent_home/themes/"
 fi
 
+if [ "$install_claude" = true ]; then
+  install -d "$claude_home"
+  ln -s "$agent_home/AGENTS.md" "$claude_home/CLAUDE.md"
+  ln -s "$agent_home/skills" "$claude_home/skills"
+fi
+
+if [ "$install_codex" = true ]; then
+  install -d "$codex_home"
+  ln -s "$agent_home/AGENTS.md" "$codex_home/AGENTS.md"
+fi
+
 printf 'Installed agent setup in %s\n' "$agent_home"
 if [ "$install_pi" = true ]; then
   printf 'Installed Pi setup in %s\n' "$pi_agent_home"
+fi
+if [ "$install_claude" = true ]; then
+  printf 'Linked Claude Code in %s\n' "$claude_home"
+fi
+if [ "$install_codex" = true ]; then
+  printf 'Linked Codex in %s\n' "$codex_home"
 fi
