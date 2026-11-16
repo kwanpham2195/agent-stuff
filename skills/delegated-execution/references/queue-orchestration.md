@@ -20,7 +20,7 @@ Do not create a second queue or hidden tracker when the existing entry can hold 
 3. Launch ready children through the harness's native path. In Pi, use `workflowScript` calls with `runs.run` or `runs.all`. In Claude Code, use the `Agent` tool. Use stable keys and explicit labels. Do not nest a runner, invoke an external CLI, or make a child responsible for queue state.
 4. Accept a completion event only after reading the child result, changed paths, acceptance evidence, and current head. Record the attempt and artifact before advancing a dependent item.
 5. Invalidate readiness and prior verdicts when a base or head changes. Re-inspect the affected item and descendants before requeueing them.
-6. Keep one writer per checkout and serialize writers on the shared cwd. Do not create worktrees; [agent-pickup](../../agent-pickup/SKILL.md#worktree-exception) lanes are the only exception.
+6. Keep one writer per checkout and serialize writers on the shared cwd. Do not create worktrees; the experimental `agent-pickup` skill's lanes, when installed, are the only exception.
 
 The harness's native completion notification is the wake mechanism: Pi completion notifications, or the background `Agent` completion notification in Claude Code. Do not wait or poll for a running child. A failed launch, workflow, extension, or tool setup is an infrastructure blocker. Preserve the item and report the exact failure. Never switch runners to get around a failed native path.
 

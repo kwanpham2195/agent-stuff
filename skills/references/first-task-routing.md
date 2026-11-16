@@ -36,7 +36,7 @@ Memory supplies context, not roles or permission. A template, installed skill or
 - Issue destination setup: [issue tracking](context-routing.md#workspace-issue-tracker-setup). Unattended repository setup: [pickup profiles](context-routing.md#agent-pickup-profiles).
 - Saving a decision or artifact: [accepted decisions](context-routing.md#accepted-decisions) and [artifact placement](context-routing.md#place-context-and-artifacts). Preserve repository-required homes, private context boundaries and existing authoritative owners.
 - Creating/updating canonical work: [work metadata](context-routing.md#work-metadata-and-overview). Consuming scheduled reports: [brief fields](context-routing.md#brief-reporting-fields). Selected workflow changes: [workflow records](context-routing.md#workflow-records). Read the named section and its relevant dependencies, not every branch.
-- T3 new work, triage or rule changes: use the assigned [Desk](../desk/SKILL.md) route under [role applicability](work-lifecycle.md#role-applicability-and-resumption). Installed skills or historical notes do not assign a role.
-- Assigned periodic thread checks: use [scrum-master](../scrum-master/SKILL.md) and its named runtime contract. Its registered-workspace evidence scope is a specific monitoring exception, not ordinary task access.
+- T3 new work, triage or rule changes: use the assigned Desk route (experimental `desk` skill) under [role applicability](work-lifecycle.md#role-applicability-and-resumption). Installed skills or historical notes do not assign a role.
+- Assigned periodic thread checks: use the experimental `scrum-master` skill and its named runtime contract. Its registered-workspace evidence scope is a specific monitoring exception, not ordinary task access.
 
 These routes preserve source/authority rules and confer no registration, cross-workspace, scheduler, publication or destructive authority.

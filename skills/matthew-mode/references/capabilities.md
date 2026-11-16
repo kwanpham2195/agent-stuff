@@ -28,7 +28,7 @@ For PR inspection, bounded fixes, or watch mode, read [pr](../../pr/SKILL.md) an
 
 ## Queue, unattended work, and cleanup
 
-For a parent-owned dependency frontier, read [queue orchestration](../../delegated-execution/references/queue-orchestration.md). For bounded unattended progress, read [autonomous runs](../../delegated-execution/references/autonomous-runs.md). For worktree ownership audits or cleanup plans, read [worktree cleanup](../../delegated-execution/references/worktree-cleanup.md). Launches and cleanup planning follow [delegated execution](../../delegated-execution/SKILL.md) and its model policy. For ready-for-agent packets and lanes, read [agent-pickup](../../agent-pickup/SKILL.md). These references do not authorize deletion, remote writes, or a fallback runner.
+For a parent-owned dependency frontier, read [queue orchestration](../../delegated-execution/references/queue-orchestration.md). For bounded unattended progress, read [autonomous runs](../../delegated-execution/references/autonomous-runs.md). For worktree ownership audits or cleanup plans, read [worktree cleanup](../../delegated-execution/references/worktree-cleanup.md). Launches and cleanup planning follow [delegated execution](../../delegated-execution/SKILL.md) and its model policy. For ready-for-agent packets and lanes, read the experimental `agent-pickup` skill when it is installed. These references do not authorize deletion, remote writes, or a fallback runner.
 
 ## Recall and handoff
 
@@ -36,7 +36,7 @@ For history reconstruction, read [recall](../../recall/SKILL.md) and keep the wo
 
 ## Intake, staged flows and tickets
 
-For an unclear idea or a staged Research-Plan-Implement flow, read [rpi](../../rpi/SKILL.md); its design discussion settles open choices one at a time. To implement a GitHub issue end to end, read [take](../../take/SKILL.md); to file one, read [issue](../../issue/SKILL.md). For a backlog review, read [triage-work](../../triage-work/SKILL.md). The Desk owns intake only under an explicit assignment or reconciled resumption. Ordinary tasks stay direct to the user; this map does not assign Desk duties.
+For an unclear idea or a staged Research-Plan-Implement flow, read [rpi](../../rpi/SKILL.md); its design discussion settles open choices one at a time. To implement a GitHub issue end to end, read [take](../../take/SKILL.md); to file one, read [issue](../../issue/SKILL.md). For a backlog review, read [triage-work](../../triage-work/SKILL.md). The Desk (experimental `desk` skill) owns intake only under an explicit assignment or reconciled resumption. Ordinary tasks stay direct to the user; this map does not assign Desk duties.
 
 ## Commits, upstream source and writing
 
