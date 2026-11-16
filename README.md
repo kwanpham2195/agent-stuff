@@ -85,7 +85,7 @@ The agent may ask you to register or select a workspace before saving. Small tas
 
 ### When to name a skill
 
-Name a skill when you want its specific method or deliverable, for example: "Use show-me to explain this flow" or "Use write-exec-plan to plan this migration". Some skills require an explicit request or agreement. Use your agent's skill invocation mechanism when needed; command syntax and available tools depend on the agent. Naming one skill does not require listing every supporting skill it uses.
+Name a skill when you want its specific method or deliverable, for example: "Use show-me to explain this flow" or "Use code-review to review this branch". Some skills require an explicit request or agreement. Use your agent's skill invocation mechanism when needed; command syntax and available tools depend on the agent. Naming one skill does not require listing every supporting skill it uses.
 
 ## Skills
 
@@ -93,15 +93,15 @@ The package contains the stable skills below, plus the Pi-specific skills listed
 
 ### Planning, collaboration, and review
 
-[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`grill-me`](skills/workflow/grill-me/SKILL.md), [`grill-with-docs`](skills/workflow/grill-with-docs/SKILL.md), [`grilling`](skills/workflow/grilling/SKILL.md), [`handoff`](skills/handoff/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`matthew-mode`](skills/matthew-mode/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`research`](skills/workflow/research/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`to-questionnaire`](skills/to-questionnaire/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), [`walkthrough`](skills/walkthrough/SKILL.md), and [`write-exec-plan`](skills/write-exec-plan/SKILL.md).
+[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`matthew-mode`](skills/matthew-mode/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
 
 ### Implementation and verification
 
-[`code-review`](skills/code-review/SKILL.md), [`coding-standards`](skills/coding-standards/SKILL.md), [`correct`](skills/correct/SKILL.md), [`create-verification-skill`](skills/create-verification-skill/SKILL.md), [`diagnosing-bugs`](skills/workflow/diagnosing-bugs/SKILL.md), [`domain-modeling`](skills/workflow/domain-modeling/SKILL.md), [`go-coding-standards`](skills/go-coding-standards/SKILL.md), [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md), [`typescript-coding-standards`](skills/typescript-coding-standards/SKILL.md), and [`write-discoverable-code`](skills/write-discoverable-code/SKILL.md).
+[`code-review`](skills/code-review/SKILL.md), [`coding-standards`](skills/coding-standards/SKILL.md), [`correct`](skills/correct/SKILL.md), [`create-verification-skill`](skills/create-verification-skill/SKILL.md), [`go-coding-standards`](skills/go-coding-standards/SKILL.md), [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md), [`typescript-coding-standards`](skills/typescript-coding-standards/SKILL.md), and [`write-discoverable-code`](skills/write-discoverable-code/SKILL.md).
 
 ### Git, issues, and delivery
 
-[`clean-copy`](skills/clean-copy/SKILL.md), [`commit`](skills/commit/SKILL.md), [`issue`](skills/issue/SKILL.md), [`librarian`](skills/librarian/SKILL.md), [`pr`](skills/pr/SKILL.md), [`take`](skills/take/SKILL.md), [`update-changelog`](skills/update-changelog/SKILL.md), [`write-issue`](skills/write-issue/SKILL.md), and [`write-pr`](skills/write-pr/SKILL.md).
+[`commit`](skills/commit/SKILL.md), [`issue`](skills/issue/SKILL.md), [`librarian`](skills/librarian/SKILL.md), [`pr`](skills/pr/SKILL.md), [`take`](skills/take/SKILL.md), [`update-changelog`](skills/update-changelog/SKILL.md), [`write-issue`](skills/write-issue/SKILL.md), and [`write-pr`](skills/write-pr/SKILL.md).
 
 ### Documentation and writing
 
@@ -196,21 +196,16 @@ The Pi package installs extensions, themes, and skills. It does not install `AGE
 ### Extensions
 
 - `answer.ts` extracts questions from the last assistant response and presents an interactive answer form.
-- `brain-index-injector.ts` injects a project-local `brain/index.md` into the system prompt when that file exists.
 - `btw.ts` opens a side conversation for a question without adding that thread to the main conversation.
-- `dirty-repo-guard.ts` blocks session replacement when the current Git working tree is dirty.
 - `files.ts` provides file browsing, opening, editing, and diff actions through `/files`.
 - `goal.ts` stores and enforces a long-running objective in the Pi session tree.
-- `handoff.ts` summarizes the active conversation into a handoff for a new session.
 - `head.ts` shows the beginning of the current conversation branch.
 - `no-sleep.ts` uses macOS `caffeinate` while the agent is active.
 - `notify.ts` sends an OSC desktop notification when Pi finishes and waits for input.
 - `permission-gate.ts` asks before dangerous shell commands such as recursive deletion or `sudo`.
-- `pickup.ts` resumes a handoff saved by `handoff.ts`.
 - `prompt-editor.ts` adds mode and model controls to the prompt editor.
 - `session-breakdown.ts` reports session, message, token, model, and cost activity over time.
 - `todos.ts` manages claimable file-based tasks under `.pi/todos` or `PI_TODO_PATH`.
-- `unified-edit.ts` replaces the built-in edit tool with row operations and unified patch support.
 - `uv.ts` redirects common Python environment and package commands through `uv`.
 
 ### Themes and Pi skills
@@ -226,7 +221,7 @@ Two Pi-specific skills are included:
 
 `pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers. Review the complete file before activating it. Pi may download and execute every third-party entry in `packages` when it loads the active settings.
 
-`pi/mcp.example.json` configures Linear through `mcp-remote` and a local zvec-grep server. Remove either server if you do not use it. Authentication remains in each service's credential storage and is not included here. See [Set up zvec-grep](docs/zvec-grep.md) for installation, indexing, Pi MCP configuration, privacy, and removal.
+`pi/mcp.example.json` configures Linear through `mcp-remote`. Remove it if you do not use Linear. Authentication remains in each service's credential storage and is not included here.
 
 Activate either example explicitly after review:
 
