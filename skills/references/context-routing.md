@@ -13,7 +13,7 @@ On the first task or resume in a working directory, make a cheap routing check u
 - If mappings overlap, identities conflict, or a repo may be a fork/worktree, ask rather than merging or selecting silently.
 - Never retrieve or associate work across workspaces. Reject a cross-workspace task or ask the user to choose one workspace boundary. Cross-repository work inside one workspace is allowed.
 
-The explicitly assigned [scrum master](../scrum-master/SKILL.md) may inspect registered workspaces under its approved monitoring contract. This exception covers scoped workflow evidence and nudges, with findings kept under their existing workspace identities. It grants no project execution, memory access, workspace merging or general cross-workspace retrieval.
+The explicitly assigned scrum master (experimental `scrum-master` skill) may inspect registered workspaces under its approved monitoring contract. This exception covers scoped workflow evidence and nudges, with findings kept under their existing workspace identities. It grants no project execution, memory access, workspace merging or general cross-workspace retrieval.
 
 Keep this check cheap: do not search the full vault, inspect unrelated workspace notes, or require a model hook, extension, tool, CLI, or startup automation. These instructions are checked on the first task/resume, not automatically at process startup.
 
@@ -80,7 +80,7 @@ Use [issue](../issue/SKILL.md) for creation and handoff. This setting supplies r
 
 ## Agent pickup profiles
 
-A workspace `index.md` may hold an `## Agent pickup` section with one repository profile per repository that agents may work in unattended. The section opts the repository in. Its fields and use belong to [agent pickup](../agent-pickup/references/packet.md#repository-profiles). Adding or changing a profile needs the workspace owner's approval.
+A workspace `index.md` may hold an `## Agent pickup` section with one repository profile per repository that agents may work in unattended. The section opts the repository in. Its fields and use belong to the experimental `agent-pickup` skill. Adding or changing a profile needs the workspace owner's approval.
 
 ## Accepted decisions
 
@@ -177,7 +177,7 @@ The canonical work note owns these YAML properties:
 | Status | Meaning |
 | --- | --- |
 | `draft` | Planned work that has not started. |
-| `ready-for-agent` | Planned work whose approved task packet passed the [agent-pickup](../agent-pickup/SKILL.md) entry check; an agent lane may start it at any time. |
+| `ready-for-agent` | Planned work whose approved task packet passed the experimental `agent-pickup` skill's entry check; an agent lane may start it at any time. |
 | `active` | Work remains and its next action is executable within current authorization. |
 | `needs-review` | A human decision is required. This includes unknown historical state needing confirmation. |
 | `blocked` | A dependency or access limitation prevents the next step. |
@@ -217,7 +217,7 @@ Reporting views use the same fields as the canonical work notes. Any scheduled o
 
 #### Workflow records
 
-Workflow metadata is an optional extension of the canonical work note. The [Desk](../desk/SKILL.md) adds it when it starts work with a flow, and the task thread keeps it current. Ordinary work without these fields retains the existing contract. Add all four fields together only for an explicitly selected workflow and authorized range. A partial bundle is invalid; do not infer or backfill workflow values for historical records.
+Workflow metadata is an optional extension of the canonical work note. The experimental `desk` skill adds it when it starts work with a flow, and the task thread keeps it current. Ordinary work without these fields retains the existing contract. Add all four fields together only for an explicitly selected workflow and authorized range. A partial bundle is invalid; do not infer or backfill workflow values for historical records.
 
 | Property | Structural value |
 | --- | --- |

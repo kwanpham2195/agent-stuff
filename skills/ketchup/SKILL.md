@@ -10,7 +10,7 @@ Catch the user up on what changed in this chat since the last message the user w
 
 Use the voice of [bro](../bro/SKILL.md) and the preferences in `USER.md` (writing and presentation): plain words, short sentences, Simplified Technical English for technical terms, no banned phrases. Say what changed for the user, not how you did it. Say "the tests pass", not "CI is green". Leave out hashes, file paths, commands, build numbers and test counts unless the user needs one to act. Name each PR, branch, thread or agent by a name the user would know, not a label you invented. Apply [unslop](../unslop/SKILL.md).
 
-This skill applies to a task thread. In the Desk thread, answer "What needs me?" under [desk](../desk/SKILL.md#what-needs-me) instead.
+This skill applies to a task thread. In a Desk thread (experimental `desk` skill), answer "What needs me?" under that skill instead.
 
 ## Gather what changed
 

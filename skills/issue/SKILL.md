@@ -46,7 +46,7 @@ external_url: <set after successful promotion>
 
 ## Issue lifecycle
 
-A local issue is backlog: work that has not started. When work starts, create the work item under [context routing](../references/context-routing.md), set the issue to `started` and link its `state.md` in `work`. From then on the work state owns progress, blockers and acceptance; the issue holds no `active` or `blocked` status of its own. When the work item completes, set the issue to `done`. Writing an [agent-pickup](../agent-pickup/references/packet.md) task packet counts as starting the work. An issue the user decides not to do becomes `dropped` with a one-line reason in the body. `promoted` marks an issue moved to a remote tracker under [implementation handoff](implementation-handoff.md).
+A local issue is backlog: work that has not started. When work starts, create the work item under [context routing](../references/context-routing.md), set the issue to `started` and link its `state.md` in `work`. From then on the work state owns progress, blockers and acceptance; the issue holds no `active` or `blocked` status of its own. When the work item completes, set the issue to `done`. Writing an experimental `agent-pickup` task packet counts as starting the work. An issue the user decides not to do becomes `dropped` with a one-line reason in the body. `promoted` marks an issue moved to a remote tracker under [implementation handoff](implementation-handoff.md).
 
 Create a local issue only where no tracker owns the work. When a remote tracker owns it, the work item links the tracker key instead of a local copy.
 

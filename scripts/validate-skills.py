@@ -4,13 +4,18 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS_DIRS = (ROOT / "skills", ROOT / "pi" / "skills")
+STABLE_SKILLS = ROOT / "skills"
+EXPERIMENTAL_SKILLS = ROOT / "experimental" / "skills"
+SKILLS_DIRS = (STABLE_SKILLS, EXPERIMENTAL_SKILLS, ROOT / "pi" / "skills")
+# Skills installed from other sources; links to them cannot resolve inside this repository.
+EXTERNAL_SKILLS = {"rpi", "visual-pr", "agent-memory-repo", "agents-md", "confluence"}
 LONG_DESCRIPTION_LIMIT = 350
 DEAD_SKILL_NAMES = ("github-pr-workflow",)
 
@@ -51,14 +56,14 @@ def code_spans_and_links(text: str) -> list[str]:
 
 
 def path_tokens(raw: str) -> list[str]:
-    cleaned = raw.strip().strip("<>,.;:")
+    cleaned = raw.strip().lstrip("<>,;:").rstrip("<>,.;:")
     if not cleaned or cleaned.startswith(("http://", "https://", "mailto:")):
         return []
 
     tokens = re.split(r"\s+", cleaned)
     result: list[str] = []
     for token in tokens:
-        token = token.strip().strip("\"'()[],.;:")
+        token = token.strip().lstrip("\"'()[],;:").rstrip("\"'()[],.;:")
         if not token or token in {"bash", "sh", "python", "python3", "node"}:
             continue
         token = token.split("#", 1)[0]
@@ -81,10 +86,25 @@ def looks_like_local_ref(token: str) -> bool:
     return False
 
 
+def is_external_skill_ref(skill_path: Path, resolved: Path) -> bool:
+    resolved = Path(os.path.normpath(resolved))
+    for root in (STABLE_SKILLS, EXPERIMENTAL_SKILLS):
+        if resolved.is_relative_to(root):
+            parts = resolved.relative_to(root).parts
+            return bool(parts) and parts[0] in EXTERNAL_SKILLS
+    return False
+
+
 def resolve_ref(skill_path: Path, token: str) -> Path:
     resolved = resolve_literal_ref(skill_path, token)
-    if resolved.exists():
+    if resolved.exists() or is_external_skill_ref(skill_path, resolved):
         return resolved
+    # The installer flattens experimental skills into the stable skills directory,
+    # so links from an experimental skill resolve against both trees.
+    if skill_path.is_relative_to(EXPERIMENTAL_SKILLS):
+        installed = STABLE_SKILLS / os.path.relpath(resolved, EXPERIMENTAL_SKILLS)
+        if installed.exists():
+            return installed
     # Chezmoi stores an executable target with this source filename prefix.
     executable_source = resolved.with_name("executable_" + resolved.name)
     if executable_source.is_file():
@@ -111,7 +131,7 @@ def validate_refs(skill_path: Path, text: str) -> list[str]:
     for raw in code_spans_and_links(text):
         for token in path_tokens(raw):
             resolved = resolve_ref(skill_path, token)
-            if not resolved.exists():
+            if not resolved.exists() and not is_external_skill_ref(skill_path, resolved):
                 rel = skill_path.relative_to(ROOT)
                 errors.append(f"{rel}: missing referenced file `{token}`")
     return errors

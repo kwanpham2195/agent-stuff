@@ -78,7 +78,7 @@ Reproduce bugs before writing tests for them. Do not use test-driven development
 
 ## Git and PRs
 
-`git status`, `git diff`, and `git log` are safe by default. Push only when asked. Branch changes require user consent. Do not create Git worktrees; work in the existing checkout and serialize writers. The only exception is an agent-pickup lane, as `skills/agent-pickup/SKILL.md` defines. A typed command such as "pull and push" grants consent for that command.
+`git status`, `git diff`, and `git log` are safe by default. Push only when asked. Branch changes require user consent. Do not create Git worktrees; work in the existing checkout and serialize writers. The only exception is a lane of the experimental `agent-pickup` skill, when installed. A typed command such as "pull and push" grants consent for that command.
 
 Check status and diff before multi-agent edits. Preserve unrecognized changes as another agent's work; continue with your own scope, but stop and ask if they cause issues. Stop and ask before deleting or renaming unexpected files. Avoid manual stash; Git auto-stashing during pull/rebase is fine.
 

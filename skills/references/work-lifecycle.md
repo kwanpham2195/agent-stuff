@@ -21,7 +21,7 @@ Distinguish no assignment from an established assignment whose current state is 
 
 Explicit revocation ends future role actions within its stated scope. It does not prove existing workers stopped, resolve pending delivery, transfer ownership, or reset usage. Reconcile outstanding work before replacement or another consequential action. Confirm T3 session identity separately under [T3 routing](../delegated-execution/references/t3-routing.md#confirm-the-current-session) only when T3 operations are relevant; role assignment is not platform identity.
 
-An assigned [scrum master](../scrum-master/SKILL.md) may send evidence-backed corrections within an owner's existing workflow and authority. A nudge is not a new user decision, approval, workflow selection or ownership transfer. Task owners reconcile it against current instructions and retain execution and state-writing responsibility. Scoped bookkeeping handoffs follow that skill; idle threads do not implicitly hand off ownership.
+An assigned scrum master (experimental `scrum-master` skill) may send evidence-backed corrections within an owner's existing workflow and authority. A nudge is not a new user decision, approval, workflow selection or ownership transfer. Task owners reconcile it against current instructions and retain execution and state-writing responsibility. Scoped bookkeeping handoffs follow that skill; idle threads do not implicitly hand off ownership.
 
 ## Human contact and direct steering
 

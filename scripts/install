@@ -2,16 +2,21 @@
 set -eu
 
 usage() {
-  printf 'Usage: %s [--pi]\n' "$0"
+  printf 'Usage: %s [--pi] [--experimental]\n' "$0"
+  printf '  --pi            also install the Pi agents, extensions, themes and skills\n'
+  printf '  --experimental  also install the skills under experimental/skills\n'
 }
 
 install_pi=false
-case ${1-} in
-  "") ;;
-  --pi) install_pi=true ;;
-  -h|--help) usage; exit 0 ;;
-  *) usage >&2; exit 2 ;;
-esac
+install_experimental=false
+for arg in "$@"; do
+  case $arg in
+    --pi) install_pi=true ;;
+    --experimental) install_experimental=true ;;
+    -h|--help) usage; exit 0 ;;
+    *) usage >&2; exit 2 ;;
+  esac
+done
 
 repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 agent_home=${AGENT_HOME:-"$HOME/.agents"}
@@ -48,6 +53,9 @@ check_destination "$agent_home/model-policy.yaml"
 check_destination "$agent_home/scripts/model-policy.py"
 check_destination "$agent_home/scripts/find-sessions.py"
 check_tree_entries "$repo_dir/skills" "$agent_home/skills"
+if [ "$install_experimental" = true ]; then
+  check_tree_entries "$repo_dir/experimental/skills" "$agent_home/skills"
+fi
 check_tree_entries "$repo_dir/context/templates" "$context_templates"
 
 if [ "$install_pi" = true ]; then
@@ -76,6 +84,9 @@ cp "$repo_dir/model-policy.yaml" "$agent_home/model-policy.yaml"
 cp "$repo_dir/scripts/model-policy.py" "$agent_home/scripts/model-policy.py"
 cp "$repo_dir/scripts/find-sessions.py" "$agent_home/scripts/find-sessions.py"
 cp -R "$repo_dir"/skills/* "$agent_home/skills/"
+if [ "$install_experimental" = true ]; then
+  cp -R "$repo_dir"/experimental/skills/* "$agent_home/skills/"
+fi
 cp "$repo_dir"/context/templates/* "$context_templates/"
 
 if [ "$install_pi" = true ]; then
