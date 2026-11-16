@@ -1,11 +1,9 @@
 ---
 name: write-tbp
-description: Writing technical blog posts about project features and implementation details. Use when creating blog content about how a project solves interesting problems.
+description: Write technical blog posts explaining how a project solves a problem through its implementation.
 ---
 
 # Write technical blog post
-
-This skill covers how to write technical blog posts about a project's implementation details.
 
 ## Process
 
@@ -23,29 +21,9 @@ Use a short, kebab-case name for the topic (e.g., `cache-invalidation`, `query-p
 
 ### 2. Research the topic
 
-Use an Explore subagent to gather all relevant information:
+Delegate thorough research before drafting, using [delegated-execution](../delegated-execution/SKILL.md) and the active harness's native exploration role and launch protocol. Supplied source does not waive this research step. If delegation is unavailable or prohibited, report the blocker rather than silently skipping it.
 
-```
-Task (subagent_type: Explore, thoroughness: very thorough)
-
-Find all code, documentation, and context related to [TOPIC] in the target codebase.
-
-Look for:
-- Implementation files in the project's relevant source packages
-- Type definitions and schemas related to the feature
-- Related examples and demos
-- Existing documentation about the feature
-- Tests that reveal behavior
-- Comments explaining why things work the way they do
-
-For each relevant file, note:
-- What it does
-- Key functions/classes
-- Interesting implementation details
-- Any "why" comments or non-obvious decisions
-
-Output a comprehensive summary of how [TOPIC] works. This document will be read by another agent. No need to over-optimize for human readability.
-```
+Bound the read-only brief to the topic and target codebase. Gather implementation files, types/schemas, examples/demos, documentation, behavior-revealing tests, and comments explaining decisions. Return a comprehensive source-linked summary of how the feature works, each relevant file's responsibility and key functions/classes, interesting details, non-obvious decisions, and evidence gaps for the drafting agent. Stop at unrelated areas; do not modify code or delegate further.
 
 Save the research output to the target workspace's `assets/<topic>/research.md`.
 
@@ -56,38 +34,23 @@ Before writing, answer these questions from the research:
 - **What problem does this solve?** Not "what does it do" but "what would go wrong without it?"
 - **What's surprising or unintuitive?** The obvious approach that doesn't work, or the hidden complexity.
 - **What's the key insight?** The "aha" that makes the solution work.
-- **What did we try first?** Any journey or iteration visible in the code or comments.
+- **What did we try first?** Include a journey or iteration only when evidenced by code, comments, or other sources. Do not fabricate history.
 
 If you can't find an interesting angle, the topic may not be suitable for a technical blog post.
 
 ### 4. Write the draft
 
-Create the draft at `assets/<topic>/draft.md` in the target workspace, following the blog-guide structure:
-
-1. **Frame the problem** — Hook the reader with context and tension
-2. **Show the insight** — The key idea that makes it work
-3. **Walk through the implementation** — Code and explanation, building complexity
-4. **Wrap up** — Where it lives, tradeoffs, links to files
+Read [blog-guide](../references/blog-guide.md) and [technical-writing](../technical-writing/SKILL.md). Create `assets/<topic>/draft.md` in the target workspace using the blog-guide's structure and shared writing standards.
 
 Target 800-1500 words.
 
 ### 5. Self-evaluate
 
-Check the draft against the blog-guide checklist:
-
-- [ ] **Opening** — Does it frame a problem before diving into solution?
-- [ ] **Insight** — Is there a clear "aha" moment or key idea?
-- [ ] **Specificity** — Is this grounded in the project's actual implementation?
-- [ ] **Code** — Do examples build understanding, not just show syntax?
-- [ ] **Tone** — Warm and personal, but not rambling?
-- [ ] **Links** — Points to actual code in the repo?
-- [ ] **Length** — Appropriate depth for the topic?
-
-Revise the draft to address any gaps.
+Review the draft against the blog-guide evaluation checklist and revise any gaps.
 
 ### 6. Output
 
-Present the final draft to the user for review. The draft remains in the target workspace's `assets/<topic>/draft.md` until the user is satisfied, at which point they can move it to the appropriate location.
+Present the final draft to the user for review. The draft remains in the target workspace's `assets/<topic>/draft.md` until the user accepts it. Do not promote or move it before acceptance; the user can then move it to the appropriate location.
 
 ## References
 

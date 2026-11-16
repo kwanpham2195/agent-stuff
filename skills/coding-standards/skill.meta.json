@@ -1,0 +1,38 @@
+{
+  "applicability": [
+    "shared engineering standards for any language",
+    "TypeScript Effect and Go additions",
+    "mixed-language standards routing"
+  ],
+  "approved_cycles": [],
+  "context_weight": 3,
+  "do_not_use_when": [
+    "the task does not touch code design implementation or code quality"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "code_context",
+    "design_context"
+  ],
+  "outputs": [
+    "coding_standard_guidance"
+  ],
+  "overlays": [],
+  "resources": [
+    "references/workflow.md",
+    "references/domain-types-and-state.md",
+    "references/parsing-and-evidence.md",
+    "references/errors.md",
+    "references/modules-and-dependencies.md",
+    "references/configuration-and-resources.md",
+    "references/persistence.md",
+    "references/workflows-transactions-and-idempotency.md",
+    "references/sensitive-data-and-observability.md",
+    "references/testing.md",
+    "references/documentation.md"
+  ],
+  "role": "overlay",
+  "schema_version": 1,
+  "skill": "coding-standards",
+  "stop_when": "applicable shared rules and language additions are applied and verified or concrete blockers are reported"
+}

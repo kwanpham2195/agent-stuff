@@ -60,4 +60,4 @@ A consolidated list of the defects and inconsistencies that the feature document
 
 ## Filing upstream
 
-Outward-facing; do only when the user asks, after confirming the target repo and the issue format. One issue per entry, title from the table, body from the entry (omit the "Raised by" links unless the description repo is public), a label if the repo uses them. Then add the Issue line to each entry, the Issue column to the table, and the range to the intro paragraph. Commit as `docs: revise bug-triage.md with links to the filed issues ({owner}/{repo} #NNNN–#NNNN)`.
+Prepare entries before requesting any missing publication authority or destination. When the user has requested filing and supplied the target repo and issue format, proceed without redundant confirmation. File one issue per entry, using the title from the table and body from the entry. Omit "Raised by" links unless the description repo is public, and use a label if the repo does. Then add the Issue line to each entry, the Issue column to the table, and the range to the intro paragraph. Commit as `docs: revise bug-triage.md with links to the filed issues ({owner}/{repo} #NNNN–#NNNN)`.

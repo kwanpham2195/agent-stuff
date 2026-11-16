@@ -7,7 +7,9 @@ updated: YYYY-MM-DD
 
 # Workspace name
 
-Save as `workspaces/<workspace-id>/index.md`. Record directory hints and stable repository identities separately. A workspace may span repositories; paths alone do not prove identity. Resolve overlaps, forks, and worktrees explicitly.
+Save as `workspaces/<workspace-id>/index.md`. Record directory hints and stable repository
+identities separately. A workspace may span repositories; paths alone do not prove identity. Resolve
+overlaps, forks, and worktrees explicitly.
 
 ## Identity and routing hints
 

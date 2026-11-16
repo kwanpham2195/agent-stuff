@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private interviewer guide · Illustrative skeleton</title>
+<style>
+:root{color-scheme:light;--field:#f5f5f5;--ink:#2d3142;--sub:#4f5d75;--line:#ccd0d6;--panel:#e8ebef;--blue:#bc491a;--soft:#f9e4d9;--radius:8px}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--field:#2d3142;--ink:#f5f5f5;--sub:#bfc0c0;--line:#616779;--panel:#3c4254;--blue:#ff9b70;--soft:#4a3835}}
+:root[data-theme="light"]{color-scheme:light;--field:#f5f5f5;--ink:#2d3142;--sub:#4f5d75;--line:#ccd0d6;--panel:#e8ebef;--blue:#bc491a;--soft:#f9e4d9}
+:root[data-theme="dark"]{color-scheme:dark;--field:#2d3142;--ink:#f5f5f5;--sub:#bfc0c0;--line:#616779;--panel:#3c4254;--blue:#ff9b70;--soft:#4a3835}
+*{box-sizing:border-box}body{margin:0;background:var(--field);color:var(--ink);font:16px/1.6 Arial,Helvetica,sans-serif}main{max-width:1120px;margin:auto;padding:28px 18px 48px}h1,h2,h3,p{margin:0}h1{font:clamp(30px,5vw,44px)/1.15 Georgia,serif;text-wrap:balance}h2{font:27px/1.3 Georgia,serif}h3{font-size:18px}p{max-width:65ch}a{color:var(--blue)}button,select,textarea,input{font:inherit}button,select{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 13px;border-radius:6px;min-height:46px;max-width:100%}button{cursor:pointer}button:hover{border-color:var(--blue)}button[aria-pressed="true"],button[aria-current="step"]{background:var(--soft);border-color:var(--blue);color:var(--blue)}button:disabled{opacity:.45;cursor:default}:focus-visible,[tabindex="-1"]:focus{outline:3px solid var(--blue);outline-offset:3px}textarea,input{width:100%;padding:12px;border:1px solid var(--line);border-radius:6px;background:var(--field);color:var(--ink)}textarea{min-height:120px;resize:vertical}label{display:grid;gap:7px;font-size:14px}header{display:grid;gap:16px;padding-bottom:25px}.eyebrow,.utility{font:12px/1.5 Menlo,Consolas,monospace;letter-spacing:1px;color:var(--blue)}.eyebrow{text-transform:uppercase}.sub{color:var(--sub)}.toolbar,.pager,.section-title{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.toolbar>label{display:flex;align-items:center;gap:8px;font-size:16px}.toolbar>button,.toolbar select{height:46px}.notice{background:var(--soft);padding:16px 18px;border-radius:var(--radius);display:grid;gap:6px;font-size:14px}.nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--radius);background:var(--field)}.nav label{display:flex;align-items:center;gap:8px;min-width:0}.nav select{min-width:0;max-width:230px}.nav a{padding:8px 0}.jump{margin-left:auto}.section{padding:28px 0;border-bottom:1px solid var(--line);display:grid;gap:18px;min-width:0}.phase-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.phase-nav button{text-align:left}.phase{display:grid;gap:18px}.phase[hidden]{display:none}.phase-grid,.assessment{display:grid;grid-template-columns:1.2fr 1fr;gap:22px}.phase-grid>div{display:grid;gap:12px;align-content:start}.ask{font-size:21px;line-height:1.45}.answer{border:1px solid var(--line);padding:16px;border-radius:var(--radius);display:grid;gap:8px}details{border:1px solid var(--line);border-radius:8px;overflow:hidden}summary{padding:12px;background:var(--panel);cursor:pointer;font-weight:600}.detail-body{padding:16px;display:grid;gap:12px}.pager{justify-content:space-between}.status{font-size:14px;color:var(--blue)}.diagram-stage{overflow:auto;padding:16px;border:1px solid var(--line);border-radius:8px}.flow{display:flex;align-items:center;gap:16px;min-width:680px}.node{flex:1;min-height:100px;padding:16px;border:1px solid var(--line);border-radius:6px;background:var(--panel);display:grid;gap:6px}.node[data-active="true"]{border:2px solid var(--blue);background:var(--soft)}.arrow{font-size:28px;color:var(--sub)}.diagram-editor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.trace-steps{display:flex;flex-wrap:wrap;gap:8px}.trace{display:grid;gap:12px;padding:18px;border:1px solid var(--line);border-radius:8px}.assessment>label{padding:16px;border:1px solid var(--line);border-radius:8px}.printed-note{display:none}ul{margin:0;padding-left:22px}[id]{scroll-margin-top:110px}
+@media(max-width:760px){.phase-grid,.assessment,.diagram-editor{grid-template-columns:1fr}.nav label{width:100%}.nav select{flex:1;max-width:none}.jump{margin-left:0}[id]{scroll-margin-top:220px}}
+@media(max-width:420px){main{padding:20px 12px 35px}.toolbar{align-items:flex-start}.toolbar button{font-size:13px}.phase-nav{grid-template-columns:1fr}.nav{gap:6px 12px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+@media print{:root,:root[data-theme]{color-scheme:light;--field:#fff;--ink:#2d3142;--sub:#4f5d75;--line:#ccd0d6;--panel:#e8ebef;--blue:#bc491a;--soft:#f9e4d9}body{font-size:10pt}main{padding:0;max-width:none}.toolbar,.nav,.phase-nav,.pager,.trace-steps,.diagram-editor,.status{display:none!important}.phase[hidden]{display:grid!important}.phase{padding:16px 0}.phase-grid,.assessment{display:block}.assessment>label{display:block;margin:12px 0}details .detail-body{display:grid!important}details:not([open])>*:not(summary){display:grid!important}textarea{display:none}.printed-note{display:block;white-space:pre-wrap;overflow-wrap:anywhere}.diagram-stage{overflow:visible}.flow{min-width:0;gap:8px}.node{min-height:0;font-size:10pt;padding:8px}.arrow{font-size:18px}.section{padding:16px 0}.answer,.trace,.diagram-stage{break-inside:avoid}input{border:0}.node[data-active]{border:1px solid var(--line);background:var(--panel)}}
+</style>
+</head>
+<body><main>
+<header>
+<p class="eyebrow">Private interviewer reference · Illustrative skeleton</p>
+<h1>Guide the design discussion</h1>
+<p class="sub">Customize this sample before use. Agree the problem, role, duration, workload and guarantees; this file is not a ready-made exercise.</p>
+<div class="toolbar"><button id="export-notes" type="button">Export notes as Markdown</button><button id="print-guide" type="button">Print full guide</button><label>Theme<select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label></div>
+<div class="notice"><p><strong>Private. Give the candidate a separate brief.</strong> Reference reasoning is illustrative, not a required answer.</p><p>Notes and diagram edits live only in this open page. Export before refreshing or closing. Browser loss warnings may be suppressed and cannot protect against crashes.</p></div>
+<output id="export-status" class="status" aria-live="polite"></output>
+</header>
+<nav class="nav" aria-label="Guide navigation"><label>Phase<select id="guide-phase"><option value="clarify">Clarify</option><option value="design">Design</option><option value="failures">Explore failures</option></select></label><button id="return-to-phase" type="button">Current question</button><a href="#reference">Architecture</a><a href="#notes">Notes</a><label class="jump">Jump to<select id="guide-jump"><option value="">Choose a topic</option><optgroup label="Interview"><option value="interview">Interview phases</option><option value="clarification">Clarification replies</option><option value="notes">Evidence and notes</option></optgroup><optgroup label="Reference"><option value="reference">Architecture</option><option value="trace">Operation walkthrough</option><option value="diagram-editor">Edit diagram</option></optgroup></select></label></nav>
+<section id="interview" class="section" tabindex="-1"><h2>Interview phases</h2><p class="sub">Set timings for the agreed duration. These three phases demonstrate navigation, not a prescribed schedule.</p><div class="phase-nav"><button type="button" data-phase="clarify">Clarify</button><button type="button" data-phase="design">Design</button><button type="button" data-phase="failures">Explore failures</button></div>
+<!-- Customize phase questions and reference reasoning together; keep IDs synchronized with both selectors. -->
+<article id="clarify" class="phase" tabindex="-1"><h3>Clarify the contract</h3><p class="ask">Who uses the service, and what outcome must it guarantee?</p><div class="phase-grid"><div><p>Listen for scope, permission boundaries and measurable targets.</p><details id="clarification"><summary>Clarification replies</summary><div class="detail-body"><p>Agree traffic shape, retention and target measurement boundaries before sizing. Replace this guidance with replies consistent with the candidate brief.</p><p>Separate fixed exercise facts from assumptions open to discussion.</p></div></details></div><div class="answer"><strong>Illustrative reasoning</strong><p>A successful reply needs a defined meaning. Ask what survives a process failure and what may be retried.</p></div></div></article>
+<article id="design" class="phase" tabindex="-1" hidden><h3>Draw a coherent design</h3><p class="ask">Where does the operation become durable, and who owns that decision?</p><div class="phase-grid"><div><p>Ask for component responsibilities, contracts and one operation trace.</p><details><summary>Optional probe</summary><div class="detail-body">What evidence lets the caller distinguish success from an unknown outcome?</div></details></div><div class="answer"><strong>Illustrative reasoning</strong><p>The service validates the request, records the result, then replies. Another design may be defensible with an explicit contract.</p></div></div></article>
+<article id="failures" class="phase" tabindex="-1" hidden><h3>Explore failures and tradeoffs</h3><p class="ask">What does the caller observe if the reply is lost?</p><div class="phase-grid"><div><p>Trace retry, resource limits and recovery against the agreed guarantees.</p><details><summary>Optional probe</summary><div class="detail-body">Which operational signal detects the failure, and how does recovery stop?</div></details></div><div class="answer"><strong>Illustrative reasoning</strong><p>Discuss how a repeated operation is recognized and when that recognition expires. Record unresolved assumptions, not a stack preference.</p></div></div></article>
+<div class="pager"><button id="previous-phase" type="button">Previous phase</button><output id="phase-status"></output><button id="next-phase" type="button">Next phase</button></div></section>
+<section id="reference" class="section" tabindex="-1"><h2>Architecture sketch</h2><p class="sub">One illustrative request path. Edit the three component labels below; the diagram, trace and export use the same values. Replace the topology when the exercise needs other actors or branches.</p>
+<div class="diagram-stage" role="region" aria-label="Architecture diagram" tabindex="0"><div class="flow"><div class="node" data-node="0"><strong></strong><span>Initiates operation</span></div><span class="arrow" aria-label="request to">→</span><div class="node" data-node="1"><strong></strong><span>Owns decision</span></div><span class="arrow" aria-label="record to">→</span><div class="node" data-node="2"><strong></strong><span>Retains result</span></div></div></div>
+<details id="diagram-editor"><summary>Edit diagram labels</summary><div class="detail-body diagram-editor"><label>Caller label<input data-label="0" value="Caller" maxlength="50"></label><label>Service label<input data-label="1" value="Operation service" maxlength="50"></label><label>Store label<input data-label="2" value="Durable store" maxlength="50"></label></div></details>
+<div id="trace" class="trace" tabindex="-1"><h3>Operation walkthrough</h3><div class="trace-steps"><button type="button" data-step="0">1 · Request</button><button type="button" data-step="1">2 · Record</button><button type="button" data-step="2">3 · Reply</button><button type="button" id="reset-trace">Reset trace</button></div><output id="trace-detail" aria-live="polite"></output><p id="trace-state" class="utility"></p></div></section>
+<section id="notes" class="section" tabindex="-1"><h2>Evidence and notes</h2><p class="sub">Record observed reasoning and assistance. Not covered means absent evidence, not failure. Export includes both fields and current diagram labels; treat the download as private.</p><div class="assessment"><label>Observed reasoning<textarea id="reasoning" placeholder="Decision, scenario and supporting reasoning"></textarea><span class="printed-note" data-print="reasoning"></span></label><label>Assistance and open questions<textarea id="assistance" placeholder="Neutral probe, hint, unresolved assumption or topic not covered"></textarea><span class="printed-note" data-print="assistance"></span></label></div></section>
+</main><script>
+const phaseIds = ['clarify', 'design', 'failures'];
+let selectedPhase = 0;
+let selectedStep = 0;
+let hasUnsavedEdits = false;
+const phaseSelect = document.getElementById('guide-phase');
+const labelInputs = [...document.querySelectorAll('[data-label]')];
+function jumpTo(id) {
+  const target = document.getElementById(id);
+  const phase = target.closest('.phase');
+  if (phase && phase.hidden) selectPhase(phaseIds.indexOf(phase.id), false);
+  for (let parent = target; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+  target.setAttribute('tabindex', '-1');
+  target.focus({preventScroll:true});
+  const navHeight = document.querySelector('.nav').getBoundingClientRect().height;
+  window.scrollTo({top:window.scrollY + target.getBoundingClientRect().top - navHeight - 16,behavior:'instant'});
+}
+function selectPhase(index, navigate = true) {
+  selectedPhase = index;
+  phaseIds.forEach((id, i) => {document.getElementById(id).hidden = i !== index; document.querySelector(`[data-phase="${id}"]`).setAttribute('aria-current', i === index ? 'step' : 'false');});
+  phaseSelect.value = phaseIds[index];
+  document.getElementById('phase-status').textContent = `${index + 1} of ${phaseIds.length}`;
+  document.getElementById('previous-phase').disabled = index === 0;
+  document.getElementById('next-phase').disabled = index === phaseIds.length - 1;
+  if (navigate) jumpTo(phaseIds[index]);
+}
+document.querySelectorAll('[data-phase]').forEach(button => button.addEventListener('click', () => selectPhase(phaseIds.indexOf(button.dataset.phase))));
+phaseSelect.addEventListener('change', () => selectPhase(phaseIds.indexOf(phaseSelect.value)));
+document.getElementById('previous-phase').addEventListener('click', () => selectPhase(selectedPhase - 1));
+document.getElementById('next-phase').addEventListener('click', () => selectPhase(selectedPhase + 1));
+document.getElementById('return-to-phase').addEventListener('click', () => jumpTo(phaseIds[selectedPhase]));
+document.getElementById('guide-jump').addEventListener('change', event => {if(event.target.value) jumpTo(event.target.value);event.target.value = '';});
+document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', event => {event.preventDefault();jumpTo(link.getAttribute('href').slice(1));}));
+document.getElementById('theme').addEventListener('change', event => {if(event.target.value === 'system') delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme = event.target.value;});
+function renderTrace() {
+  const labels = labelInputs.map(input => input.value.trim() || 'Unnamed component');
+  document.querySelectorAll('[data-node]').forEach((node, index) => {node.querySelector('strong').textContent = labels[index];node.dataset.active = String(index === [0,2,1][selectedStep]);});
+  const descriptions = [`${labels[0]} sends a request to ${labels[1]}.`, `${labels[1]} records the result in ${labels[2]}.`, `${labels[1]} replies to ${labels[0]} after recording the result.`];
+  document.getElementById('trace-detail').textContent = descriptions[selectedStep];
+  document.getElementById('trace-state').textContent = ['Outcome: not yet recorded', 'Outcome: recorded; caller may not know', 'Outcome: reply sent; receipt is not demonstrated'][selectedStep];
+  document.querySelectorAll('[data-step]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.step) === selectedStep)));
+}
+document.querySelectorAll('[data-step]').forEach(button => button.addEventListener('click', () => {selectedStep = Number(button.dataset.step);renderTrace();}));
+document.getElementById('reset-trace').addEventListener('click', () => {selectedStep = 0;renderTrace();});
+labelInputs.forEach(input => input.addEventListener('input', () => {hasUnsavedEdits = true;renderTrace();}));
+document.querySelectorAll('textarea').forEach(input => input.addEventListener('input', () => {hasUnsavedEdits = true;}));
+function exportNotes() {
+  const content = `# Private interview notes\n\n## Observed reasoning\n${document.getElementById('reasoning').value}\n\n## Assistance and open questions\n${document.getElementById('assistance').value}\n\n## Diagram labels\n${labelInputs.map(input => input.value).join(' → ')}\n`;
+  const url = URL.createObjectURL(new Blob([content], {type:'text/markdown;charset=utf-8'}));
+  const link = document.createElement('a');link.href = url;link.download = 'private-interview-notes.md';link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.getElementById('export-status').textContent = 'Download requested. Check the saved file before closing; edits remain only in this page.';
+}
+document.getElementById('export-notes').addEventListener('click', exportNotes);
+window.addEventListener('beforeunload', event => {if(hasUnsavedEdits){event.preventDefault();event.returnValue = '';}});
+const printDetails = [...document.querySelectorAll('details')];
+let beforePrint;
+window.addEventListener('beforeprint', () => {
+  beforePrint = printDetails.map(item => item.open);
+  printDetails.forEach(item => {item.open = true;});
+  document.querySelectorAll('[data-print]').forEach(span => {span.textContent = document.getElementById(span.dataset.print).value || 'No notes recorded.';});
+});
+window.addEventListener('afterprint', () => {
+  if (beforePrint) printDetails.forEach((item, index) => {item.open = beforePrint[index];});
+  beforePrint = undefined;
+});
+document.getElementById('print-guide').addEventListener('click', () => window.print());
+selectPhase(0, false);renderTrace();
+</script></body></html>

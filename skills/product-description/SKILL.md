@@ -5,6 +5,8 @@ description: "Create or extend feature-by-feature product behavior documentation
 
 # Product description repo
 
+Before drafting or materially revising the human-facing behavior documents, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+
 Work in the requested documentation location. The commit messages below are suggested groups: initialize Git or commit only when the user requests it or an authorized repository workflow includes it. Otherwise leave the documents ready for review. Create CLAUDE.md only when explicitly requested.
 
 A product description treats the product as a large state chart the user moves through with input. The repo describes that state chart feature by feature, in plain language, from the user's point of view, with the same skeleton for every document so that gaps and inconsistencies show up by comparison. Documents are drafted from the source code and its tests, then verified by hand against the running product, and everything that looks like a defect is collected into one triage file.
@@ -52,7 +54,7 @@ Write, in this order, adapting the templates in `references/`:
 1. **README.md** from `README-template.md`. The structure section is the plan: list every document you expect to write with a one-line gloss, grouped by how the user meets the feature (foundations, then the areas of the product, then cross-cutting concerns), never by package or module. The coverage table lists every document as `not started`. Getting the structure right up front is most of the planning; expect to revise it as you learn, and update the table whenever you do.
 2. **glossary.md** from `glossary-guide.md`. Start with the terms the foundations will need and the interrupt words from Phase 0; grow it as documents demand new words. A term used in a document that is not in the glossary is a consistency bug.
 3. **goal.md** from `goal-template.md`. This is the prompt that drives all drafting. Its "Things already established" section is empty at first and fills in as the foundations are written.
-4. **AGENTS.md** with the one-line content shown under Outputs, following the `agents-md` skill. Add CLAUDE.md only when explicitly requested.
+4. **AGENTS.md** with the one-line content shown under Outputs,. Add CLAUDE.md only when explicitly requested.
 
 Commit: `docs: add README, glossary, goal`.
 
@@ -89,7 +91,7 @@ Over the whole set:
 - The interrupt table has the same rows in the same order in every document; the cross-cutting concerns appear in the same order.
 - The README structure and coverage table match the files on disk exactly.
 
-Commit: `docs: revise the set after the consistency review`. Then go back through the documents whose open questions were thinnest and deepen them; expect a second revision pass on a handful of documents.
+Commit: `docs: revise the set after the consistency review`. Revisit documents when missing evidence, inconsistencies, or unresolved concerns justify another pass. A short open-question list alone does not require more work.
 
 ## Phase 5: verification checklists
 
@@ -104,7 +106,7 @@ If you can drive the product (browser tools, a console handle on the app, a shel
 
 From `bug-triage-template.md`: collect every suspected defect from every document's body and open questions, merge duplicates (the same root cause raised by many documents is one entry with many "Raised by" links), and write each up with where the user meets it, what happens vs. what was expected, reproduction steps, the cause in the code with file and line, a severity, and the decision the product team needs (`fix` or `product call`). Summary table at the top sorted by severity. Entries confirmed by a verification pass carry a **Status** line.
 
-**Filing upstream is a separate, outward-facing step.** Offer it; do not do it unasked. If the user wants the entries filed as issues, confirm the repo and the format first, file them, then add an Issue line to each entry and a link column to the summary table (`docs: revise bug-triage.md with links to the filed issues`).
+**Filing upstream requires publication authority.** Prepare concrete entries first. If the user requested filing and supplied the repository and format, proceed; ask only for missing destination or publication authority. Then add an Issue line to each entry and a link column to the summary table (`docs: revise bug-triage.md with links to the filed issues`).
 
 ## Resuming and extending an existing repo
 
@@ -124,7 +126,7 @@ A later session, or a request to add a feature that was out of scope, starts her
 - Surprising behavior is stated plainly, with the reason if the code or a comment gives one. If it looks like a bug, say so in "Open questions".
 - Variants and interrupts go in tables, split by phase ("at the start" / "during"). Every cell filled, even with "no effect".
 - Cross-reference with relative links instead of repeating. The foundation documents own thresholds and definitions.
-- One Mermaid `stateDiagram-v2` per interaction, limited to the states the user passes through.
+- One state diagram per interaction, limited to the states the user passes through. Keep its `stateDiagram-v2` source in a `.mmd` file and embed the rendered PNG, never the Mermaid text ([mermaid-png](../mermaid-png/SKILL.md)).
 - Footer: `## Open questions and verification`, a bullet list, then `Verified against {repo} commit \`{sha}\``.
 - Commits: `docs: add {path}` / `docs: revise {path}`. Follow whatever the user's repo does about AI attribution in commit messages.
 - Never modify the source repo. It is read-only reference material.

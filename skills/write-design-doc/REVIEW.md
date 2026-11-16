@@ -4,8 +4,8 @@ Most design reviews fail the same way: a meeting is scheduled as the first step.
 
 ## The order
 
-1. **One reviewer first.** Before the doc goes anywhere else, give it to a single trusted reader — the person who will implement it, the client, or whoever owns the system upstream. Early confusion is cheaper to fix in front of one person than ten.
-2. **Then asynchronous reading.** Send it out and give reviewers at least two working days to read it uninterrupted. Broadcasting to a large group at once invites the bystander effect: everyone assumes somebody else is reading carefully.
+1. **Choose the needed review.** For substantial designs, start with one trusted reader when useful. Use the user's designated reviewers and existing team workflow. A completed draft does not require a new review gate unless the task or repository requires one.
+2. **Allow asynchronous reading.** When review is authorized, provide enough time for the document's depth and the team's schedule. Prepare the document and proposed recipients before asking for any missing sharing permission. Do not impose a fixed waiting period or send it to new recipients without authority.
 3. **Resolve in the document.** Answer comments by changing the doc, not by explaining in chat. If a reviewer misread something, every later reader will misread it the same way unless the text changes.
 4. **A meeting last, if at all.** Reserve it for the contentious points that text could not settle. Never hand out a doc nobody has seen and read excerpts aloud while people listen — that produces agreement, not thinking.
 
@@ -19,10 +19,10 @@ When an issue settles, summarize the reasoning at the top of the section, update
 
 ## Tooling
 
-Use something with inline comments, stable URLs for each thread, and visible change history. The URLs matter — a thread you cannot link to is a thread you cannot promote or reference later.
+Use the user's chosen review channel. Inline comments, stable thread URLs, and change history help with substantial shared reviews; ordinary chat with the exact document version also works. Do not require a new tool or publication merely to review a local draft.
 
 ## After it ships
 
-Run a blameless postmortem on the design itself: what took longer than expected, which dependency let you down, what the doc failed to consider. Aim it at the process, not at people.
+When requested or warranted by observed problems, run a blameless retrospective on the design: what took longer than expected, which dependency failed, and what the doc missed. Keep it focused on the process.
 
 Collecting answers anonymously first, then aggregating by how often and how badly each thing bit, keeps the discussion out of groupthink. Take the aggregate into a meeting and turn it into changes for the next design.

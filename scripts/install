@@ -44,6 +44,8 @@ check_tree_entries() {
 }
 
 check_destination "$agent_home/AGENTS.md"
+check_destination "$agent_home/model-policy.yaml"
+check_destination "$agent_home/scripts/model-policy.py"
 check_tree_entries "$repo_dir/skills" "$agent_home/skills"
 check_tree_entries "$repo_dir/context/templates" "$context_templates"
 
@@ -64,8 +66,13 @@ if [ -n "$collisions" ]; then
   exit 1
 fi
 
-install -d "$agent_home/skills" "$context_templates"
+install -d "$agent_home/skills" "$agent_home/scripts" "$context_templates"
 cp "$repo_dir/AGENTS.md" "$agent_home/AGENTS.md"
+if [ ! -e "$agent_home/USER.md" ] && [ ! -L "$agent_home/USER.md" ]; then
+  cp "$repo_dir/templates/USER.md" "$agent_home/USER.md"
+fi
+cp "$repo_dir/model-policy.yaml" "$agent_home/model-policy.yaml"
+cp "$repo_dir/scripts/model-policy.py" "$agent_home/scripts/model-policy.py"
 cp -R "$repo_dir"/skills/* "$agent_home/skills/"
 cp "$repo_dir"/context/templates/* "$context_templates/"
 

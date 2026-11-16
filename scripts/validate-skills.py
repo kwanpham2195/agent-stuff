@@ -165,7 +165,7 @@ def main() -> int:
             continue
 
         assert data is not None
-        unsupported = set(data) - {"name", "description", "license", "allowed-tools", "metadata", "disable-model-invocation", "argument-hint"}
+        unsupported = set(data) - {"name", "description", "license", "allowed-tools", "metadata", "disable-model-invocation", "argument-hint", "compatibility"}
         if unsupported:
             errors.append(f"{rel}: unsupported frontmatter fields: {', '.join(sorted(unsupported))}")
         invocation = data.get("disable-model-invocation")

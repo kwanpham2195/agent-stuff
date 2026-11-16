@@ -5,6 +5,10 @@ description: Reference standards for writing and maintaining local or remote iss
 
 # Writing and maintaining issues
 
+Before drafting or materially revising the issue's human-facing prose, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+
+Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising an issue title or body, even when technical-writing is not loaded. Before presenting a draft or saving an issue, scan, rewrite, and self-audit the prose you authored. Preserve verbatim user descriptions and quoted evidence.
+
 These content standards apply to local and remote issues. Destination-specific APIs, types, labels, milestones, and automation apply only when that remote tracker supports them. Local mode uses the metadata and lifecycle in the [issue skill](../issue/SKILL.md) and never requires GitHub, `gh`, or network access.
 
 ## Title standards
@@ -61,6 +65,20 @@ Use sparingly (1-2 per issue) for metadata, not categorization.
 | `performance`      | Performance improvement          |
 | `api`              | API change                       |
 
+### Recurring-work labels
+
+Use `recurring` for a standing issue that remains open across repeated runs. Add at most one work label beside it:
+
+| Label          | Use for                                                |
+| -------------- | ------------------------------------------------------ |
+| `recurring`    | Standing work repeated on a cadence or for each release |
+| `maintenance`  | Dependency, tooling, performance, or code-health work   |
+| `verification` | Repeated product or release verification                |
+| `release`      | Work tied to preparing or validating a release          |
+| `blocked`      | Work cannot continue until a named condition changes    |
+
+Keep standing recurring issues open. Record each completed run in a dated comment with its evidence, follow-ups, and next due date. Apply `blocked` only while a concrete condition prevents the next run, and remove it when that condition clears.
+
 ### Automation labels (do not apply manually)
 
 `keep`, `stale`, `update-snapshots`, `publish-packages`, `major`, `minor`, `skip-release`, deploy triggers
@@ -91,13 +109,13 @@ Use sparingly (1-2 per issue) for metadata, not categorization.
 
 ### Request-intake issues (problem readback and open questions)
 
-Request-intake issues capture the user's intent over a short interrogation, so they carry an unheaded readback paragraph beneath the verbatim description, followed by open questions and a confidence status line at the bottom:
+Request-intake issues preserve the user's intent with an unheaded readback beneath the verbatim description, any unresolved questions, and a plain readiness statement:
 
 - **Problem readback** - A brief, unheaded paragraph that states the agent's interpretation of the problem, expected behavior, and scope. It should be easy for the user to correct. Keep it product-facing: no code blocks, no long implementation analysis, no file paths, no function names, no line numbers, and no fix recipes unless the user explicitly asks for them.
 - **Open questions** - A numbered list of the specific gaps in intent or context still worth asking the user about. Answers are written beneath each question as the user replies, and the readback is revised each round. A question prefixed with `Critical:` is genuinely blocking — the issue cannot be worked on until it is answered. Most issues have none. Non-critical questions the user chooses not to answer are marked `_Deferred by user; not blocking implementation._`.
-- **Confidence line** - A plain-text line at the bottom, not a section heading, such as `Confidence: 84%, ready to get started.` or `Confidence: 42%, still need more information.` It reflects whether the issue has enough of the user's intent and context to work on, not confidence in the eventual fix.
+- **Readiness line** - State whether the issue has enough intent to proceed or name the missing decision. Do not invent confidence percentages or ask questions to fill the template. Omit open questions when the supplied request is sufficient.
 
-Leave the readback, open questions, and confidence line in the issue once interrogation is complete. The answered questions are a record of the discussion that produced the issue, so keep them rather than deleting them — mark questions resolved in place and keep the final readback as the issue's concise problem statement.
+Keep the final readback and readiness statement in the issue. Preserve actual answered questions as the intent record, marking them resolved in place. Do not require a question round before finishing a clear issue request.
 
 ## GitHub triage workflow
 

@@ -1,49 +1,49 @@
 ---
 name: write-design-doc
-description: Write a design doc that settles hard-to-reverse decisions before anyone builds.
+description: Write a design doc that makes a proposed system understandable and settles consequential decisions before implementation.
 disable-model-invocation: true
 ---
 
 # Write a design doc
 
-A design doc makes the team think through costly decisions before implementation, keeps the project off expensive wrong paths, and coordinates the decisions across everyone who touches them. It is a **decision document**, not an implementation plan.
+Before drafting or materially revising the design, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
 
-It is written for people who were not in your head: teammates, partner teams, stakeholders, and someone who joins in six months. Anyone you expect to read it must be able to read it without prior context.
+Write for builders, reviewers, operators, and stakeholders without prior context.
 
-Based on Michael Lynch's [Write an effective design doc](https://refactoringenglish.com/excerpts/write-an-effective-design-doc/). The worked example is [the Little Moments design doc](https://refactoringenglish.com/excerpts/write-an-effective-design-doc/little-moments-design-doc/) — read it when you want to see the register and depth rather than infer them.
+This skill is a faithful adaptation of Michael Lynch's [Write an effective design doc](https://refactoringenglish.com/excerpts/write-an-effective-design-doc/). The [Little Moments design doc](https://refactoringenglish.com/excerpts/write-an-effective-design-doc/little-moments-design-doc/) shows the depth and project-specific sections that a substantial design may need. The instructions below remain usable without either page.
 
 ## 1. Decide whether to write one at all
 
-Sometimes the right amount to invest in a design doc is zero. Answer these:
+Answer these before proposing a design doc:
 
 - Will several people coordinate the implementation?
 - Will the work take more than about three months full time?
 - Will what you build run in production for years?
 - Does it cross team boundaries?
 - Are the goals or requirements still ambiguous?
-- Could a catastrophic risk — security, legal, data loss — be prevented at design time?
+- Could a catastrophic security, legal, or data-loss risk be prevented at design time?
 
-Two or more yes answers justify the effort. Fewer, and say so rather than writing one out of habit.
+One yes answer probably justifies a design doc. Two or more make the effort strongly advisable. Use judgment because a single catastrophic risk may matter more than several minor coordination concerns.
 
-Then size it. A doc runs from a one-pager to fifty pages with multi-team signoff, and the right size depends on the team's goals, risks, deadlines, and culture. Propose the size before drafting.
+Then size it to the team's goals, risks, deadlines, and culture. Infer an appropriate depth from the request and proceed with the draft. Ask only when a consequential scope choice remains unresolved.
 
 **Completion criterion:** the decision to write, and the intended size, are both stated and grounded in the questions above.
 
 ## 2. Decide what goes in it
 
-One test governs every candidate: **what is the penalty for being wrong?**
+Use one question to choose the depth for each topic: **what is the penalty for being wrong?**
 
-In: decisions that are costly or impossible to reverse — the language, the storage backend, the architecture, the trust boundary, the data you retain.
+Give costly or difficult decisions enough detail for reviewers to challenge them. Examples include the language, storage backend, architecture, trust boundaries, and retained data.
 
-Out: decisions someone can change in an afternoon. A "load more" button does not deserve design review cycles.
+Keep cheap decisions brief unless they define user behavior, establish a shared contract, constrain another owner, or help reviewers understand the proposed system. A pagination control rarely needs design review by itself. The behavior of a complete user flow may still belong in the design.
 
-Specifying every possible detail means writing the implementation during the design phase. Contracts, function signatures, call stacks and test plans belong to the build, not here — reach for `/to-tickets`, `/implement`, `/tdd` and `/coding-standards` when the design is settled.
+Include enough interface detail to evaluate the design. API or CLI semantics, example payloads, file formats, and selected function signatures are appropriate when the contract is the subject of review. Leave exhaustive internal types, complete call stacks, task breakdowns, and implementation-level test plans to the build. Use the repository's issue workflow or [work-lifecycle](../references/work-lifecycle.md#plan-act-verify-accept) when the settled design needs a durable implementation plan.
 
-**Completion criterion:** every decision in the doc has a real reversal cost, and no section has drifted into implementation.
+**Completion criterion:** each topic has enough detail for its risk and coordination cost, and the doc does not prescribe implementation details that reviewers do not need to assess the design.
 
 ## 3. Load the local context
 
-Inspect existing code and docs for vocabulary, prior art, and precedent: earlier attempts at this problem, related design docs, ADRs, `CONTEXT.md`, and the conventions the team already follows. Where the repo already keeps design docs, match that convention.
+Inspect existing code and docs for vocabulary, prior art, and precedent: earlier attempts at this problem, related design docs, ADRs, `CONTEXT.md`, and the conventions the team already follows. Where the repo already keeps design docs, match that convention. For warranted ADRs, read [ADR format](../references/adr-format.md); repository-specific rules take precedence.
 
 Do not introduce a term, tool, or pattern before checking whether one is already established.
 
@@ -51,57 +51,55 @@ Do not introduce a term, tool, or pattern before checking whether one is already
 
 ## 4. Draft it
 
-Pick the sections that apply from [SECTIONS.md](SECTIONS.md). Not every doc needs all of them; a doc padded with empty sections is worse than a short one.
+Use [SECTIONS.md](SECTIONS.md) as an open catalogue. Choose the sections that help reviewers understand this system, and add project-specific sections when the design needs them.
 
 Order it as an inverted pyramid. The early sections make sense to anyone you expect to read the doc, whatever their background; later sections may assume more context. Whatever a reader needs in order to follow the doc belongs on the first page.
 
-Two things carry disproportionate weight:
+Use concrete views when they make the design easier to assess:
 
-- **Diagrams.** You can see the architecture in your head; reviewers cannot, and drawing it is the fastest way to give them the picture. Roughly half of all review feedback lands on diagrams, because they are what make an architecture arguable. Use an editable source — Mermaid, D2, Excalidraw, draw.io — and link that source so anyone can revise it. A photo of a whiteboard is not a diagram. A boxed diagram is not the only option: see [Choosing the view](SECTIONS.md#choosing-the-view) for the lighter forms and when each one reads better.
-- **Scenarios.** Concrete walkthroughs of the finished system in use, step by step. They ground abstract requirements in something a reader can picture.
+- **Diagrams.** Draw architecture, component relationships, protocols, or data flow when prose would make those relationships hard to follow. Keep an editable source such as Mermaid, D2, Excalidraw, or draw.io beside the doc, embed the rendered PNG, and link the source so reviewers can revise it. Never paste Mermaid text into the doc; see [mermaid-png](../mermaid-png/SKILL.md). See [Choosing the view](SECTIONS.md#choosing-the-view) for lighter forms.
+- **Scenarios.** Walk through the finished system step by step when reviewers need to understand user behavior, system interaction, ordering, or failure handling.
 
 Frame goals as impact, never as implementation. "Minimize outages when deploying new app versions" is a goal; "Add Kubernetes" is not.
 
-Mark anything you do not know as an open issue. Do not invent requirements, constraints, or rationale to make the doc feel finished.
+Record unresolved questions that could change the design as open issues. Leave minor implementation questions to the implementation workflow. Do not invent requirements, constraints, or rationale to make the doc feel finished.
 
-**Completion criterion:** every included section earns its place, the first page is readable by every intended audience, each architectural claim has a diagram or a scenario behind it, and every unknown appears in Open issues rather than as invented detail.
+**Completion criterion:** every included section earns its place, the first page is readable by every intended audience, concrete views clarify the relationships or behavior that reviewers need to assess, and unresolved design questions appear in Open issues.
 
 ## 5. Get feedback and close it out
 
-Follow [REVIEW.md](REVIEW.md). The short version: one reviewer before many, asynchronous reading before any meeting, and a meeting only for what text could not settle.
+Follow [REVIEW.md](REVIEW.md) for review order and comment resolution.
 
 **Completion criterion:** every comment thread is resolved or promoted to Open issues, and the doc reflects the decisions rather than the argument that produced them.
 
 ## When there is not enough context yet
 
-If the problem, constraints, users, or success criteria are still vague, do not draft. Say that there is not enough context for a design doc, then run the `/grilling` skill — the whole frontier each round, numbered, with a recommended answer on each — until you can answer step 1 and step 2. Then draft.
+If the problem, constraints, users, or success criteria are still vague, do not draft. Use [define-outcome](../define-outcome/SKILL.md) to settle intent and observable acceptance. Resolve missing facts through RPI's research steps. Draft only when you can answer step 1 and step 2.
 
 Facts are your job: if a question can be answered by reading the codebase or the docs, read them instead of asking.
 
 ## Output
 
-A design doc is a human-readable decision artifact, not an execution plan. Follow [context routing](../references/context-routing.md): reuse an existing authoritative design artifact and honor repository-required conventions. A draft intended for local review may use the current work item's optional `design.md` and may remain local. Publishing or promoting it to a shared repository or tracker requires authorization; after promotion, the local entry links the shared authority rather than maintaining a duplicate.
+Follow [context routing](../references/context-routing.md) for artifact ownership, local drafts, promotion, and accepted decisions. Reuse an authoritative design and honor repository conventions. Local drafts may remain local; publishing or promotion requires authorization.
 
-For a shared or repository-required design doc, save it where the repo already keeps design docs. Common locations to check: `docs/design/`, `docs/designs/`, `docs/technical-designs/`, `docs/adr/`. If the repo has no convention, use `docs/design/<slug>.md` and say where you put it. Creating or approving the document does not authorize committing or publishing it.
+For a shared or repository-required design doc, save it where the repo already keeps design docs. Common locations to check: `docs/design/`, `docs/designs/`, `docs/technical-designs/`, `docs/adr/`. If the repo has no convention, use `docs/design/<slug>.md` and say where you put it. Commit a completed, verified draft as a proposal under [commit](../commit/SKILL.md). Document approval does not authorize publication or implementation beyond the requested scope.
 
-The filename stays stable while people comment on it — no date prefix. The date it was written belongs in the Metadata section.
+The filename stays stable while people comment on it. Put the date in the Metadata section instead of the filename.
 
 Give it a short, distinctive title that is easy to say aloud. "RecencyBank" works. "Project Flying Silver Horse" does not.
 
 ## Rules
 
 - Plain language in the objective and background: any stakeholder should follow them.
-- Goals state impact; implementation choices are not goals.
 - Define internal jargon inline, or use a term readers already know.
 - Express targets in concrete, objective terms. "Performant on mobile" is not a target; "under 200ms at the 95th percentile" is.
-- Document the threats you considered and why you judged them, even the ones you dismissed.
+- Document threats relevant to the system and the reasons for consequential security decisions. Omit hypothetical warnings and checklists that do not affect the design.
 - Keep rejected alternatives brief. Cover the strong ones and why they lost; do not catalogue every idea anyone had.
 - One source of truth. If two sections say the same thing, one of them points at the other.
-- Record technical choices and rationale here while this document owns them, including approval source and worthwhile rejected alternatives. A draft or agent proposal is not accepted without actual approval or delegated authority. If a decision later earns a workspace-wide decision record or an existing repository ADR owns it, follow [context routing](../references/context-routing.md) and link that authority rather than maintaining duplicate semantics.
-- Unknowns stay open issues.
+- Record technical choices and rationale here while this document owns them, including approval source and worthwhile rejected alternatives. A draft or agent proposal is not accepted without actual approval or delegated authority. Link a superseding workspace decision record or an existing repository ADR rather than duplicating its semantics.
 
 ## This skill does not
 
-- implement anything, or ask to;
-- specify types, function signatures, call stacks, or a test plan;
-- replace `/to-tickets`, which turns a settled design into work.
+- implement the design or grant permission to implement it;
+- provide an exhaustive internal specification, task breakdown, or implementation-level test plan;
+- replace the repository's issue or execution-planning workflow.
