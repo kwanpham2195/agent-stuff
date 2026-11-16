@@ -12,8 +12,8 @@ import {
 	mkdtempSync,
 	readFileSync,
 	realpathSync,
+	rmSync,
 	statSync,
-	unlinkSync,
 	writeFileSync,
 } from "node:fs";
 import os from "node:os";
@@ -692,10 +692,11 @@ const openPath = async (pi: ExtensionAPI, ctx: ExtensionContext, target: FileEnt
 };
 
 const openExternalEditor = (tui: TUI, editorCmd: string, content: string): string | null => {
-	const tmpFile = path.join(os.tmpdir(), `pi-files-edit-${Date.now()}.txt`);
+	const tmpDir = mkdtempSync(path.join(os.tmpdir(), "pi-files-edit-"));
+	const tmpFile = path.join(tmpDir, "edit.txt");
 
 	try {
-		writeFileSync(tmpFile, content, "utf8");
+		writeFileSync(tmpFile, content, { encoding: "utf8", flag: "wx", mode: 0o600 });
 		tui.stop();
 
 		const [editor, ...editorArgs] = editorCmd.split(" ");
@@ -707,10 +708,7 @@ const openExternalEditor = (tui: TUI, editorCmd: string, content: string): strin
 
 		return null;
 	} finally {
-		try {
-			unlinkSync(tmpFile);
-		} catch {
-		}
+		rmSync(tmpDir, { recursive: true, force: true });
 		tui.start();
 		tui.requestRender(true);
 	}
