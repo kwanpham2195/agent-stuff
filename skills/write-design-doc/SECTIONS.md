@@ -1,83 +1,93 @@
 # Sections
 
-The catalogue to pick from when drafting. Choose what applies; a doc padded with empty sections is worse than a short one. Order them as an inverted pyramid — anything a reader needs in order to follow the doc goes on the first page.
+Use this as an open catalogue when drafting. Choose what applies, add project-specific sections when reviewers need them, and leave out empty sections. Order the document as an inverted pyramid. Put anything a reader needs to follow the design on the first page.
 
 ## Nearly always
 
-**Title** — short, distinctive, easy to say aloud. Names the thing, not a codename nobody can decode.
+**Title.** Use a short, distinctive name that is easy to say aloud. Name the thing instead of using a codename nobody can decode.
 
-**Metadata** — author, date written, the authoritative URL for this doc, and approvals with timestamps once they arrive.
+**Metadata.** Record the author, date written, authoritative URL, and approvals with timestamps once they arrive.
 
-**Objective** — one plain sentence, in language any stakeholder understands, saying what this is for.
+**Objective.** State what the project is for in one plain sentence that any stakeholder can understand.
 
-**Background** — why the team is doing this and what problem it solves. Narrative, not bullets. Include previous attempts at the problem and why they did not stick.
+**Background.** Explain why the team is doing this and what problem it solves. Use a narrative rather than bullets. Include previous attempts and why they did not stick.
 
-**Goals** — framed as impact. "Minimize outages when deploying new app versions", not "Add Kubernetes".
+**Goals.** Describe the intended impact. "Minimize outages when deploying new app versions" is a goal. "Add Kubernetes" is an implementation choice.
 
-**Non-goals** — what a reader might reasonably assume is in scope but is not, each with its reason. The reasons matter as much as the list.
+**Non-goals.** Name what a reader might reasonably assume is in scope and give the reason each item is excluded.
 
-**Scenarios** — concrete step-by-step walkthroughs of the finished system in use. This is what lets a reader picture the solution instead of parsing requirements.
+**Scenarios.** Walk through the finished system step by step when concrete behavior helps the reader assess the design.
 
-**Architecture** — a diagram plus prose describing each component and why it is shaped that way. Editable source (Mermaid, D2, Excalidraw, draw.io), linked so anyone can revise it.
+**Alternatives considered.** Describe the strong options you rejected and why. Keep this brief.
 
-**Alternatives considered** — the strong options you rejected and why. Brief. Not a catalogue of every idea anyone floated.
-
-**Open issues** — each entry states the problem, the options on the table, and the immediate next action. Move them to Resolved issues as they close, keeping the discussion and the final rationale.
+**Open issues.** For each unresolved design question, state the problem, current options, and immediate next action. Move settled questions to Resolved issues and retain the final rationale.
 
 ## When they apply
 
-**Related documents** — test plans, functional specs, neighbouring design docs, earlier versions of this one.
+**Related documents.** Link test plans, functional specifications, related design docs, and earlier versions.
 
-**Glossary** — internal tools and systems a cross-team or new reader would not know. Better still, define terms inline so nobody has to jump around.
+**Users, roles, and permissions.** Describe the people or systems that interact with the design, their needs, and the permissions or responsibilities that affect behavior.
 
-**Constraints** — budget, client, infrastructure, or dependency limits that shape the design.
+**Product behavior.** Describe important workflows, interactions, notifications, or deliberately omitted features. Include choices that coordinate implementation or define what users experience, even when each choice is individually reversible.
 
-**Service level objectives** — measurable targets for uptime, latency, and scale, with their consequences spelled out. "99% availability, which allows up to 3.65 days of outage a year."
+**Assumptions and compatibility.** Record relevant assumptions about users, clients, platforms, existing data, or integrations. State compatibility requirements that constrain the design.
 
-**Monitoring and alerting** — how you will measure those targets in production. If the service goes down, how do you find out? If it slows by 100x, how do you know?
+**Migration and import.** Explain how existing users, data, or clients move to the proposed system when migration can affect architecture, privacy, or user behavior.
 
-**Interfaces** — UI sketches, API or CLI semantics, file formats. Keep UI sketches rough; pixel decisions are cheap to reverse and do not belong here.
+**Failure and recovery behavior.** Explain failures that affect users, data, dependencies, or operations, and describe the recovery behavior that belongs to the design.
 
-**Dependencies and infrastructure** — language, hardware, storage, third-party packages. Spend the words on what is hard to change later, not on what you could swap in a day.
+**Glossary.** Define internal tools and systems that a cross-team or new reader would not know. Prefer a clear term or inline definition when possible.
 
-**Security** — attack surface, trust boundaries, the threats you considered, and the mitigation for each. Record the threats you dismissed and why.
+**Constraints.** Explain the budget, client, infrastructure, or dependency limits that shape the design.
 
-**Privacy** — what sensitive data you handle, how long you keep it, who can reach it, and how it is protected at rest and in transit.
+**Service level objectives.** Set measurable targets for uptime, latency, and scale, and explain their consequences. For example, 99% availability allows up to 3.65 days of outage a year.
 
-**Data retention** — what is deleted, when, and whether deletes are hard, plus how long backups hold what was deleted.
+**Monitoring and alerting.** Explain how the team will measure service targets and detect failures or severe slowdowns in production.
 
-**Legal and licensing** — regulatory obligations, contractual limits, open-source licences.
+**Interfaces.** Show the UI, API or CLI semantics, protocols, or file formats that reviewers need to assess. Include a bounded payload, signature, or type when the contract itself is under review. Keep UI sketches rough and omit pixel-level choices unless they carry product risk.
 
-**Logging** — which events are logged, at what level, kept how long, readable by whom, and what must never appear in them.
+**Architecture.** Describe relevant components, responsibilities, communication, and data flow. Add an editable diagram when it makes those relationships easier to assess. A small product change may need no architecture section.
 
-**Timeline** — milestones with dates. Choose milestones that produce something useful to stakeholders: a clickable prototype on dummy data before the data plumbing is real.
+**Dependencies and infrastructure.** Cover language, hardware, storage, and third-party packages in proportion to their replacement cost and effect on the design.
 
-**Resolved issues** — closed open issues, with the discussion and the reasoning that settled them. This is what makes the doc worth reading a year later.
+**Security.** Describe attack points, trust boundaries, considered threats, and mitigations. Record dismissed threats and the reasons for dismissing them.
 
-**Appendix** — data formats, exports, long reference material that would break the flow of the doc.
+**Privacy.** State which sensitive data the system handles, how long it retains that data, who can access it, and how the system protects it at rest and in transit.
+
+**Data retention.** State what the system deletes, when deletion occurs, whether deletion is permanent, and how long backups retain deleted data.
+
+**Legal and licensing.** Record regulatory duties, contractual limits, and open-source licence decisions.
+
+**Logging.** State which events the system logs, at what level, where it stores them, how long it retains them, who can read them, and what must never appear in a log.
+
+**Timeline.** Define milestones with dates when delivery sequencing affects stakeholders or design risk. Choose milestones that produce something useful for review, such as a clickable prototype with dummy data.
+
+**Resolved issues.** Retain settled open issues with the reasoning that led to the decision.
+
+**Appendix.** Put data formats, exports, and long reference material here when they would interrupt the main document.
 
 ## Choosing the view
 
-A boxed architecture diagram is not always the clearest thing to draw. The `/show-me` skill holds the full catalogue of forms and worked examples — pseudocode, call trees, component trees, shallow file trees, Mermaid, diffs — and it applies here. Pick the smallest view that makes the point, and put it next to the short text it supports rather than in a diagram appendix.
+A boxed architecture diagram is not always the clearest view. The `/show-me` skill has worked examples of pseudocode, call trees, component trees, shallow file trees, plain-text flow diagrams, and diffs. Pick the smallest view that makes the point, and put it next to the text it supports.
 
 Which form suits which section:
 
-- **Architecture** — Mermaid for how components talk and where data flows; a shallow file tree when the point is which module owns what.
-- **Scenarios** — a call tree, or a Mermaid sequence diagram, walking one scenario from the user's action to the result. Easier to check against reality than a paragraph.
-- **Interfaces** — a component tree for UI shape; a small block for an API or file format when the reader needs a copyable target.
-- **Alternatives considered** — a **diff** against the current design. When the surrounding shape already exists and only part of it changes, showing the change alone is far easier to judge than two full diagrams side by side.
-- **Timeline** — what each milestone adds, as a diff against the milestone before it.
+- **Architecture.** Use a rendered diagram for component communication and data flow. Use a shallow file tree when the decision concerns module ownership.
+- **Scenarios.** Use a call tree or a rendered sequence diagram to trace a scenario from the user's action to the result.
+- **Interfaces.** Use a component tree for UI shape or a small code block for an API, signature, payload, or file format that needs a copyable target.
+- **Alternatives considered.** Use a diff against the current design when reviewers need to judge a focused change within an established structure.
+- **Timeline.** Show what each milestone adds when the sequence carries design or stakeholder risk.
 
 These read well partly because they are plain text: reviewers can edit them in a comment, and they diff cleanly between revisions. That satisfies the editable-source rule without any tooling.
 
-**The bound.** These are sketches at the altitude the decision needs, not contracts. A file tree that shows which module owns a responsibility is design. Full function signatures, exhaustive type definitions, and a complete call stack are the implementation, and putting them here means writing the build during the design phase. If a view has grown past the decision it exists to settle, cut it back.
+**The bound.** Use enough detail to evaluate the decision. A file tree can show which module owns a responsibility. A selected function signature can define the boundary under review. Exhaustive internal types, complete call stacks, and task-level implementation detail belong in the build. Cut a view back when its extra detail no longer helps reviewers assess the design.
 
 ## Notes on a few of them
 
-**Goals versus non-goals.** A non-goal with no reason attached reads as an oversight. Say why it is out: out of your control, deliberately deferred, or someone else's problem.
+**Goals versus non-goals.** A non-goal with no reason reads as an oversight. State whether it is outside the team's control, deliberately deferred, or owned elsewhere.
 
 **Open issues.** An empty Open issues section is a signal of a mature design, not a section you forgot. Leave it there and write "None."
 
-**Alternatives considered.** Compare on the dimensions that decided it — cost, operational burden, lock-in, how it fails — rather than listing pros and cons in the abstract.
+**Alternatives considered.** Compare the factors that decided the choice, such as cost, operational burden, lock-in, and failure behavior. Avoid an abstract pros-and-cons list.
 
 **Diagrams.** One diagram of how data moves is usually worth more than three of how things are grouped.

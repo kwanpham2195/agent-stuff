@@ -43,17 +43,7 @@ src/
 └── transport/      # sends API requests
 ```
 
-- Show component interaction, control flow, or data flow with Mermaid:
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant UI
-    participant Daemon
-    User->>UI: choose command
-    UI->>Daemon: send expanded prompt
-    Daemon-->>UI: stream result
-```
+- Show component interaction, control flow, or data flow as a diagram rendered to PNG and uploaded with `gh pr edit --attach`. Never paste Mermaid text into a PR. See [mermaid-png](../../mermaid-png/SKILL.md).
 
 - Use `diff` when the point is what changes and the surrounding shape already exists. Match the diff shape to the topic.
 

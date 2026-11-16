@@ -41,7 +41,7 @@ Every feature document follows the same skeleton so that documents are comparabl
 
 1. **Summary.** One paragraph describing the feature abstractly. For example: "{one-sentence summary of the pilot feature}."
 2. **The simple case.** The common path in prose.
-3. **The interaction, event by event.** The five phases of {the product's unit of interaction: a gesture / a page or form lifecycle / an invocation / a turn}: {name them in the product's words: starting; ending at once; becoming extended; while extended; finishing}. What starts it and what is captured, what happens if it ends at once, what is decided the moment it becomes extended, what updates live, and what is committed at the end. Include a small state diagram (Mermaid `stateDiagram-v2`) of the states the user passes through.
+3. **The interaction, event by event.** The five phases of {the product's unit of interaction: a gesture / a page or form lifecycle / an invocation / a turn}: {name them in the product's words: starting; ending at once; becoming extended; while extended; finishing}. What starts it and what is captured, what happens if it ends at once, what is decided the moment it becomes extended, what updates live, and what is committed at the end. Include a small state diagram of the states the user passes through, embedded as a PNG rendered from a `stateDiagram-v2` source file.
 4. **Modifiers.** A table of {Shift, Alt/Option, Ctrl/Cmd, and Space / the product's variant axis: roles, record states, flags, modes}, and what each one does when set at the start and when changed *during* the interaction.
 5. **Cancel and interrupt.** The same checklist in every document:
    - {The user's explicit abort: Escape, Stop, Ctrl+C, a Cancel button}

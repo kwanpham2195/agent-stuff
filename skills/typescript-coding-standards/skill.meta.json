@@ -1,0 +1,51 @@
+{
+  "applicability": [
+    "TypeScript and Effect code and design",
+    "TypeScript coding standards",
+    "Effect standards"
+  ],
+  "approved_cycles": [],
+  "context_weight": 3,
+  "do_not_use_when": [
+    "the task does not touch TypeScript or Effect design or code quality"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "code_context",
+    "design_context"
+  ],
+  "outputs": [
+    "coding_standard_guidance"
+  ],
+  "overlays": [],
+  "resources": [
+    "references/comments-and-jsdoc.md",
+    "references/configuration-and-resources.md",
+    "references/domain-types-and-state.md",
+    "references/effect-alchemy.md",
+    "references/effect-caching.md",
+    "references/effect-configuration.md",
+    "references/effect-http-clients.md",
+    "references/effect-scheduling-and-retry.md",
+    "references/effect-schema-and-data.md",
+    "references/effect-services.md",
+    "references/effect-streams.md",
+    "references/effect-testing.md",
+    "references/effect.md",
+    "references/errors.md",
+    "references/imports-exports-and-files.md",
+    "references/lint-and-policy.md",
+    "references/modules-services-and-adapters.md",
+    "references/parsing-and-schemas.md",
+    "references/persistence.md",
+    "references/sensitive-data-and-observability.md",
+    "references/testing.md",
+    "references/typescript-safety.md",
+    "references/workflows-transactions-and-idempotency.md"
+  ],
+  "role": "overlay",
+  "schema_version": 1,
+  "skill": "typescript-coding-standards",
+  "stop_when": "applicable references are read and applied to the changed behavior",
+  "provenance": "Derived from github.com/dmmulroy/.dotfiles home/.agents/skills/coding-standards at 574e1f2; locally adapted to extract shared engineering policy into coding-standards while retaining TypeScript and Effect additions"
+}

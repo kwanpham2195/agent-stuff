@@ -1,11 +1,20 @@
 ---
 name: pr
-description: Create or update a pull request for the current branch. Use when the user invokes pr, asks to create a PR, update an existing PR, push current branch changes for review, or prepare a pull request.
+description: "Create, update, inspect, fix, watch, or land pull requests. Use for PR preparation, maintenance, review follow-up, CI monitoring, and explicitly requested merging."
 ---
 
 # PR
 
-Create or update a pull request for the current branch.
+Create or update a pull request for the current branch. Creation and ordinary updates remain governed by this workflow; maintenance and landing use the explicit modes below.
+
+## Modes
+
+- `inspect` reads the exact repository, PR, base, head, checks, reviews, and findings and returns a bounded report.
+- `fix` changes only the owning branch after the user authorizes the finding and records a falsifiable reproduction or source proof.
+- `watch` observes the active forge's checks and review state without changing code, review threads, or merge state. In T3 use the parent-owned app watch/unwatch controls under maintenance; a monitoring request does not authorize fixes or landing.
+- `land` requires an explicit land request and follows [landing](references/landing.md); it never follows from `watch` or a green check alone.
+
+Read [maintenance](references/maintenance.md) for these boundaries, exact-head evidence, finding triage, bounded reruns, and human-note preservation. Read [landing](references/landing.md) only for an explicit landing request. Stacked PR topology belongs to the installed `gh-stack` owner; do not use Graphite or an external orchestrator.
 
 Use `../write-pr/SKILL.md` as the standards reference for PR titles, descriptions, release notes, API changes, code changes tables, and human-note preservation.
 
@@ -32,11 +41,11 @@ Use `../write-pr/SKILL.md` as the standards reference for PR titles, description
    - Sweep the diff's added comments for slop, following `../write-pr/SKILL.md` § The comment sweep. On an update, this catches whatever the branch grew since the PR was opened, which on a long-lived branch is most of it.
    - Fix what's clearly worth fixing so the human review starts from a strong diff. If a finding needs a product or design call, raise it with the user instead of guessing.
    - Commit and push fixes from this pass only when those mutations are within the user's requested PR scope. Never force push.
-5. If no PR exists, create one with `gh pr create`.
+5. If no PR exists, create one with `gh pr create`. When running in a T3 thread, immediately link every opened PR, including each stack layer, to the thread using its actual URL or repository/number. A delegated creator immediately returns the PR identity so its parent registers it before further PR work; it does not own monitoring. Reconcile an uncertain create/link receipt before retrying rather than opening a duplicate.
 6. If a PR exists, read its title, labels, and number with `gh pr view --json title,labels,number`. When the body is needed, fetch it through the REST API and inspect the changed-file list with `gh pr view --json files --jq '.files[].path'`.
 7. Update the title or body with `gh pr edit` if the existing PR does not match the current diff or the `write-pr` standards.
 8. Search for related issues and link them in the PR description with `Closes #123` or `Relates to #123` where appropriate.
-9. Share the PR URL with the user.
+9. Share the PR URL with the user. In T3 maintain the correct thread's PR links as ownership or PR identity changes; unlink only a mistaken or obsolete link, never as permission to close/delete a PR. Requested monitoring follows the [T3 watch protocol](references/maintenance.md#t3-registration-and-monitoring).
 
 ## Handling problems
 

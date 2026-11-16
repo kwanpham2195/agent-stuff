@@ -1,21 +1,21 @@
 ---
 name: define-outcome
-description: "Clarify product intent and observable acceptance for a feature or change when the desired outcome, scope, or success criteria are ambiguous. Reuse sufficient existing criteria without a separate exercise."
+description: "Clarify ambiguous product intent, scope, or observable acceptance for a feature or change."
 ---
 
-Define what success looks like before choosing how to build it. The deliverable is a compact acceptance contract that a fresh developer, agent, or reviewer can evaluate without the conversation.
+Deliver a compact acceptance contract that a fresh developer, agent, or reviewer can evaluate without the conversation. Reuse sufficient existing criteria.
 
 ## Establish the target
 
 1. Read the request and relevant existing product decisions, issues, examples, and behavior. Extract what is already agreed; distinguish user requirements, observed facts, and your proposals.
-2. Identify the user, situation, problem, desired outcome, scope, and exclusions. Ask only questions requiring user intent or judgment. Investigate factual questions yourself. Do not invent users, targets, constraints, or approval to fill the template.
+2. Identify the user, situation, problem, desired outcome, scope, and exclusions. For discretionary new work, capture why it matters now and what evidence would make it unnecessary when those affect the decision. Reuse stated intent; do not require a business case for a routine fix. Keep agreed stop conditions with the owning criteria. Ask only questions requiring user intent or judgment. Investigate factual questions yourself. Do not invent users, targets, constraints, or approval to fill the template.
 3. Describe observable scenarios with starting conditions, action, and expected result. Include failure and boundary cases relevant to the risk; do not enumerate speculative cases. Include performance, accessibility, compatibility, or safety constraints only when required or materially relevant, and confirm proposed thresholds.
 4. For each criterion, specify evidence: automated test, live demonstration, measurement, or human review. State the environment or fixture when it affects the verdict. Identify the decision owner for subjective acceptance; if unknown, leave it unresolved rather than assigning someone.
 5. Present unresolved assumptions and proposed criteria for confirmation. Existing explicit requirements need no redundant approval. Do not proceed past a consequential unresolved decision; research or prototypes may continue within authorized scope.
 
 ## Record the contract
 
-Keep small contracts inline. For durable work, place the contract in the existing authoritative product/review artifact or issue and link it from plans. If no owner exists, a local work entry may hold the outcome and acceptance; use its optional `prd.md` only when a separate requirements document is warranted. Do not create a PRD or standalone outcome or acceptance file by default. Follow [context-routing](../references/context-routing.md) for placement and [work-lifecycle](../references/work-lifecycle.md) for checkpointing and resumption.
+Keep small contracts inline. For durable work, follow [context-routing](../references/context-routing.md) for the authoritative contract home and link it from plans. Do not create a PRD or standalone outcome or acceptance file by default. Follow [work-lifecycle](../references/work-lifecycle.md) for checkpointing and resumption.
 
 Use this shape only as far as it helps:
 
@@ -23,6 +23,7 @@ Use this shape only as far as it helps:
 User / situation / problem:
 Desired outcome:
 Scope / exclusions:
+Why now / agreed stop conditions: when relevant
 
 A1: Given … when … then …
 Evidence: method, conditions, expected observation

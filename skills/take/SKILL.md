@@ -51,7 +51,7 @@ Create a concise implementation checklist based on:
 - Codebase exploration.
 - Existing repo patterns.
 
-For substantial dependencies, consequential technical unknowns, or work across sessions, offer [write-exec-plan](../write-exec-plan/SKILL.md) unless an accepted plan already exists. Its workflow resolves technical unknowns through bounded prototypes before drafting dependent implementation phases. Reuse prior evidence; block dependent work when a prototype is inconclusive or cannot run. Observe the plan's review gate before execution. A small issue keeps its checklist inline.
+For an issue beyond a trivial edit, run [rpi](../rpi/SKILL.md) under [RPI local rules](../references/rpi-local.md), with the issue as the request. Resume existing RPI documents at their first unfinished step. RPI's research, design and outline replace this checklist. In step 5, create the branch, then use RPI's implement step instead of the checklist. Steps 6 to 8 still apply. Resolve technical unknowns through RPI research or an authorized [prototype](../prototype/SKILL.md); block dependent work when a prototype is inconclusive or cannot run. A trivial issue keeps its checklist inline.
 
 ### 5. Implement
 
@@ -103,7 +103,7 @@ For durable work, update the owning checkpoint for completion or handoff using [
 
 ## Rules
 
-- Ask the user when requirements are unclear. Do not implement past unanswered critical questions or unresolved `_Awaiting answer._` placeholders.
-- Do not guess at unspecified product behavior.
+- Ask the user when a consequential requirement remains unclear after exploration. An unresolved `_Awaiting answer._` placeholder blocks only the work that depends on its answer.
+- Infer routine implementation choices from the request, accepted criteria, and repository conventions. Ask before choosing consequential unspecified product behavior.
 - Keep the implementation scoped to the issue.
 - Never include AI attribution in commits, issues, or PRs.

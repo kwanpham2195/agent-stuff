@@ -20,7 +20,11 @@ The common path in prose, two to four short paragraphs. No variants, no edge cas
 
 ## The interaction, event by event
 
-```mermaid
+![{Feature} states](assets/{feature}-states.png)
+
+Keep the source in `assets/{feature}-states.mmd` and render it to the PNG; never paste the Mermaid text into the document. A starting source:
+
+```text
 stateDiagram-v2
     [*] --> idle
     idle --> started : {what begins it}

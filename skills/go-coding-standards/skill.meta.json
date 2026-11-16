@@ -1,0 +1,40 @@
+{
+  "applicability": [
+    "Go code and design",
+    "domain modeling",
+    "typed errors",
+    "boundaries and parsing",
+    "async workflows",
+    "testing and verification"
+  ],
+  "approved_cycles": [],
+  "context_weight": 3,
+  "do_not_use_when": [
+    "the task does not touch Go design or code quality"
+  ],
+  "handoffs": [],
+  "inputs": [
+    "code_context",
+    "design_context"
+  ],
+  "outputs": [
+    "coding_standard_guidance"
+  ],
+  "overlays": [],
+  "resources": [
+    "ASYNC_AND_WORKFLOWS.md",
+    "BOUNDARIES_AND_PARSING.md",
+    "DESIGNING_MODULES.md",
+    "DOMAIN_MODELING.md",
+    "ERROR_HANDLING.md",
+    "GO_CONTRACTS.md",
+    "GO_STYLE.md",
+    "OBSERVABILITY.md",
+    "TESTING_AND_VERIFICATION.md",
+    "VOCABULARY.md"
+  ],
+  "role": "overlay",
+  "schema_version": 1,
+  "skill": "go-coding-standards",
+  "stop_when": "applicable references are read and applied to the changed behavior"
+}

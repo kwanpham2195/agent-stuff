@@ -60,7 +60,7 @@ bash checkout.sh <repo> --force-update --path-only
 
 ## If edits are needed
 
-Prefer not to edit directly in the shared cache. Create a separate worktree or copy from the cached checkout for task-specific modifications.
+Prefer not to edit directly in the shared cache. Copy from the cached checkout for task-specific modifications; do not create worktrees.
 
 ## Notes
 

@@ -1,0 +1,30 @@
+#!/bin/sh
+# Render a Mermaid source file to a PNG, so readers see a picture instead of Mermaid text.
+# Pele draws the SVG without a browser; rsvg-convert turns it into a PNG.
+# Usage: mermaid-png <input.mmd> [output.png]   (default output: input path with .png)
+set -eu
+
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+  echo "usage: mermaid-png <input.mmd> [output.png]" >&2
+  exit 2
+fi
+
+input=$1
+output=${2:-${input%.*}.png}
+here=$(dirname "$(realpath "$0")")  # follow the ~/.local/bin link back to the skill
+
+# Pele lives outside any repository, pinned so diagrams do not change under us.
+pele_version=1.13.0
+pele_home=${XDG_CACHE_HOME:-$HOME/.cache}/mermaid-png/pele-$pele_version
+if [ ! -f "$pele_home/node_modules/pele/package.json" ]; then
+  mkdir -p "$pele_home"
+  npm install --silent --no-audit --no-fund --prefix "$pele_home" "pele@$pele_version" >&2
+fi
+
+command -v rsvg-convert >/dev/null || { echo "mermaid-png: rsvg-convert not found (brew install librsvg)" >&2; exit 1; }
+
+svg=$(mktemp "${TMPDIR:-/tmp}/mermaid-png.XXXXXX")
+trap 'rm -f "$svg"' EXIT
+node "$here/mermaid-png.mjs" "$pele_home/node_modules/pele/dist/pele.js" "$input" "$svg"
+rsvg-convert --zoom 2 --background-color white "$svg" -o "$output"
+echo "$output"

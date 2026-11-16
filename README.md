@@ -7,7 +7,9 @@ Personal agent instructions, reusable skills, and a local context management fra
 - `AGENTS.md` contains the global operating rules.
 - `skills/` contains workflows and reference material loaded when a task needs them.
 - `context/templates/` contains empty templates for private local work records.
+- `templates/USER.md` is a blank profile the installer copies to `~/.agents/USER.md` when that file is missing.
 - `scripts/validate-skills.py` checks skill metadata and local references.
+- `model-policy.yaml` and `scripts/model-policy.py` configure and resolve model choices for supported workflows.
 
 ## Day-to-day usage
 
@@ -85,58 +87,27 @@ Name a skill when you want its specific method or deliverable, for example: "Use
 
 ## Skills
 
-### Planning and collaboration
+The package contains the owned skills below. Each skill is loaded when its task matches; you do not need to name every skill in a request.
 
-- [`define-outcome`](skills/define-outcome/SKILL.md) clarifies intent, scope, acceptance criteria, and required evidence before implementation.
-- [`research`](skills/workflow/research/SKILL.md) investigates a bounded question and reports source-backed findings.
-- [`prototype`](skills/workflow/prototype/SKILL.md) builds a disposable experiment to answer a design or state-model question.
-- [`domain-modeling`](skills/workflow/domain-modeling/SKILL.md) defines project terminology and records architectural decisions.
-- [`grilling`](skills/workflow/grilling/SKILL.md) runs a structured interview to test a plan, decision, or idea.
-- [`grill-me`](skills/workflow/grill-me/SKILL.md) provides a short command for the standard grilling workflow.
-- [`grill-with-docs`](skills/workflow/grill-with-docs/SKILL.md) runs the interview and records glossary or decision updates when authorized.
-- [`show-me`](skills/show-me/SKILL.md) explains technical work with diagrams, pseudocode, structural diffs, and concrete contracts.
-- [`handoff`](skills/handoff/SKILL.md) records enough state for another session or agent to resume the work.
-- [`delegated-execution`](skills/delegated-execution/SKILL.md) controls subagent permissions, ownership, model selection, review, and recovery.
-- [`retro`](skills/retro/SKILL.md) reviews a coding session and identifies changes worth retaining.
+### Planning, collaboration, and review
+
+[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`desk`](skills/desk/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`matthew-mode`](skills/matthew-mode/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
 
 ### Implementation and verification
 
-- [`coding-standards`](skills/workflow/coding-standards/SKILL.md) routes TypeScript, Go, Effect, and Cloudflare changes to the applicable coding rules.
-- [`write-discoverable-code`](skills/workflow/write-discoverable-code/SKILL.md) keeps names, files, errors, and comments easy to find through search.
-- [`diagnosing-bugs`](skills/workflow/diagnosing-bugs/SKILL.md) requires reproduction evidence and verification against the reported scenario.
-- [`code-review`](skills/workflow/code-review/SKILL.md) reviews changes against repository standards and the originating specification.
-- [`create-verification-skill`](skills/create-verification-skill/SKILL.md) creates a project-specific workflow that tests an application through its user-facing interface.
-- [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md) updates an existing verification workflow as the application changes.
+[`code-review`](skills/code-review/SKILL.md), [`coding-standards`](skills/coding-standards/SKILL.md), [`correct`](skills/correct/SKILL.md), [`create-verification-skill`](skills/create-verification-skill/SKILL.md), [`go-coding-standards`](skills/go-coding-standards/SKILL.md), [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md), [`typescript-coding-standards`](skills/typescript-coding-standards/SKILL.md), and [`write-discoverable-code`](skills/write-discoverable-code/SKILL.md).
 
-### Git, issues, and pull requests
+### Git, issues, and delivery
 
-- [`commit`](skills/commit/SKILL.md) defines commit scope, message format, staging, and authorization rules.
-- [`clean-copy`](skills/clean-copy/SKILL.md) rebuilds branch changes as a clean sequence of reviewable commits.
-- [`issue`](skills/issue/SKILL.md) captures work in a local issue or an authorized remote tracker.
-- [`write-issue`](skills/write-issue/SKILL.md) defines titles, descriptions, types, and triage standards for issues.
-- [`take`](skills/take/SKILL.md) claims an issue, implements it, verifies it, and opens a pull request.
-- [`pr`](skills/pr/SKILL.md) creates or updates a pull request for the current branch.
-- [`write-pr`](skills/write-pr/SKILL.md) defines pull request titles, descriptions, and the preflight comment sweep.
-- [`update-changelog`](skills/update-changelog/SKILL.md) applies the repository's changelog and release-note rules.
+[`commit`](skills/commit/SKILL.md), [`issue`](skills/issue/SKILL.md), [`librarian`](skills/librarian/SKILL.md), [`pr`](skills/pr/SKILL.md), [`take`](skills/take/SKILL.md), [`update-changelog`](skills/update-changelog/SKILL.md), [`write-issue`](skills/write-issue/SKILL.md), and [`write-pr`](skills/write-pr/SKILL.md).
 
-### Documentation and agent instructions
+### Documentation and writing
 
-- [`technical-writing`](skills/technical-writing/SKILL.md) writes or reviews developer documentation for a specific reader and purpose.
-- [`writing-for-agents`](skills/writing-for-agents/SKILL.md) writes executable instructions for an agent with no conversation history.
-- [`agents-md`](skills/agents-md/SKILL.md) controls the scope and content of root and nested `AGENTS.md` files.
-- [`write-design-doc`](skills/write-design-doc/SKILL.md) records decisions that are expensive to reverse before implementation.
-- [`write-exec-plan`](skills/write-exec-plan/SKILL.md) plans complex work across phases or pull requests.
-- [`product-description`](skills/product-description/SKILL.md) documents user-visible product behavior from source, tests, and live verification.
-- [`write-tbp`](skills/write-tbp/SKILL.md) writes technical blog posts about project features and implementation.
-- [`to-questionnaire`](skills/to-questionnaire/SKILL.md) turns an unresolved decision into questions for the person who owns the missing context.
+[`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`mermaid-png`](skills/mermaid-png/SKILL.md), [`product-description`](skills/product-description/SKILL.md), [`technical-writing`](skills/technical-writing/SKILL.md), [`unslop`](skills/unslop/SKILL.md), [`visual-explainer`](skills/visual-explainer/SKILL.md), [`write-design-doc`](skills/write-design-doc/SKILL.md), [`write-tbp`](skills/write-tbp/SKILL.md), and [`writing-for-agents`](skills/writing-for-agents/SKILL.md).
 
-### Local tools
+### Local tools and setup
 
-- [`config-manager`](skills/config-manager/SKILL.md) manages dotfiles and global tools through chezmoi.
-- [`librarian`](skills/librarian/SKILL.md) maintains local read-only checkouts of upstream repositories for source reference.
-- [`orbstack`](skills/orbstack/SKILL.md) checks and starts OrbStack when tests require Docker.
-- [`obsidian-vault-config`](skills/obsidian-vault-config/SKILL.md) manages configuration shared by multiple Obsidian vaults.
-- [`bro`](skills/bro/SKILL.md) restates the previous response in plain language.
+[`agent-pickup`](skills/agent-pickup/SKILL.md), [`apple-notes`](skills/apple-notes/SKILL.md), [`apple-reminders`](skills/apple-reminders/SKILL.md), [`optimize-metric`](skills/optimize-metric/SKILL.md), [`orbstack`](skills/orbstack/SKILL.md), [`prepare-system-design-interview`](skills/prepare-system-design-interview/SKILL.md), [`scrum-master`](skills/scrum-master/SKILL.md), and [`bro`](skills/bro/SKILL.md).
 
 The repository does not contain workspace records, session transcripts, credentials, or authentication data. Keep context created from the templates under `~/.agents/context/` and out of Git unless you intentionally publish a specific artifact.
 
@@ -150,13 +121,24 @@ Run the installer from a clone:
 ./scripts/install
 ```
 
-The installer copies the global instructions and owned skills into `~/.agents`. It stops when a destination already exists. Move or remove an existing destination only after reviewing it.
+The installer copies the global instructions and owned skills into `~/.agents`. It also copies `templates/USER.md` to `~/.agents/USER.md` unless that file exists; fill it in with your name, languages, time zone and writing preferences. It stops when another destination already exists. Move or remove an existing destination only after reviewing it.
+
+The model-policy resolver requires Python 3 and PyYAML. Review the model choices in `model-policy.yaml` for your providers and available models before using delegation.
 
 Validate the repository with:
 
 ```bash
 python3 scripts/validate-skills.py
 ```
+
+## Skill requirements
+
+Skills provide instructions; the tools they drive must be installed separately.
+
+- `agent-pickup`, `scrum-master`, `triage-work` and `desk` need T3 Code and the context folders. Create the folders from [`context/templates/`](context/templates) (see the [context model](#context-model)); these skills read and write work records there and use T3 Code threads and scheduling.
+- `apple-notes` and `apple-reminders` need macOS, with the [`memo`](https://github.com/antoniorodr/memo) and [`remindctl`](https://github.com/steipete/remindctl) command-line tools.
+- `orbstack` needs macOS with [OrbStack](https://orbstack.dev).
+- `mermaid-png` needs Node.js.
 
 ## Context model
 
@@ -220,8 +202,6 @@ Two Pi-specific skills are included:
 - `pi-skill-creator` creates, evaluates, and improves skills for Pi and OpenCode.
 - `tldraw-offline` controls an open tldraw Desktop canvas through its local API.
 
-The local `recall` skill is excluded until its upstream provenance and redistribution terms are resolved.
-
 ### Settings and optional services
 
 `pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers. Review the complete file before activating it. Pi may download and execute every third-party entry in `packages` when it loads the active settings.
@@ -240,13 +220,17 @@ If an active file already exists, merge the settings you want instead of replaci
 `pi/modes.json` supplies the `default` and `fast` model presets used by `prompt-editor.ts`.
 
 ## Install external skills
-## Install external skills
 
-The global instructions refer to several skills maintained in other repositories. Install only the ones you use. `npx skills` records their source and supports later updates.
+The global instructions use `rpi` for substantial work and `agent-memory-repo` for global memory. Install these separately before using those workflows. Other external skills are optional. Review third-party skills before installing them; `npx skills` records their source and supports later updates.
 
 ```bash
+# Research, implementation workflow, and global memory
+npx skills add humanlayer/skills -g --skill rpi
+npx skills add AgentMemoryRepo/agentmemoryrepo -g --skill agent-memory-repo
+
 # Browser automation and visual PR evidence
 npx skills add vercel-labs/agent-browser -g --skill agent-browser
+npx skills add vercel-labs/agent-desktop -g --skill agent-desktop
 npx skills add vercel-labs/before-and-after -g --skill before-and-after
 
 # Document conversion
@@ -273,8 +257,13 @@ npm install --global tuistory
 
 The `skill-creator` skill is supplied by Codex as a system skill in this setup, so this repository does not install a separate copy.
 
-Other bundled skills describe workflows for tools such as chezmoi, GitHub CLI, OrbStack, and Obsidian. Install and configure those applications only when you use the corresponding workflow.
+Two skills that the bundled instructions mention are not bundled:
+
+- `tuistory` is maintained upstream at [remorses/tuistory](https://github.com/remorses/tuistory); the command above installs it.
+- `agents-md` guides writing `AGENTS.md` files. This repository does not bundle it and has no public upstream source to cite. Use your own guidance, or a skill from a source you trust, when you write `AGENTS.md`.
+
+Install and configure the applications a skill drives only when you use that workflow.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE) and [third-party material](THIRD-PARTY.md).

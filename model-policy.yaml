@@ -1,0 +1,125 @@
+version: 1
+t3:
+  difficulties:
+    low:
+      provider: codex-default
+      model: gpt-6.1-terra
+      options: {reasoningEffort: low}
+    medium:
+      provider: codex-default
+      model: gpt-6.1-terra
+      options: {reasoningEffort: low}
+    high:
+      provider: codex-default
+      model: gpt-6.1-sol
+      options: {reasoningEffort: low}
+    hardest:
+      provider: claude-default
+      model: claude-opus-5-5
+      options: {effort: high}
+  roles:
+    task-research:
+      provider: codex-default
+      model: gpt-6.1-terra
+      options: {reasoningEffort: low}
+    task-implementation:
+      provider: codex-default
+      model: gpt-6.1-sol
+      options: {reasoningEffort: low}
+    exploration:
+      provider: codex-default
+      model: gpt-6.1-terra
+      options: {reasoningEffort: low}
+    implementation:
+      provider: codex-default
+      model: gpt-6.1-sol
+      options: {reasoningEffort: low}
+    review:
+      provider: codex-default
+      model: gpt-6.1-sol
+      options: {reasoningEffort: high}
+    advisor:
+      provider: claude-default
+      model: claude-opus-5-5
+      options: {effort: high}
+direct:
+  codex:
+    roles:
+      task-research:
+        model: gpt-6.1-terra
+        options: {reasoningEffort: low}
+      task-implementation:
+        model: gpt-6.1-sol
+        options: {reasoningEffort: low}
+      exploration:
+        model: gpt-6.1-terra
+        options: {reasoningEffort: low}
+      implementation:
+        model: gpt-6.1-sol
+        options: {reasoningEffort: low}
+      review:
+        model: gpt-6.1-sol
+        options: {reasoningEffort: high}
+      advisor:
+        model: gpt-6.1-sol
+        options: {reasoningEffort: high}
+  claude:
+    roles:
+      task-research:
+        model: sonnet
+        options: {effort: low}
+      task-implementation:
+        model: sonnet
+        options: {effort: high}
+      exploration:
+        model: sonnet
+        options: {effort: low}
+      implementation:
+        model: sonnet
+        options: {effort: high}
+      review:
+        model: opus
+        options: {effort: high}
+      advisor:
+        model: opus
+        options: {effort: high}
+  pi:
+    roles:
+      task-research:
+        model: openai/gpt-6-luna
+        options: {thinking: high}
+      task-implementation:
+        model: openai/gpt-6.1-sol
+        options: {thinking: low}
+      exploration:
+        model: openai/gpt-6-luna
+        options: {thinking: medium}
+      implementation:
+        model: openai/gpt-6.1-sol
+        options: {thinking: low}
+      review:
+        model: openai/gpt-6.1-sol
+        options: {thinking: high}
+      advisor:
+        model: openai/gpt-6.1-sol
+        options: {thinking: high}
+  opencode:
+    roles:
+      task-research:
+        model: openai/gpt-6-luna
+        options: {variant: high}
+      task-implementation:
+        model: openai/gpt-6.1-sol
+        options: {variant: low}
+      exploration:
+        model: openai/gpt-6-luna
+        options: {variant: medium}
+      implementation:
+        model: openai/gpt-6.1-sol
+        options: {variant: low}
+      review:
+        model: openai/gpt-6.1-sol
+        options: {variant: high}
+      advisor:
+        model: openai/gpt-6.1-sol
+        options: {variant: high}

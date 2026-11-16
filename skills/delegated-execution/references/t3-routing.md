@@ -1,0 +1,44 @@
+# T3 task routing
+
+Read when delegating or resuming through T3 Code. [Delegated execution](../SKILL.md) and [model policy](model-policy.md) own role, permissions, budget, models, and concurrency. The live tool contracts own supported arguments and runtime behavior. This reference grants no launches, new source access, model changes, extra concurrency, or human-gate bypass.
+
+## Confirm the current session
+
+Use T3 mechanics only with trusted host context binding this caller to a current T3 thread, or a supported identity or capability response that establishes the current caller's thread binding. A reachable server or successful catalog response without caller binding is insufficient. Installed skills, executable paths, available tools, working directories, pasted thread links, and historical records do not establish current T3 identity. Confirm project and checkout separately before operations that depend on them. Session identity and tool support grant no action or role authority.
+
+Discover tools only when trusted current host context indicates T3, or the user explicitly authorizes verifying a T3 connection. Make one bounded supported identity or capability attempt and inspect the returned caller binding. Use only the host's documented transport and fallback, without credential inspection or environment enumeration. If current identity remains unresolved, pause dependent T3 operations, report the limitation, and retain established role restrictions under [role resumption](../../references/work-lifecycle.md#role-applicability-and-resumption). Independent portable work may continue within its existing authority. Do not probe T3 merely because shared guidance is installed in a standalone session.
+
+After identity is confirmed, check support and control ownership for the intended launch, send, schedule, browser, or other operation. Missing tools block that operation and leave the role relationship in place. Higher-priority host instructions and live tool contracts remain authoritative; source applicability gates cannot override them.
+
+## Choose the operation
+
+For new general task assignments, classify this item's difficulty under [model policy](model-policy.md#general-top-level-tasks) and pass `--difficulty` with `task-research` or `task-implementation`. Copy the resolver's native selection arguments into the authorized launch. Helpers and specialists resolve independently without that flag. A long conversation's next item gets a new resolution and scoped authority check; resolving never changes its existing parent model or authorizes a new thread/helper by itself.
+
+- Call `orchestrator_capabilities` for the live provider and model catalog, including custom models. Select under model policy and actual authority, and do not rely on a hardcoded model or a native tool's incomplete list.
+- Immediately before dispatch, follow [resolver usage](model-policy-configuration.md). Pass current structured capability evidence, routed workspace identity and classified task/project inputs. Use emitted `target` for `delegate_task`, or `modelSelection` with `--operation t3_thread_launch`. Record source/key and hashes; re-resolve changed inputs. Preserve explicit empty options to clear inheritance. Compare returned settings with the saved result, report missing metadata or mismatch and reconcile the original run without a duplicate launch. Authority, budgets and runtime modes remain separate checks.
+- Title every launched thread or delegated task `<Action> [#issue]: <short subject>` (Discuss, Research, Plan, Implement, Review, Verify or Fix), as the [desk skill](../../desk/SKILL.md#name-threads) defines.
+- `delegate_task` creates child work owned by the current thread. Prefer a native same-provider subagent tool only when it supports the selected model and ownership needs. Use T3 delegation for unavailable native models, cross-provider work, or explicitly T3-owned children.
+- `t3_thread_launch` and `create_threads` create ordinary top-level conversations, not subagents. They require an explicit request for separate, new, or top-level threads. Never use them just to advance a stage, replace a child, or isolate a review. Never create worktrees, except an [agent-pickup](../../agent-pickup/SKILL.md#worktree-exception) lane launched by its dispatcher. Bind an existing authorized checkout through `t3_thread_launch.workspaceStrategy` before the agent starts; a shell `cd` in a prompt is not a thread binding.
+- Resume the current owner thread by default. No new thread, worktree, scheduler, push, or publication authority follows from a checkpoint or completed child.
+
+## Retain identity and inspect completion
+
+Before dispatch, record the original brief, the exact source and version, the scope, the acceptance evidence, the cumulative remaining budget, and the lower caps. Use a distinct stable `clientRequestId` for each delegated task or independent review round. Reuse it only when retrying that same operation after an uncertain receipt.
+
+Retain the returned `taskId`, original `childRunId` when exposed, and `childThreadId` separately. The child thread is backing storage and is no substitute for the task identity. Read status and cancel through `task_status` and `task_cancel` with `taskId`. Preserve the original run identity through retries and later child turns.
+
+For permitted [exploration nesting](../SKILL.md#t3-exploration-nesting), pass the root outcome and owner identity, the current depth, and the non-overlapping subtree reservations in the direct helper's brief. The helper must confirm its own current T3 binding and its supported dispatch and status controls before it launches only its reserved exploration leaves. Each immediate parent retains and reconciles its own child task and run identities and returns the leaf evidence and pending state upward. The root uses supported direct-child status and those receipts to reconcile its reserved tree. Do not assume the root can invoke controls that only a grandchild's own parent may use. Missing support or unreconciled nested state blocks further dispatch and release. It gives no permission to switch runners or launch a top-level replacement.
+
+Prefer `mode='async'` for long work. Completion notifications wake or queue the parent. When waiting, end the turn instead of polling or spawning watchers. Use `task_status` only when the result is needed mid-turn. `mode='wait'` has a parent wait budget. `waitTimedOut=true` does not cancel the child, establish failure, or authorize a duplicate run. Retain the task and inspect it later. Stop it only through the supported cancellation protocol when authorized. A request receipt alone is not proof that mutation stopped.
+
+Inspect `workState`, the terminal status, the result and summary, the original run, and `hasPendingChildRuns`. A completed child turn with live nested work or `waiting_for_children` is not a completed task. A terminal task's published summary remains stable. Later queued or executing child turns do not reopen it but can leave mutation active. Reconcile pending runs and their terminal evidence before replacing a writer or claiming completion. Reading a terminal result acknowledges automatic delivery and does not signal parent acceptance. Verify the actual report, diff, checks, and governing version under the shared owner. Child self-approval is insufficient.
+
+## Independent review rounds and follow-up
+
+For every independent T3 review round, call `delegate_task` again with the original brief, source, and version, the actual diff, prior findings, responses and corrections, unresolved objections, and current limits. Use a new round-specific stable `clientRequestId` and retain its own `taskId` and original run. Do not send a new independent review round to `childThreadId` with `t3_thread_send`.
+
+A follow-up needing the same child's conversation may use `t3_thread_send` under the live contract. After the original task completes, it creates a fresh task with its own `taskId`. Retain that identity and inspect its evidence separately. It does not replace the original published result or reset cumulative usage. Unknown state, failed required checks, unresolved decisions, missing nonbudget authority or capability, fixed recurring per-report caps, and explicit human review gates still stop dependent dispatch and acceptance. Notification does not resume stopped work or retry an uncertain operation.
+
+## Unavailable tools
+
+Within the current-session discovery boundary above, follow the harness's supported transport discovery and fallback guidance, if supplied. A missing native model list or lazily exposed catalog is not proof that T3 delegation is absent. Stop if no authorized supported operation is available; never shell-launch agents, switch models, install tools, or create a top-level replacement to bypass the limit.
