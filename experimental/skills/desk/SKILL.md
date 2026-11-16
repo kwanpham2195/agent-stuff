@@ -62,7 +62,7 @@ Read designated metadata from project indexes and work states only. Never messag
 
 ## Triage
 
-When the user asks to triage, run [triage-work](../triage-work/SKILL.md) against the Context Home board, one item at a time. Work items end as continue, close or park. Issues end as a priority (`now`, `next`, `later`), dropped with a reason, or started: starting follows the "start now" route, then set the issue to `started` and link the new `state.md` in its `work` field. Apply changes only to the item the user decided on. When a work item that came from an issue completes, set that issue to `done`.
+When the user asks to triage, run [triage-work](../triage-work/SKILL.md) against the Context Home board when one exists, otherwise the open work notes, one item at a time. Work items end as continue, close or park. Issues end as a priority (`now`, `next`, `later`), dropped with a reason, or started: starting follows the "start now" route, then set the issue to `started` and link the new `state.md` in its `work` field. Apply changes only to the item the user decided on. When a work item that came from an issue completes, set that issue to `done`.
 
 ## Rules broadcast
 
