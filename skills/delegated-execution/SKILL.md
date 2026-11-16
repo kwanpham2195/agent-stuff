@@ -77,7 +77,7 @@ Resolve these paths relative to this skill directory, then pass only those the a
 
 - Code implementation in any language: [coding-standards](../coding-standards/SKILL.md).
 - Naming or changing code: [write-discoverable-code](../write-discoverable-code/SKILL.md). Use repository standards for other language-specific concerns.
-- Bug investigation: [work-lifecycle](../references/work-lifecycle.md#plan-act-verify-accept) for evidence and verification, plus the actual [browser](~/.agents/skills/agent-browser/SKILL.md) or [terminal](~/.agents/skills/terminal-control/SKILL.md) owner for live reproduction. Pass the original scenario and the surface and profile. Include implementation skills if fixing.
+- Bug investigation: [work-lifecycle](../references/work-lifecycle.md#plan-act-verify-accept) for evidence and verification, plus the actual `browser` or `terminal` owner for live reproduction. Pass the original scenario and the surface and profile. Include implementation skills if fixing.
 - Explicit research or deeper investigation of a consequential uncertainty: the research steps of [rpi](../rpi/SKILL.md), with subagents launched under [RPI local rules](../references/rpi-local.md#subagents-and-models).
 - Human-facing artifacts, including any file saved under a workspace `review/` folder: [Writing reviewable artifacts](../references/reviewable-writing.md) and [unslop](../unslop/SKILL.md).
 - Authorized commits: [commit](../commit/SKILL.md). Authorized PR work: [pr](../pr/SKILL.md), which routes to PR writing standards.
