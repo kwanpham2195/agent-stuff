@@ -5,10 +5,12 @@ Personal agent instructions, reusable skills, and a local context management fra
 ## Contents
 
 - `AGENTS.md` contains the global operating rules.
-- `skills/` contains workflows and reference material loaded when a task needs them.
+- `skills/` contains the stable workflows and reference material loaded when a task needs them.
+- `experimental/skills/` contains skills that depend on T3 Code and the context folders. The installer skips them unless you pass `--experimental`; see [Experimental skills](#experimental-skills).
 - `context/templates/` contains empty templates for private local work records.
 - `templates/USER.md` is a blank profile the installer copies to `~/.agents/USER.md` when that file is missing.
-- `scripts/validate-skills.py` checks skill metadata and local references.
+- `scripts/validate-skills.py` checks skill metadata and local references in `skills/`, `experimental/skills/` and `pi/skills/`.
+- `pi/` contains the Pi agents, extensions, themes, skills, modes and example settings.
 - `model-policy.yaml` and `scripts/model-policy.py` configure and resolve model choices for supported workflows.
 
 ## Day-to-day usage
@@ -87,29 +89,47 @@ Name a skill when you want its specific method or deliverable, for example: "Use
 
 ## Skills
 
-The package contains the owned skills below. Each skill is loaded when its task matches; you do not need to name every skill in a request.
+The package contains the stable skills below, plus the Pi-specific skills listed under [Pi setup](#themes-and-pi-skills). Each skill is loaded when its task matches; you do not need to name every skill in a request.
 
 ### Planning, collaboration, and review
 
-[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`desk`](skills/desk/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`matthew-mode`](skills/matthew-mode/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
+[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`grill-me`](skills/workflow/grill-me/SKILL.md), [`grill-with-docs`](skills/workflow/grill-with-docs/SKILL.md), [`grilling`](skills/workflow/grilling/SKILL.md), [`handoff`](skills/handoff/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`matthew-mode`](skills/matthew-mode/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`research`](skills/workflow/research/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`to-questionnaire`](skills/to-questionnaire/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), [`walkthrough`](skills/walkthrough/SKILL.md), and [`write-exec-plan`](skills/write-exec-plan/SKILL.md).
 
 ### Implementation and verification
 
-[`code-review`](skills/code-review/SKILL.md), [`coding-standards`](skills/coding-standards/SKILL.md), [`correct`](skills/correct/SKILL.md), [`create-verification-skill`](skills/create-verification-skill/SKILL.md), [`go-coding-standards`](skills/go-coding-standards/SKILL.md), [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md), [`typescript-coding-standards`](skills/typescript-coding-standards/SKILL.md), and [`write-discoverable-code`](skills/write-discoverable-code/SKILL.md).
+[`code-review`](skills/code-review/SKILL.md), [`coding-standards`](skills/coding-standards/SKILL.md), [`correct`](skills/correct/SKILL.md), [`create-verification-skill`](skills/create-verification-skill/SKILL.md), [`diagnosing-bugs`](skills/workflow/diagnosing-bugs/SKILL.md), [`domain-modeling`](skills/workflow/domain-modeling/SKILL.md), [`go-coding-standards`](skills/go-coding-standards/SKILL.md), [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md), [`typescript-coding-standards`](skills/typescript-coding-standards/SKILL.md), and [`write-discoverable-code`](skills/write-discoverable-code/SKILL.md).
 
 ### Git, issues, and delivery
 
-[`commit`](skills/commit/SKILL.md), [`issue`](skills/issue/SKILL.md), [`librarian`](skills/librarian/SKILL.md), [`pr`](skills/pr/SKILL.md), [`take`](skills/take/SKILL.md), [`update-changelog`](skills/update-changelog/SKILL.md), [`write-issue`](skills/write-issue/SKILL.md), and [`write-pr`](skills/write-pr/SKILL.md).
+[`clean-copy`](skills/clean-copy/SKILL.md), [`commit`](skills/commit/SKILL.md), [`issue`](skills/issue/SKILL.md), [`librarian`](skills/librarian/SKILL.md), [`pr`](skills/pr/SKILL.md), [`take`](skills/take/SKILL.md), [`update-changelog`](skills/update-changelog/SKILL.md), [`write-issue`](skills/write-issue/SKILL.md), and [`write-pr`](skills/write-pr/SKILL.md).
 
 ### Documentation and writing
 
-[`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`mermaid-png`](skills/mermaid-png/SKILL.md), [`product-description`](skills/product-description/SKILL.md), [`technical-writing`](skills/technical-writing/SKILL.md), [`unslop`](skills/unslop/SKILL.md), [`visual-explainer`](skills/visual-explainer/SKILL.md), [`write-design-doc`](skills/write-design-doc/SKILL.md), [`write-tbp`](skills/write-tbp/SKILL.md), and [`writing-for-agents`](skills/writing-for-agents/SKILL.md).
+[`mermaid-png`](skills/mermaid-png/SKILL.md), [`product-description`](skills/product-description/SKILL.md), [`technical-writing`](skills/technical-writing/SKILL.md), [`unslop`](skills/unslop/SKILL.md), [`visual-explainer`](skills/visual-explainer/SKILL.md), [`write-design-doc`](skills/write-design-doc/SKILL.md), [`write-tbp`](skills/write-tbp/SKILL.md), and [`writing-for-agents`](skills/writing-for-agents/SKILL.md).
 
 ### Local tools and setup
 
-[`agent-pickup`](skills/agent-pickup/SKILL.md), [`apple-notes`](skills/apple-notes/SKILL.md), [`apple-reminders`](skills/apple-reminders/SKILL.md), [`optimize-metric`](skills/optimize-metric/SKILL.md), [`orbstack`](skills/orbstack/SKILL.md), [`prepare-system-design-interview`](skills/prepare-system-design-interview/SKILL.md), [`scrum-master`](skills/scrum-master/SKILL.md), and [`bro`](skills/bro/SKILL.md).
+[`apple-notes`](skills/apple-notes/SKILL.md), [`apple-reminders`](skills/apple-reminders/SKILL.md), [`optimize-metric`](skills/optimize-metric/SKILL.md), [`orbstack`](skills/orbstack/SKILL.md), [`prepare-system-design-interview`](skills/prepare-system-design-interview/SKILL.md), and [`bro`](skills/bro/SKILL.md).
 
 The repository does not contain workspace records, session transcripts, credentials, or authentication data. Keep context created from the templates under `~/.agents/context/` and out of Git unless you intentionally publish a specific artifact.
+
+## Experimental skills
+
+[`experimental/skills/`](experimental/skills) holds skills that are still changing and that only work in one environment. They are not part of the stable catalog and the installer skips them by default.
+
+- [`desk`](experimental/skills/desk/SKILL.md) runs a T3 Code thread as a desk that starts work, answers what needs attention, triages and changes rules.
+- [`agent-pickup`](experimental/skills/agent-pickup/SKILL.md) runs planned tasks unattended in T3 Code through packets, a dispatcher thread and lane threads in worktrees.
+- [`scrum-master`](experimental/skills/scrum-master/SKILL.md) runs an assigned T3 Code check of workflow progress and nudges task owners.
+
+They need T3 Code for threads and scheduling, and the context folders from [`context/templates/`](context/templates) for work records (see the [context model](#context-model)). They also rely on the stable skills: once installed they sit beside them in `~/.agents/skills`, so their relative links resolve there, not in the repository tree. Stable skills mention them only as optional.
+
+Install them with the stable set:
+
+```bash
+./scripts/install --experimental
+```
+
+The flag can be combined with `--pi`. It checks the experimental destinations for collisions like the others and stops before writing when one exists.
 
 ## Install
 
@@ -121,7 +141,9 @@ Run the installer from a clone:
 ./scripts/install
 ```
 
-The installer copies the global instructions and owned skills into `~/.agents`. It also copies `templates/USER.md` to `~/.agents/USER.md` unless that file exists; fill it in with your name, languages, time zone and writing preferences. It stops when another destination already exists. Move or remove an existing destination only after reviewing it.
+Options: `--pi` adds the [Pi setup](#pi-setup) and `--experimental` adds the [experimental skills](#experimental-skills). Run `./scripts/install --help` for usage.
+
+The installer copies the global instructions and stable skills into `~/.agents`. `--experimental` adds the [experimental skills](#experimental-skills). It also copies `templates/USER.md` to `~/.agents/USER.md` unless that file exists; fill it in with your name, languages, time zone and writing preferences. It stops when another destination already exists. Move or remove an existing destination only after reviewing it.
 
 The model-policy resolver requires Python 3 and PyYAML. Review the model choices in `model-policy.yaml` for your providers and available models before using delegation.
 
@@ -135,7 +157,7 @@ python3 scripts/validate-skills.py
 
 Skills provide instructions; the tools they drive must be installed separately.
 
-- `agent-pickup`, `scrum-master`, `triage-work` and `desk` need T3 Code and the context folders. Create the folders from [`context/templates/`](context/templates) (see the [context model](#context-model)); these skills read and write work records there and use T3 Code threads and scheduling.
+- The [experimental skills](#experimental-skills) (`desk`, `agent-pickup`, `scrum-master`) need T3 Code and the context folders. Create the folders from [`context/templates/`](context/templates) (see the [context model](#context-model)); they read and write work records there and use T3 Code threads and scheduling. `triage-work` also reads those work records.
 - `apple-notes` and `apple-reminders` need macOS, with the [`memo`](https://github.com/antoniorodr/memo) and [`remindctl`](https://github.com/steipete/remindctl) command-line tools.
 - `orbstack` needs macOS with [OrbStack](https://orbstack.dev).
 - `mermaid-png` needs Node.js.
@@ -191,8 +213,6 @@ The Pi package installs extensions, themes, and skills. It does not install `AGE
 - `unified-edit.ts` replaces the built-in edit tool with row operations and unified patch support.
 - `uv.ts` redirects common Python environment and package commands through `uv`.
 
-`herdr-agent-state.ts` and `moshi-hooks.ts` are excluded because their owning applications generate them. Install those integrations through Herdr or moshi-hook instead of copying generated files.
-
 ### Themes and Pi skills
 
 The Pi package includes `catppuccin-macchiato`, `dayowl`, `modern-dark`, and `nightowl` themes.
@@ -236,31 +256,16 @@ npx skills add vercel-labs/before-and-after -g --skill before-and-after
 # Document conversion
 npx skills add firecrawl/anydoc -g --skill convert-documents-to-markdown
 
-# HTML artifacts
-npx skills add plannotator/effective-html -g \
-  --skill design-artifact html html-diagram html-plan html-prototype html-wireframe
-
-# Terminal and development-process tools
-npx skills add herdrdev/herdr -g --skill herdr
-npx skills add mitsuhiko/agent-stuff -g --skill tmux
-npx skills add remorses/tuistory -g --skill tuistory
-
-# Writing cleanup
-npx skills add cursor/plugins -g --skill unslop
+# Terminal automation: drives and verifies TUIs and interactive CLIs in a real PTY
+npx skills add anomalyco/terminal-control -g --skill terminal-control
+cargo install terminal-control
 ```
 
-The `tuistory` skill expects its CLI:
-
-```bash
-npm install --global tuistory
-```
+The instructions also name `rex` for servers, watchers, logs and background terminal work. The Rex app installs that skill itself (`rex skill setup`); it is not available through `npx skills`.
 
 The `skill-creator` skill is supplied by Codex as a system skill in this setup, so this repository does not install a separate copy.
 
-Two skills that the bundled instructions mention are not bundled:
-
-- `tuistory` is maintained upstream at [remorses/tuistory](https://github.com/remorses/tuistory); the command above installs it.
-- `agents-md` guides writing `AGENTS.md` files. This repository does not bundle it and has no public upstream source to cite. Use your own guidance, or a skill from a source you trust, when you write `AGENTS.md`.
+`agents-md`, which guides writing `AGENTS.md` files, is mentioned by the bundled instructions but is not bundled. This repository has no public upstream source to cite for it. Use your own guidance, or a skill from a source you trust, when you write `AGENTS.md`.
 
 Install and configure the applications a skill drives only when you use that workflow.
 
