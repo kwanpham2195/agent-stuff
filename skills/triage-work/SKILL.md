@@ -9,7 +9,7 @@ Help the user decide what still needs attention without making them reconstruct 
 
 ## Establish the selection
 
-Read applicable instructions and the actual view or list definition. Enumerate the exact matching records using its global and local filters; do not substitute a nearby board's workspace or filename restrictions. For Context Home, follow [context routing](../references/context-routing.md) and its metadata contract.
+Read applicable instructions and the actual view or list definition. Enumerate the exact matching records using its global and local filters; do not substitute a nearby board's workspace or filename restrictions. For an optional Context Home board, follow [context routing](../references/context-routing.md) and its metadata contract.
 
 Record the original count, selected paths, source dates and observation time. Keep that original cohort stable as decisions change rows; distinguish it from a later verified view count and from any new triage record. Disclose malformed metadata, missing sources and unavailable live-view verification. Filesystem results describe saved records, not the app's cache or current task activity.
 

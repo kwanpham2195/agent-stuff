@@ -1,6 +1,9 @@
 # Local context
 
-Workspaces are the context and work ownership boundary. Paths are routing hints. Stable repository identities provide supporting evidence.
+Workspaces are the sole context and work ownership boundary. Routing uses this directory and each
+workspace index; paths are hints and repository identities are supporting evidence. Unknown,
+overlapping, or uncertain mappings require a question rather than silent registration or merging.
+Small work stays inline.
 
 ## Registered workspaces
 

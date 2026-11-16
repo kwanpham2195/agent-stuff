@@ -181,14 +181,28 @@ Skills provide instructions; the tools they drive must be installed separately.
 
 The framework treats a workspace as the boundary for related repositories, work records, and reusable local knowledge. `skills/references/context-routing.md` defines how an agent selects that workspace. `skills/references/work-lifecycle.md` defines checkpoints, review pauses, acceptance, and resumption.
 
-Copy the empty templates when you need durable local context:
+The context folder is a plain directory of Markdown files, `~/.agents/context/`, kept out of this repository. You may track it in its own private Git repository. Small tasks remain in the conversation. Repository documentation, issue trackers, and accepted decision records remain authoritative when they already own the information.
 
-```bash
-mkdir -p "$HOME/.agents/context/templates"
-cp context/templates/*.md "$HOME/.agents/context/templates/"
-```
+### Set up your context folder
 
-Small tasks remain in the conversation. Repository documentation, issue trackers, and accepted decision records remain authoritative when they already own the information.
+The installer copies the empty templates to `~/.agents/context/templates/`. Then:
+
+1. Create the root index and the workspaces folder:
+
+   ```bash
+   mkdir -p "$HOME/.agents/context/workspaces"
+   cp "$HOME/.agents/context/templates/index.md" "$HOME/.agents/context/index.md"
+   ```
+
+2. Start an agent session in a repository. On the first task the agent checks the root index for a workspace that owns the directory. If none does, it asks whether to create and register one, associate the directory with an existing workspace, or continue without one. Answer once; it creates `workspaces/<id>/index.md` from the `workspace.md` template and adds a link to the root index.
+3. Durable work then lives under `workspaces/<id>/work/<work-id>/`, using the `work.md` template. `project.md` and `research.md` are used for larger efforts and saved findings.
+
+The agent asks before registering or merging workspaces, and it keeps secrets out of context files.
+
+### Optional pieces
+
+- **Overview board.** You can build an Obsidian Base (a Kanban view over the work notes' properties) for a cross-workspace overview. This repository does not ship one. Without it, agents read the work notes directly. The `obsidian-markdown` and `obsidian-bases` skills help build one; install them separately.
+- **Commit guardrails.** Checks for metadata, secrets and writing quality on the context repository are your own tooling and are not included.
 
 ## Pi setup
 
