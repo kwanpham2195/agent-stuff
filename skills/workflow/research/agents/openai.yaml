@@ -1,4 +1,0 @@
-interface:
-  display_name: "Research"
-  short_description: "Capture factual task research"
-  default_prompt: "Use $research to capture factual current-state research for this task."
