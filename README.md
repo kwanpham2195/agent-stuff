@@ -141,7 +141,7 @@ Run the installer from a clone:
 ./scripts/install
 ```
 
-Options: `--pi` adds the [Pi setup](#pi-setup), `--claude` and `--codex` connect those harnesses ([below](#connect-your-harness)), and `--experimental` adds the [experimental skills](#experimental-skills). Run `./scripts/install --help` for usage.
+Options: `--pi` adds the [Pi setup](#pi-setup), `--claude`, `--codex` and `--cursor` connect those harnesses ([below](#connect-your-harness)), and `--experimental` adds the [experimental skills](#experimental-skills). Run `./scripts/install --help` for usage.
 
 The installer copies the global instructions and stable skills into `~/.agents`. `--experimental` adds the [experimental skills](#experimental-skills). It also copies `templates/USER.md` to `~/.agents/USER.md` unless that file exists; fill it in with your name, languages, time zone and writing preferences. It stops when another destination already exists. Move or remove an existing destination only after reviewing it.
 
@@ -153,9 +153,10 @@ The installer writes to `~/.agents`. Each harness needs to find the instructions
 | --- | --- | --- |
 | Claude Code | `--claude` | `~/.claude/CLAUDE.md` to `~/.agents/AGENTS.md`, and `~/.claude/skills` to `~/.agents/skills` |
 | Codex | `--codex` | `~/.codex/AGENTS.md` to `~/.agents/AGENTS.md`; Codex reads user skills from `~/.agents/skills` itself |
+| Cursor | `--cursor` | Writes `~/.cursor/rules/agents.mdc` as an always-apply rule containing a copy of `AGENTS.md`. Cursor reads user skills from `~/.agents/skills` itself. Cursor does not read a global `AGENTS.md` file, so re-run or re-copy after you edit the instructions |
 | Pi | `--pi` | See the [Pi setup](#pi-setup) |
 
-Set `CLAUDE_HOME` or `CODEX_HOME` to use other locations. The installer stops instead of replacing an existing `CLAUDE.md`, `AGENTS.md` or `skills` path there. To connect a harness after installing, create the same links by hand once you have reviewed the existing files, for example `ln -s ~/.agents/AGENTS.md ~/.codex/AGENTS.md`.
+Set `CLAUDE_HOME`, `CODEX_HOME` or `CURSOR_HOME` to use other locations. The installer stops instead of replacing an existing `CLAUDE.md`, `AGENTS.md`, `agents.mdc` or `skills` path there. To connect a harness after installing, create the same links by hand once you have reviewed the existing files, for example `ln -s ~/.agents/AGENTS.md ~/.codex/AGENTS.md`.
 
 T3 Code runs the Codex and Claude Code harnesses, so it needs no separate flag: connect the harness you select in T3 Code. The [experimental skills](#experimental-skills) also need the T3 Code tools and the context folders, and a registered workspace.
 
