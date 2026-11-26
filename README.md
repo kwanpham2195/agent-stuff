@@ -150,7 +150,7 @@ The installer writes to `~/.agents`. Each harness needs to find the instructions
 
 | Harness | Flag | What it links |
 | --- | --- | --- |
-| Claude Code | `--claude` | `~/.claude/CLAUDE.md` to `~/.agents/AGENTS.md`, and `~/.claude/skills` to `~/.agents/skills` |
+| Claude Code | `--claude` | `~/.claude/CLAUDE.md` to `~/.agents/AGENTS.md`, and `~/.claude/skills` to `~/.agents/skills`. Claude Code (v2.1.277 or later) reads a project's `AGENTS.md` itself when the project has no `CLAUDE.md`, but its only user-level instruction file is `~/.claude/CLAUDE.md`, and it reads user skills only from `~/.claude/skills`, so both links are still needed |
 | Codex | `--codex` | `~/.codex/AGENTS.md` to `~/.agents/AGENTS.md`; Codex reads user skills from `~/.agents/skills` itself |
 | Cursor | `--cursor` | Writes `~/.cursor/rules/agents.mdc` as an always-apply rule that tells the agent to read `~/.agents/AGENTS.md`. Cursor reads user skills from `~/.agents/skills` itself. Cursor has no global `AGENTS.md` file, and the rule points to the file instead of copying it, so edits to `AGENTS.md` apply without re-running the installer |
 
