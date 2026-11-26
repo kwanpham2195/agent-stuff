@@ -96,7 +96,7 @@ Progress is tracked in the [coverage table](#coverage) below.
 ```
 README.md                        this file
 goal.md                          the standing instructions for whoever drafts
-AGENTS.md, CLAUDE.md             entry points for agents: read README.md, then goal.md
+AGENTS.md                        entry point for agents: read README.md, then goal.md
 glossary.md                      shared vocabulary
 bug-triage.md                    suspected defects collected from every document, with repro steps and decisions needed
 

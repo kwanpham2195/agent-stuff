@@ -28,7 +28,6 @@ README.md            purpose, conventions, document template, method, structure,
 goal.md              the standing instructions for whoever drafts (you, subagents, a future session)
 glossary.md          the vocabulary; the source of truth for every term of art
 AGENTS.md            "Read README.md, then goal.md. The coverage table in README.md is the work list."
-CLAUDE.md            "Read @AGENTS.md."
 {area}/{feature}.md  one document per feature, all on the same skeleton
 verification/        README.md (protocol) + one checklist file per cluster of documents
 bug-triage.md        every suspected defect, deduplicated, with repro, cause, severity, decision needed
@@ -54,7 +53,7 @@ Write, in this order, adapting the templates in `references/`:
 1. **README.md** from `README-template.md`. The structure section is the plan: list every document you expect to write with a one-line gloss, grouped by how the user meets the feature (foundations, then the areas of the product, then cross-cutting concerns), never by package or module. The coverage table lists every document as `not started`. Getting the structure right up front is most of the planning; expect to revise it as you learn, and update the table whenever you do.
 2. **glossary.md** from `glossary-guide.md`. Start with the terms the foundations will need and the interrupt words from Phase 0; grow it as documents demand new words. A term used in a document that is not in the glossary is a consistency bug.
 3. **goal.md** from `goal-template.md`. This is the prompt that drives all drafting. Its "Things already established" section is empty at first and fills in as the foundations are written.
-4. **AGENTS.md** with the one-line content shown under Outputs,. Add CLAUDE.md only when explicitly requested.
+4. **AGENTS.md** with the one-line content shown under Outputs, following the [AGENTS.md reference](../writing-for-agents/references/agents-md.md). Claude Code reads `AGENTS.md` itself, so add no `CLAUDE.md` unless one is explicitly requested.
 
 Commit: `docs: add README, glossary, goal`.
 

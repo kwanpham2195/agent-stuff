@@ -15,7 +15,7 @@ STABLE_SKILLS = ROOT / "skills"
 EXPERIMENTAL_SKILLS = ROOT / "experimental" / "skills"
 SKILLS_DIRS = (STABLE_SKILLS, EXPERIMENTAL_SKILLS)
 # Skills installed from other sources; links to them cannot resolve inside this repository.
-EXTERNAL_SKILLS = {"rpi", "visual-pr", "agent-memory-repo", "agents-md", "confluence"}
+EXTERNAL_SKILLS = {"rpi", "visual-pr", "agent-memory-repo", "confluence"}
 LONG_DESCRIPTION_LIMIT = 350
 DEAD_SKILL_NAMES = ("github-pr-workflow",)
 

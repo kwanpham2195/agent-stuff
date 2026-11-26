@@ -228,8 +228,6 @@ The instructions also name `rex` for servers, watchers, logs and background term
 
 The `skill-creator` skill is supplied by Codex as a system skill in this setup, so this repository does not install a separate copy.
 
-`agents-md`, which guides writing `AGENTS.md` files, is mentioned by the bundled instructions but is not bundled. This repository has no public upstream source to cite for it. Use your own guidance, or a skill from a source you trust, when you write `AGENTS.md`.
-
 Install and configure the applications a skill drives only when you use that workflow.
 
 ## License
