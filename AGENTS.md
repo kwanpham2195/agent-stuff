@@ -8,7 +8,7 @@ Read `USER.md` in this directory for facts about the user and their preferences,
 
 Helpers and scheduled jobs keep their explicit source scopes.
 
-For implementation, refactoring or investigation beyond a trivial edit, use [rpi](skills/rpi/SKILL.md) by default, as if the user had invoked it. Whenever `rpi` or `visual-pr` runs, also read [RPI local rules](skills/references/rpi-local.md) for the default route, task directory, work state, subagent models and PR description rules. `rpi` owns stage order and artifacts; [matthew-mode](skills/matthew-mode/SKILL.md) playbooks guide work inside an implementation phase. matthew-mode's local context-capture permission applies only when the user invokes it by name.
+For implementation, refactoring or investigation beyond a trivial edit, use [rpi](skills/rpi/SKILL.md) by default, as if the user had invoked it. Whenever `rpi` or `visual-pr` runs, also read [RPI local rules](skills/references/rpi-local.md) for the default route, task directory, work state, subagent models and PR description rules. `rpi` owns stage order and artifacts; [ayo](skills/ayo/SKILL.md) playbooks guide work inside an implementation phase. matthew-mode's local context-capture permission applies only when the user invokes it by name.
 
 Skills own tool workflows. Install external skills with `npx skills`. If a mentioned skill is absent from the listed skills, look in project-local skills first, then `~/.agents/skills/`. When editing instructions or skills, use `skills/writing-for-agents/SKILL.md` and keep descriptions concise.
 

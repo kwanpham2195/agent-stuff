@@ -92,7 +92,7 @@ The package contains the stable skills below. Each skill is loaded when its task
 
 ### Planning, collaboration, and review
 
-[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`matthew-mode`](skills/matthew-mode/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
+[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`ayo`](skills/ayo/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
 
 ### Implementation and verification
 
