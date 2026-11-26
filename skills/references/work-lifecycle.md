@@ -1,87 +1,80 @@
 # Work lifecycle
 
-Use this contract for work that needs planning, review, multiple sessions, or transfer to another owner. It applies to the main agent and delegated workers. Repository instructions and the user's authorization determine permitted actions.
+Use this contract for work that needs planning, review, multiple sessions, transfer to another owner, or two unsuccessful corrections of the same issue. Also load it before substantial handbacks or consequential recommendations, and when the user asks to understand before hearing a recommendation. Loading it alone requires no saved artifact. It applies to the main agent and delegated workers. Repository instructions and the user's authorization determine permitted actions.
+
+## Sections
+
+| Read when | Section |
+| --- | --- |
+| Choosing when to act or ask | [Collaboration defaults](#collaboration-defaults) |
+| Resuming or acting under a role | [Role applicability and resumption](#role-applicability-and-resumption) |
+| Asking the user a question or decision | [Human contact and direct steering](#human-contact-and-direct-steering) |
+| Picking inline, durable or tracked work | [Choose the smallest mode](#choose-the-smallest-mode) |
+| Deciding whether to save a work record | [Recognize when to save](#recognize-when-to-save) |
+| Saving memory at closeout or correction | [Preserve reusable project knowledge](#preserve-reusable-project-knowledge) |
+| Limiting what context to load | [Keep working context bounded](#keep-working-context-bounded) |
+| Explaining an outcome or change | [Explain with visuals](#explain-with-visuals) |
+| Revising an experiment, direction or result | [Iterate according to the question](#iterate-according-to-the-question) |
+| Running plan, act, verify, accept steps | [Plan, act, verify, accept](#plan-act-verify-accept) |
+| Reporting results and choices | [Help the user judge the result](#help-the-user-judge-the-result) |
+| Saving an implementation outline or plan | [Saved planning artifacts](#saved-planning-artifacts) |
+| Handling several items in one conversation | [Switch items in a mixed conversation](#switch-items-in-a-mixed-conversation) |
+| Requesting review and waiting for a decision | [Pause for human review](#pause-for-human-review) |
+| Acting on feedback | [Route feedback](#route-feedback) |
+| Keeping decisions and evidence | [Checkpoint before context is lost](#checkpoint-before-context-is-lost) |
+| Setting up local context Git history | [Initialize local context history](#initialize-local-context-history) |
+| Committing local context changes | [Commit local context changes](#commit-local-context-changes) |
+| Resuming or handing off existing work | [Resume and hand off](#resume-and-hand-off) |
 
 ## Collaboration defaults
 
-- Clarify ambiguous requests before acting on the uncertain part. State the plausible interpretations and recommend one. Investigate factual unknowns yourself; do not ask the user to rediscover information available in the repository or tools.
-- "Implement this" permits routine implementation choices within the stated scope. Present consequential alternatives in behavior, architecture, or scope for a decision before committing to one.
-- Show an early useful sketch when the direction is uncertain; prepare a coherent proposal when requesting execution approval. Label which kind of feedback is needed.
-- "Iterate on this" means one revision per feedback round for subjective design. For objectively verifiable fixes, continue within scope until agreed criteria are met or a decision/blocker requires the user. Clarify which mode applies when unclear.
-- Ask a small batch of related decisions with visuals where useful, tradeoffs, and a recommendation. Ask sequentially when an answer determines the next question.
-- "Looks good" approves the reviewed artifact. It authorizes implementation only when that broader workflow was already requested and this approval resolves its review gate. If the next action or approval scope is ambiguous, clarify it.
+Resolve factual gaps yourself. For ambiguous intent, give plausible interpretations and recommend one before acting on the uncertain part. Make routine choices within scope and ask about consequential changes to behavior, architecture or scope.
 
-Explicit task instructions override these defaults. Do not repeatedly ask about decisions the user has already settled. Use the human-contact route below for clarification, decisions, and review.
+Show an early sketch for direction and a coherent proposal for approval. Say what feedback you need. Group related choices with consequences and a recommendation. Ask sequentially if answers depend on each other.
+
+For subjective work, revise once per feedback round. Continue objective fixes until the criteria pass or a decision or blocker intervenes. Clarify which mode applies if unclear. Follow the [review pause](#pause-for-human-review) for the scope of approval. Honor explicit instructions and reuse settled decisions.
 
 ## Role applicability and resumption
 
-Use ordinary direct-user workflow unless the current assignment explicitly establishes a role or an authorized same-task resumption reconciles its saved agreement. Record the role, outcome, accountable owner, granted authority, and evidence of assignment in the existing checkpoint when durable state is needed. Skill discovery, a working directory, available tools, pasted links, and historical notes alone do not assign a role. The Desk is assigned only in confirmed T3 Code sessions. Helpers report to their assigning parent. A task thread reports to the user directly and to no one else.
+Work directly with the user unless explicitly assigned a role or resuming one under its saved agreement. Skills, tools, directories, links and history do not assign roles. Only confirmed T3 Code sessions can be assigned as the Desk (experimental `desk` skill), which can coordinate across workspaces. Helpers report to their parent. Task threads report directly to the user alone. When durability is needed, retain the role, outcome, owner, authority and assignment evidence in the owning record or thread.
 
-Distinguish no assignment from an established assignment whose current state is uncertain. On an authorized resumption, preserve the last established ownership, restrictions, pending human gates, cumulative usage, and uncertain operations or receipts while reconciling current authority and state. Missing transport does not dissolve that ownership or authorize duplicate dispatch or takeover. Pause dependent actions and tell the user about the limitation; continue only independent work already authorized. Historical notes may identify what needs reconciliation, not grant fresh authority.
+On authorized resumption, reconcile ownership, restrictions, pending gates and uncertain operations or receipts. Keep the last established authority while resolving uncertainty. Missing transport grants no takeover or duplicate dispatch. Tell the user and pause dependent work. Continue independently authorized work.
 
-Explicit revocation ends future role actions within its stated scope. It does not prove existing workers stopped, resolve pending delivery, transfer ownership, or reset usage. Reconcile outstanding work before replacement or another consequential action. Confirm T3 session identity separately under [T3 routing](../delegated-execution/references/t3-routing.md#confirm-the-current-session) only when T3 operations are relevant; role assignment is not platform identity.
-
-An assigned scrum master (experimental `scrum-master` skill) may send evidence-backed corrections within an owner's existing workflow and authority. A nudge is not a new user decision, approval, workflow selection or ownership transfer. Task owners reconcile it against current instructions and retain execution and state-writing responsibility. Scoped bookkeeping handoffs follow that skill; idle threads do not implicitly hand off ownership.
+Revocation ends future role actions in scope. Reconcile existing workers, pending delivery and ownership before replacement or another consequential action. Confirm T3 identity through [T3 routing](../delegated-execution/references/t3-routing.md#confirm-the-current-session) when T3 operations matter.
 
 ## Human contact and direct steering
 
-A task thread asks the user directly in its own thread, which T3 shows in the user's inbox. Nothing relays through another thread. Lead the message with the decision or result needed. Give the exact question, a link to the artifact or evidence and the current reviewed revision instead of pasting them, and a recommendation and consequence when supported. Keep the pending gate in the task checkpoint. Pause dependent work; independently authorized work may continue.
+Ask the user directly in the owner thread, without relays. Use the harness's question tool when it has one, so the host can mark the thread as waiting. Lead with the decision or result needed. Include the exact question, a link and review version, and any supported recommendation and consequence. Keep the gate in that thread and pause dependent work.
 
-Silence, cached text, or a completed tool interaction never substitutes for the user's actual decision. Actual platform permission and private-secret dialogs remain human/tool gates, and secrets never go in chat. Asking grants no source, thread, spend, acceptance, model, or schedule authority, and does not resume canceled or stopped work or retry an uncertain operation.
-
-The user may steer any task thread directly at any time. Follow the user's actual scoped instructions within permissions and human gates, and save consequential decisions in the task's own checkpoint. Material authority, safety, or ownership conflicts still require scoped handling and a pause of affected work.
+Use platform permission and private-secret dialogs where applicable. Never ask for secrets in chat. Asking or completing a dialog grants no additional authority, restart or retry. Follow the user's direct scoped steering within permissions and gates. Pause affected work for material conflicts in authority, safety or ownership.
 
 ## Choose the smallest mode
 
-- **Inline:** the scope is small and the relevant context fits comfortably in the conversation. State the outcome and verification approach, do the work, and report evidence. No mandatory document or research phase.
-- **Durable:** research, planning, discussion, or implementation must survive context loss. Maintain one current state owner and link existing relevant documents, an ExecPlan, or the user's chosen authority. Follow [context-routing](context-routing.md) to select its home or resume selected context. A discussion checkpoint does not require a full ExecPlan.
-- **Tracked:** the user wants work queued or assigned through local workspace issues or a configured remote tracker. Use the `issue` skill's implementation-handoff mode. Destination and scope must be explicit or authorized by a workspace default before creation. Drafting does not authorize publishing, assigning people, implementation, or status changes.
+- **Inline:** state the outcome and check, act, and report evidence. Small work needs no plan or research document.
+- **Durable:** use one current authority when work must survive context loss. Link existing evidence and plans using [context-routing](context-routing.md). Discussion needs no full ExecPlan.
+- **Tracked:** use [issue](../issue/SKILL.md) for requested queueing or assignment. Resolve the destination and scope from the request or an approved default. Drafting grants no implementation, publishing, assignment or status changes.
 
-Recheck the save triggers below when scope or ownership changes. Explain a mode switch briefly.
+Recheck the mode at changes of scope or ownership and explain a switch briefly.
 
 ## Recognize when to save
 
-A work item is a bounded outcome or question: a feature, bug investigation, comparison, migration, or design discussion. It can exist before implementation starts. Use [projects and bounded work](context-routing.md#projects-and-bounded-work) for goals spanning several outcomes; keep each outcome's state separate from the project backlog.
+Choose durable or tracked work for requested plans, checkpoints, resumptions and handoffs, or when unfinished work, a pending review or costly evidence must survive the session. Use the smallest authorized record and reuse existing owners. For multiple outcomes, follow [projects and bounded work](context-routing.md#projects-and-bounded-work).
 
-At intake and when scope changes, check whether any of these applies:
-
-- The user asks to plan, checkpoint, resume later, queue, or hand off the work.
-- Work has unfinished steps that must survive another session or owner.
-- A review or unresolved decision pauses dependent work.
-- Findings, rejected approaches, or verification evidence would be costly to reconstruct.
-
-When a trigger applies, use the durable or tracked mode above. Reuse an existing entry; otherwise create the smallest authorized work record using context-routing. Do not wait for the user to say "save context" during authorized work. For a read-only request, save findings worth keeping to the workspace context record without asking; offer other checkpoints inline or ask permission to save them. If no registered workspace owns the directory, follow context-routing and ask. A quick lookup, completed small edit, or ordinary clarification stays inline when none of these triggers applies.
-
-Once work is durable, checkpoint at meaningful progress, a new or resolved blocker, review readiness or feedback, an answer or acceptance change, and completion. Checkpoint before a handoff, pause, or end of turn when resume state changed. Read the current owner before writing and reconcile any manual metadata edits. Replace the snapshot and update the [canonical work metadata](context-routing.md#work-metadata-and-overview) and [brief reporting fields](context-routing.md#brief-reporting-fields) as one file checkpoint. Set `updated` only for a meaningful change and `brief_checked_at` only after actual reconciliation. A commit or routine passing gate alone is not a save trigger. If the snapshot is semantically unchanged, skip the write and context commit. File checkpoints do not depend on Obsidian running. Link existing policy, design, and tracker authorities instead of copying them.
-
-The task owner reconciles decisions; the brief only checks reporting consistency. At each checkpoint, compare pending attention with actual answers, approval scope and supporting artifacts. Record answer evidence before removing its stable ask ID; preserve all other unanswered asks, even old ones. Never infer acceptance from silence, archive placement, a helper recommendation or a completed administrative step. Keep status/progress/next action/blocker, attention and the body semantically consistent. If reconciliation is incomplete, do not advance `brief_checked_at` or replace attention with `[]`; preserve the uncertainty so consumers report a Coverage gap. Update only owned records; consolidation/backfill and other owners' work require their own authority.
+During read-only work, save durable findings within the authorized workspace context. Keep other checkpoints inline unless approved. For unregistered workspaces, follow [context-routing](context-routing.md) and ask. Routine lookups, edits and clarification stay inline.
 
 ## Preserve reusable project knowledge
 
-For a learning-worthy outcome, add a compact Outcome section and link receipts under [improvement records](../retro/references/improvement-records.md). This is optional for trivial work and does not duplicate canonical status. Technical improvements may proceed within recorded outcome, finite budget, write scope and regression gates; taste, intent, acceptance and expanded authority remain human decisions. Explicit-only retro discovery is preserved; an explicitly authorized loop may invoke it.
+For learning-worthy outcomes, link receipts in a compact Outcome section under [improvement records](../retro/references/improvement-records.md). Technical improvements stay within the agreed outcome, write scope and regression gates. Taste, intent, acceptance and expanded authority remain human decisions. `retro` requires explicit authorization.
 
-Memory is saved at three moments, using `agent-memory-repo`:
+At closeout, use `agent-memory-repo` to save up to three reusable lessons beyond the repo or record. Report saved links or that there were none in the closeout message. Save lasting corrections and preferences promptly under [global memory](context-routing.md#global-memory). Use [registered workspace memory](context-routing.md#workspace-memory-registration) for project knowledge, or the work record if none exists. These scoped writes need no further approval. Read-only tasks and scheduled runs may not write memory.
 
-1. **Closeout.** When a task thread sets its work state to `complete`, ask what the next session should know that is not in the repository or the work record. Save 0–3 entries, then add one line to the state: `Memory: <links to the saved entries>` or `Memory: none`. List the saved entries in the final message to the user.
-2. **Correction.** When the user corrects an agent or states a lasting preference, save it to global memory right away.
-3. **Weekly sweep.** The Friday review lists completed work without a `Memory:` line; the user decides what to save.
-
-The user grants standing permission for these writes within each memory's registered write scope: closeout and correction need no separate approval. Read-only requests and scheduled runs still write no memory, except the weekly [memory dream](context-routing.md#memory-dream), which tidies saved entries and adds none.
-
-Save project knowledge in the workspace's registered memory repo under [workspace memory registration](context-routing.md#workspace-memory-registration). Save personal preferences and lessons that apply across workspaces in [global memory](context-routing.md#global-memory). A workspace without a registered memory repo uses global memory for cross-workspace lessons and keeps project-only facts in its work records.
-
-Cite the source artifact or current repository evidence, and distinguish verified facts from observations and proposals. Link authoritative docs and decisions instead of copying them, and do not promote task-specific findings into global rules. Skip transient status, duplicates, secrets, and cheap-to-rediscover facts. Reconcile outdated entries under the registered memory's update scope and the [global memory approval rules](context-routing.md#global-memory); this closeout procedure grants no additional archival or deletion permission.
-
-Commit memory changes in the memory repo under the skill's workflow, separately from context commits. If memory is dirty, unavailable, or disputed, keep the finding in the work record, write `Memory: pending (<reason>)`, and tell the user.
+Cite current evidence. Distinguish verified facts, observations and proposals. Link authoritative sources and omit transient, duplicate, sensitive or easily rediscovered details. Follow registered update and deletion limits. Commit separately in the memory repo. If dirty, unavailable or disputed, preserve the finding in the work record and report why memory is pending.
 
 ## Keep working context bounded
 
-- Resolve the workspace and authoritative entry through [context-routing](context-routing.md) before mining history or creating records.
-- Load the current phase's outcome, acceptance criteria, dependency results, prototype findings, required instructions, and relevant code. Follow other links only to answer a named gap. Do not reload every phase, transcript, or research artifact on each step.
-- Treat sufficient search snippets as already-read evidence; a source pointer alone is only a navigation aid. Return to the source when it changed, a consequential claim needs verification, or the available excerpt is insufficient. Stop exploration when the change location, affected contracts, and verification approach are known.
-- Keep large logs, screenshots, experiment output, and worker reports in their authorized artifact locations. Apply the retention test in [Checkpoint before context is lost](#checkpoint-before-context-is-lost); link detailed evidence rather than copying it.
-- Before switching phases or handing off, apply the checkpoint contract below.
-- Use context isolation only when delegation is authorized and earns its cost. Follow [delegated-execution](../delegated-execution/SKILL.md) for a bounded brief, exact source paths, ownership, and evidence reports. The parent retains synthesis and acceptance; children do not need the full conversation or unrelated phase history.
+Resolve the workspace and owner through [context-routing](context-routing.md). Load current criteria, dependencies, prototype findings, instructions and relevant code. Follow links to answer named gaps. Use adequate excerpts as evidence. Reopen changed, insufficient or consequential sources as needed. Stop once the change location, affected contracts and checks are known.
+
+Keep large evidence in its authorized home and link it. Use isolation only when authorized and worth the cost. Give children only the context needed for their task. Follow [delegated-execution](../delegated-execution/SKILL.md) for briefs, scoped sources, ownership and evidence. The parent synthesizes results and evaluates acceptance.
 
 ## Explain with visuals
 
@@ -98,59 +91,44 @@ Keep simple answers inline. Prefer small inline representations; use HTML, rende
 
 ## Iterate according to the question
 
-The activities below are revisitable, not a mandatory one-way sequence. An iteration can be a discussion, sketch, prototype, code change, or verification probe:
+Name what each iteration should learn or improve, what will decide it, and what remains provisional. Do not interpret “iterate” as unlimited authority.
 
-```text
-question / desired improvement
-  → smallest useful experiment or change
-  → observation or review
-  → keep, revise, reject, or request a decision
-  → next question or completion
-```
+- Explore an idea with the smallest authorized experiment. Verify the learning goal and label omitted production checks.
+- Refine an agreed direction using evidence or feedback. Check changed behavior and affected contracts.
+- Finish against accepted criteria and required checks.
 
-Name what the iteration should learn or improve, what evidence or feedback will decide it, and what remains provisional. Use the appropriate intent:
-
-- **Explore:** test a hypothesis or compare alternatives. Throwaway work is acceptable when authorized; verify the learning objective and label production checks not performed.
-- **Refine:** improve an agreed direction using observed behavior or review feedback. Check the changed behavior and affected contracts.
-- **Finish:** satisfy accepted criteria and required repository checks before claiming implementation complete.
-
-A successful experiment does not establish production readiness. Revisit requirements or milestones when evidence warrants it; distinguish proposed changes from accepted decisions and seek approval when scope or a user-owned decision changes.
-
-Continue useful iterations within authorized scope. Pause for missing decisions, a scope change, an agreed time/cost/iteration limit, or repeated attempts producing no new evidence. For stalled work, report what was learned and propose a different probe or request help. Do not invent an iteration count or interpret "iterate" as unlimited authority.
+Distinguish proposed from accepted changes. Pause for missing decisions, changed scope, agreed limits or repeated attempts without new evidence. After two failed corrections, check assumptions, missing context and inadequate evidence using [diagnostics](../ayo/references/diagnostics.md). Honor stricter limits. Report what was learned and propose a different probe or ask for help. Start a fresh session only when needed, authorized and handed off. Treat experiment results as evidence for the question tested.
 
 ## Plan, act, verify, accept
 
-Beyond a trivial edit, [rpi](../rpi/SKILL.md) owns research, design, planning and implementation phases under [RPI local rules](rpi-local.md). Steps 5 and 6 below still apply to its verification and acceptance; steps 1 to 4 cover work that stays inline.
+Beyond trivial edits, `rpi` and its [local rules](rpi-local.md) own research, design, planning and implementation. Apply the verification and acceptance steps below to `rpi` too. Read [Writing reviewable artifacts](reviewable-writing.md) before drafting or materially revising human-facing artifacts.
 
-Before drafting or materially revising a human-facing plan, design, proposal, or review report, read and apply [Writing reviewable artifacts](reviewable-writing.md).
+1. Agree the outcome, scope, constraints, observable criteria and evidence. Use [define-outcome](../define-outcome/SKILL.md) for ambiguity. Keep criteria inline or in their authoritative artifact, with proposals clearly marked.
+2. Inspect relevant code, callers, tests and conventions. Stop when the change, contracts and checks are understood. Use `rpi` research for consequential gaps.
+3. Plan to the scale of the change. Use a short sequence or code sketch for small work. Resolve material unknowns through `rpi` research or an authorized [prototype](../prototype/SKILL.md) before planning dependent work. Use [show-me](../show-me/SKILL.md) for behavior, contracts, tradeoffs and decisions. Follow the saved planning rules below.
+4. Execute an authorized slice. Revise the plan when evidence refutes it. Confirm scope changes with the decision owner.
+5. Run required repository and behavior checks. For live bugs, reproduce and verify on the relevant surface and profile. Record commands, results and limits. Distinguish source evidence from runtime proof. If a consequential decision trail is doubtful, check entries against the authorized transcript and record missing pivots or corrections.
+6. Compare results with the original need and agreed criteria. Passing tests alone do not establish that the intended problem was solved. Report each evaluated criterion as passed, failed, blocked or awaiting human review, with evidence. Finish only when all required evidence and acceptance are present. Otherwise correct the work or report partial completion. Keep the agreed contract when implementation falls short.
 
-1. Identify the intended outcome, scope, constraints, and observable acceptance criteria. When ambiguous, read [define-outcome](../define-outcome/SKILL.md). Keep the acceptance contract in the authoritative artifact or inline for small work; distinguish agreed criteria from proposals and name how each will be verified. Clarify only decisions that cannot be established from available evidence.
-2. Explore relevant code, callers, tests, and conventions. Stop when the change location, affected contracts, and verification approach are known. Use RPI's research steps for a remaining question needing deeper evidence; do not turn routine exploration into a research project.
-3. Plan proportionally. A small task needs a short sequence. When code is cheaper to write and review than prose that describes it, a code sketch or the change itself is the plan; saved implementation outlines and plans follow [saved planning artifacts](#saved-planning-artifacts), including in mixed triage/planning conversations. Resolve consequential technical unknowns through RPI research or an authorized [prototype](../prototype/SKILL.md) before planning dependent implementation. For developer discussion, use `show-me` to present the proposed behavior, contracts, tradeoffs, and decisions needed. Mark proposals separately from accepted decisions.
-4. Execute an authorized slice. Update the plan when evidence refutes an assumption. Do not treat a plan or reviewer suggestion as permission to expand scope.
-5. Run required repository checks and checks that exercise the requested behavior. For live bugs, reproduce and verify on the relevant surface/profile. Record commands, outcomes, and limitations; source inspection is not runtime verification. When a consequential result rests on a decision trail you doubt, such as a checkpoint or attempt log, check its entries against the run's transcript where access is authorized. Confirm that each entry's evidence shows what the entry claims, and record pivots and corrections the trail left out.
-6. Compare results with the agreed acceptance contract and original user need. Criteria are pending until evaluated; report evaluated criteria as passed, failed, blocked, or awaiting human review, with evidence. Finish only when required criteria are supported, including human acceptance when required. Otherwise correct the work or report partial completion. Passing tests alone does not establish that the intended problem was solved; do not weaken the contract to match the implementation.
+Close research when its scope and acceptance are met. Missing evidence can answer a bounded research question. Otherwise report the blocker. Close planning or discussion when requested decisions are settled and recorded. Keep explicit disagreements in review (`needs-review` for legacy records). Completion grants no implementation authority.
 
-Research completes when its requested scope and acceptance are satisfied. Identifying missing evidence may satisfy a bounded research question; otherwise preserve the remaining blocker. A planning or discussion item completes when all requested decisions are settled and recorded. An explicit unresolved disagreement remains `needs-review`. Neither completion grants implementation approval.
+### Help the user judge the result
+
+Follow the user's stated writing and presentation preferences, such as those in `USER.md`. Lead with the conclusion and the user's one decision, if any. Use `Decided for you` for material choices within your authority. “Decided for you” never replaces approval for a decision outside your authority. Give at most five key points connecting evidence, limits and gaps to the result. Link supporting details or provide them on request. Commands, hashes and counts go in the details layer unless a check failed. Surface failed checks and any details required by the task or decision.
+
+For real choices, show the strongest supported objection and what evidence could change the recommendation. If the user asks to understand first, explain the evidence and hold the recommendation. Invite one prediction only when they want to test their reasoning. Compare it with evidence. Answer routine requests directly and omit teaching questions from unattended runs. If asked whether the help worked, assess whether it exposed an assumption or changed a decision.
 
 ### Saved planning artifacts
 
-When saving or materially revising an implementation outline or plan, read and use the RPI [outline template](../rpi/references/create-structure-outline/references/structure_outline_template.md) and the [show-me views](../rpi/references/show-me.md), unless the user or repository requires another format. Ordinary conversation, rough triage and inline sketches stay lightweight. Reusing a format does not select RPI, add workflow metadata, establish prior stages, require child roles, or grant implementation authority.
+Use the `rpi` outline template and show-me views when saving or materially revising an implementation outline or plan, unless the user or repo requires another format. Reuse the owning artifact. Rough discussion and inline sketches need no template. Using a format grants no workflow, metadata, stage credit, child role or execution authority.
 
-Choose depth from evidence and decision maturity. When settled decisions support exact changes, show the exact code shapes in each phase's Change Outline instead of writing a separate plan. Keep unsupported details and consequential decisions explicit as unknowns; a blocked draft does not become ready by being formatted. Preserve required headings and useful technical detail. Reuse the current authoritative artifact and its existing home rather than creating a competing plan.
-
-Before delivering, check the artifact against its selected template:
-
-- Required sections, metadata and phase headings are present; conditional sections match the work.
-- Proposed changes, paths and code shapes have evidence; checks are runnable in the named environment and state expected results. Label unavailable verification explicitly.
-- Unknowns and pending decisions remain visible, with their dependent actions.
-- Readiness matches current evidence, decisions and required review. State draft, blocked or ready truthfully; formatting alone proves neither readiness, approval nor implementation authority.
+Show exact code shapes in each phase's Change Outline when decisions support them. Before delivering, check required metadata, sections and phase headings. Ground proposed paths and code in evidence. Name the check environment, runnable checks and expected results. Mark unavailable checks, unresolved choices and their dependent actions. Preserve conditional sections that apply and retain technical detail needed for review. Label the draft, blocked or ready state according to evidence and review.
 
 ### Switch items in a mixed conversation
 
-Identify the current work item and its authoritative artifact before planning or interpreting an answer. Apply a scoped answer only to the question and artifact version it resolves. Before switching items, incorporate accepted decisions into the affected artifact and preserve unresolved questions, waiting actions and authority in the existing owner. If an owner write is not authorized, retain the scoped decision in the permitted checkpoint and leave the owner update pending. Do not require a new thread or record for every topic.
+Name the current item and authoritative artifact. Scope answers to the question and version they resolve. Before switching, incorporate accepted decisions where authorized. Keep unresolved questions, waiting actions and authority with the owner. If the owner update lacks authorization, preserve the scoped decision where permitted and flag the pending update. Rough discussion needs no new thread or record.
 
-When returning, resume that item's artifact and reconcile its current version, decisions and permissions. A decision on one item leaves other items' questions and gates intact; a brief yes resolves only the unambiguous question presented. Ask before dependent action when the intended scope is unclear.
+On return, reconcile the item's version, decisions and permissions. A brief yes settles only the unambiguous question asked. Ask before dependent action when its scope is unclear.
 
 ## Pause for human review
 
@@ -165,84 +143,53 @@ Review: path/link or the response below; version/iteration when relevant
 Decision needed: the specific question or approval requested
 Evidence: focused visual, example, or verification result
 Options / recommendation: only when a choice is needed
+Would change this: evidence that would change the recommendation and the smallest check, when applicable
 Waiting on your answer: dependent actions that will not proceed yet
 Independent work: only if already authorized and unaffected by this decision
 ```
 
 Then end the turn and wait for the actual scoped decision through the human-contact route above. Do not announce a pause and continue implementing, publishing, dispatching dependent workers, or silently revising the review target. For delegated work, stop new dependent dispatches and use the harness protocol to bring affected running workers to a safe checkpoint; preserve partial work. Independent work may continue only when already authorized, it cannot prejudice the decision, and the user did not ask for a full pause. State it explicitly.
 
-Use chat through the human-contact route above by default. Open Plannotator or another review surface only when requested or covered by an established preference, following its skill. Silence, timeout, or closing a review surface without a decision leaves review pending. A tool returning successfully means the interaction completed, not that the user approved. Read the actual decision and notes.
+Ask through the harness question tool by default. Use chat only when the harness has none. Open Plannotator or another review surface only when requested or covered by an established preference, following its skill. Silence, timeout, or closing a review surface without a decision leaves review pending. A tool returning successfully means the interaction completed, not that the user approved. Read the actual decision and notes.
 
 On feedback, identify whether the user approved, requested revisions, rejected the direction, or asked a question. Answering a question is not approval. A brief "yes" or "go" is sufficient when its scope is unambiguous; ask when multiple proposals make it unclear. Approval applies to the reviewed version and stated next actions, not unrelated changes. Material changes to reviewed behavior, scope, or acceptance need another review unless the user explicitly delegates that decision; routine corrections within accepted feedback do not need repeated approval.
 
-For durable work, set `status` to `needs-review` and name the decision in `next_action`. Record the exact artifact/version, decision needed, and authorized independent work in the current state body. Preserve this state across compaction. After approval, record the decision and resume only the authorized dependent steps. Do not claim full acceptance while required human review remains pending.
+Keep the pending question and exact review version in the owner thread. Once the user answers, record a decision only when it explains a change. Resume only the authorized dependent steps.
 
 ## Route feedback
 
-- Implementation defect: revise the affected code and rerun the relevant checks.
-- Refuted assumption: update the authoritative plan or research finding, including evidence and consequences.
-- Changed requirement or disputed decision: record the alternatives and ask the user or designated decision owner before proceeding beyond approved scope.
-- Missing environment, access, or authority: report the blocker and next concrete action; do not silently weaken verification.
-- Developer review: incorporate accepted feedback into the artifact and plan. Keep unresolved comments visible with their decision owner when known; do not claim consensus from silence.
+Fix defects and rerun relevant checks. Update refuted assumptions in the owning plan or research with evidence and consequences. Ask the decision owner about changed requirements or disputes before exceeding scope. Report access, environment and authority blockers with the next action. Fold accepted feedback into the artifact and plan. Keep unresolved comments and known decision owners visible. Silence does not establish consensus.
 
-Revise stale diagrams, pseudocode, and acceptance criteria when decisions change. A recurring failure may justify a narrow skill correction or executable check; propose it with the observed failure. Do not automatically promote task history into global policy.
+Update stale visuals and criteria. For recurring failures, propose a focused repository check or skill correction backed by evidence. Follow [ayo's suggestion rules](../ayo/SKILL.md#suggesting-a-skill) for optional [correct](../correct/SKILL.md) or [retro](../retro/SKILL.md). Keep lessons under their existing authority and seek approval for user policy changes. Avoid automatic rule additions or unrelated deletions.
 
 ## Checkpoint before context is lost
 
-Follow the timing in [Recognize when to save](#recognize-when-to-save). Replace the existing snapshot in place; do not append dated checkpoints or commit sections. Read the current note first and update its metadata and body as one checkpoint. For each meaningful checkpoint, add one dated entry to `agent/history.md`, newest first, linking the evidence used. Content digests belong in that evidence or history entry. Context Git also preserves earlier snapshots. Keep only information whose omission would change the next safe action, obscure authority, repeat expensive learning, or erase useful rationale. Use Markdown by default and apply [writing-for-agents](../writing-for-agents/SKILL.md). Keep the current state body at most 600 words, and 150-300 for a typical state. Link older detail from the state through `agent/history.md` or its evidence owner. Keep permission, acceptance, and recovery information in the state itself. Exclude secrets and unnecessary personal data. Existing unmigrated histories retain their authority until an authorized migration preserves them.
-
-Preserve the current objective, scope, acceptance authority and status or authoritative link, granted and withheld permissions with approval source, decisions and useful reasons, blocker or unresolved disagreement, and next authorized action. Retain the exact pending review artifact/version and required next-step reading. Link the owning plan, issue, design, research, and required skills rather than copying their content. Distinguish proposals from accepted choices and observed facts from unverified claims. Retain important failed approaches and unresolved limitations with concise evidence links. Keep the latest verification scope, actual result, and tested revision; Git commits do not establish that checks ran. Superseded checks and completed implementation chronology belong in context Git history or their existing evidence owners, not the snapshot.
-
-For implementation, retain checkout/revision and dirty-file ownership when needed to resume safely. Keep process identifiers and external-operation receipts only while active, uncertain, or needed for recovery. Once resolved, replace them with the result and evidence link. Never replay an external write solely because its result was lost. Before a pause or handoff, ensure a fresh reader can find the current status, authority, blocker, next action, and evidence; skip writing when those facts have not changed.
+Follow the [work record contract](context-routing.md#work-metadata-and-overview) for retention and commit triggers. Keep pending questions and recovery instructions in the owner thread and recoverable evidence in its authorized home.
 
 ### Initialize local context history
 
-During authorized first-time setup of `~/.agents/context/`, initialize Git at that root without a separate Git-init question. Use the user-approved root if it differs. All workspaces share this repository; do not initialize repositories inside individual workspace or work-item directories. This permission does not authorize creating or registering a workspace, saving read-only work, or adopting unrelated existing files.
+On first-time setup, initialize one Git repo at the context root, stage only reviewed files, and never add a remote. The root repo holds the shared tools: `index.md`, templates, hooks, validators and lint settings. Each workspace folder `workspaces/<id>/` then becomes its own private repo, ignored by the root repo. For a new workspace, once the owner approves registering it:
 
-1. Resolve the context root's physical path and inspect its Git state before writing. Reuse a repository whose top-level path is exactly that root. If an ancestor owns the directory, a descendant contains a repository, or Git metadata is broken or ambiguous, stop and ask; do not create nested history or repair metadata automatically. Check both `.git` files and directories without following directory symlinks. A failed Git command alone does not prove no repository exists.
-2. If the root has no repository and no enclosing or nested repository, run `git init <context-root>`. Preserve existing files. Merge `.obsidian/` and `.DS_Store` into the root `.gitignore` without replacing existing rules; add exclusions for known editor/runtime files before staging. Never add a remote automatically.
-3. Review the initial files for ownership, secrets, and unnecessary personal data. Stage only the `.gitignore` changes and context files created or explicitly approved for this setup, using exact paths. Existing unreviewed files stay untracked; ask if mixed ownership prevents a clean commit. Do not stage the entire directory.
-4. Create the initial local commit under [commit](../commit/SKILL.md), with hooks enabled and the configured identity. Do not change identity or bypass a failed hook to finish setup. If committing is blocked, preserve the files and report the initialized repository and pending commit.
-5. Verify the repository top level, initial commit, ignored editor/runtime paths, and remaining status. For a newly initialized repository, confirm `git remote` lists no remotes. Do not alter remotes on an existing repository. Report unresolved files or failures separately from completed setup.
+1. Create `workspaces/<id>/index.md` from the root's `templates/workspace.md`, and run `git init` in that folder.
+2. Copy the root's ignore rules into the workspace's `.gitignore`, with paths relative to the workspace.
+3. Install the shared hooks in the new repo so it runs the same pre-commit checks as the root.
+4. Commit the workspace's first files in its own repo.
+5. In the root repo, add `/workspaces/<id>/` to `.gitignore` and a directory-hint entry to `index.md`, then commit.
+6. If the host organizes work by project, add the context folder to the workspace's project as a tracked folder.
 
-On later use, follow the checkpoint commit procedure below. If history is unexpectedly missing after prior setup, stop and ask before recreating it.
+If history is missing later, stop and ask before recreating it.
 
 ### Commit local context changes
 
-The user authorizes agents to commit their own context changes in the separate local Git repository at `~/.agents/context/`. After saving changed resume state under [Checkpoint before context is lost](#checkpoint-before-context-is-lost), commit before a review pause, handoff, or end of turn. An unchanged snapshot needs no context commit. This is an agent instruction, not a background watcher.
+Standing authorization covers an agent's own context additions under the work record contract. Before editing, find the repo that owns the file: a workspace folder with its own `.git` is a separate repo, so run Git from that folder; everything else belongs to the root repo. Confirm that repo's top level by physical path, check status and note existing changes. Limit edits to owned workspace files and authorized shared files.
 
-1. Before editing, check `git -C ~/.agents/context status -sb` and confirm its repository root is `~/.agents/context`, comparing physical paths. For authorized first-time setup, follow [Initialize local context history](#initialize-local-context-history); unexpectedly missing history requires asking before reinitialization. Record pre-existing changes and limit work to the selected workspace and authorized shared context files. Use the approved alternate root when applicable.
-2. Inspect the diff for the agent's changes and check for secrets or unnecessary personal data. Stage explicit file paths only. If a file also contains another owner's uncommitted changes, or the index contains unrelated changes, leave them untouched and resolve ownership before committing.
-3. Follow the `commit` skill for attribution, staged-diff review, and hooks. Context commit subjects use `<type>(<workspace>): <summary>`, for example `docs(example): checkpoint owner probe`. Use `context` as the scope for shared templates or rules spanning workspaces. Commit only when the staged changes are nonempty. Describe the changed resume state in the message.
-4. Verify the commit and remaining status. On failure, preserve the checkpoint and report the pending commit and blocker; do not bypass hooks or silently retry an operation whose result is unknown.
-
-This section governs local context checkpoints. Completed, verified project code and chezmoi source changes follow the global local-commit policy and [commit](../commit/SKILL.md). Do not add a remote, push, amend, change branches, or include Obsidian state, secrets, or unrelated files under this permission. On resume, read the current checkpoint first; inspect scoped Git history only when an earlier decision or change needs explanation.
-
-### Checkpoint format
-
-Use this compact shape when no existing plan, research, or issue template owns the record. Update the current state owner rather than creating another progress file. For new or migrated local work this is the linked `agent/state.md`, not the navigation index. Legacy records keep their current owner until explicitly migrated. Link information already maintained elsewhere.
-
-```text
-Goal / scope / permissions: granted and withheld actions; approval source
-Acceptance: authoritative contract/owner and current evidence status
-Pending review, if any: exact artifact/version; decision; waiting actions
-Read first: required next-step source artifacts and skills
-Decisions: accepted choices, useful reasons, and approval sources
-Evidence: latest verification scope/result/tested revision;
-  links to findings, important failed approaches and unresolved limitations
-Open: disagreements, blockers, missing evidence or authority
-Resume details: what to reconcile before the metadata's next action
-Runtime, if needed: cwd/revision; dirty-file ownership; active or uncertain
-  external operations and safe retry/recovery notes
-```
-
-Use the properties in [work metadata](context-routing.md#work-metadata-and-overview) above this body. Do not duplicate their status, progress, blocker, or next action as separately maintained body fields. Body details explain the evidence and resolution conditions. For a read-only discussion, omit runtime fields that do not apply. Do not omit unresolved disagreements merely to make the record shorter. Update existing fields in place when state changes; do not add a new section per save. A handoff note may contain only the entry link when the linked record already supplies the current state and next action.
+Follow [commit](../commit/SKILL.md) for a nonempty staged change. Use `<type>(<workspace>): <summary>` and describe the change that matters on resume. Use `context` for shared templates or rules. Exclude Obsidian state and unnecessary personal data. Leave mixed-owner files and unrelated staged changes untouched until ownership is resolved. Add no remote. If blocked, preserve the record and report the pending commit. Read back uncertain results before considering another attempt. Read the current record on resume and consult scoped history only to explain earlier changes.
 
 ## Resume and hand off
 
-1. Read the entry and its linked current state, or the legacy current owner if unmigrated. Read applicable repository instructions and required next-step skills; follow source links for the next step.
-2. Check current worktree, tracker, and relevant external state against the checkpoint. Reconcile manual Kanban status edits with evidence and granted permissions before acting. A drag to `active` grants no new permission; a drag to `complete` does not establish acceptance. Preserve unknown historical state as `needs-review` with the confirmation question. If the edit's intent conflicts with evidence or is unclear, ask before the dependent action and retain the uncertainty. Mark stale claims and reconcile changed assumptions. Stored plans are not evidence that a command ran or a deployment succeeded.
+1. Start with `index.md`, `decisions/` and any linked task thread through [recall](../recall/SKILL.md). Read the current legacy owner when the record has yet to be converted.
+2. Check the current worktree, tracker and relevant external state. Reconcile any status edit with evidence and granted permissions before acting. Ask before dependent work if intent remains unclear.
 3. Preserve unrelated changes. If ownership or an in-flight mutation is uncertain, stop the dependent action and resolve it.
-4. Continue the next authorized step; checkpoint corrections as they are discovered.
+4. Continue the next authorized step; follow the work record contract for additions.
 
 Follow [context-routing](context-routing.md#accepted-decisions) for decision ownership and [artifact placement](context-routing.md#place-context-and-artifacts) for promotion or tracker transfers. Research owns evidence; plans own execution sequencing; issues own assigned scope/status. Local paths are not shareable links.

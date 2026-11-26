@@ -14,7 +14,7 @@ Write for a fresh agent with no conversation history. Preserve the actions, inpu
 - Preserve personal intent and safety boundaries. Surface contradictions for a decision rather than silently choosing the weaker rule.
 - Verify paths, tool names, and references. Treat claimed behavioral improvements as hypotheses until tested on representative tasks; document checks actually run.
 
-For workspace work records, follow [context-routing](../references/context-routing.md#local-work-audience-layout) for audience and authority, and [work-lifecycle](../references/work-lifecycle.md#checkpoint-before-context-is-lost) for state retention. Keep detailed specialist report formats and raw evidence intact; a concise state links them rather than replacing them.
+For workspace work records, follow [context-routing](../references/context-routing.md#place-context-and-artifacts) for audience and authority, and [work-lifecycle](../references/work-lifecycle.md#checkpoint-before-context-is-lost) for state retention. Keep detailed specialist report formats and raw evidence intact; a concise state links them rather than replacing them.
 
 Before accepting a substantial trim, walk through a normal request, an ambiguous or blocked case, and a handoff/resume case when relevant. Check that the reader can select the starting action, branch on evidence, recognize completion, and return the expected result without reconstructing removed guidance. Inspect the before/after text; static metadata validation alone does not establish these properties. Report walkthroughs as instruction checks, not behavioral tests.
 

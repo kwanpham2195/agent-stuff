@@ -22,7 +22,7 @@ The global guide sends implementation, refactoring and investigation beyond a tr
 
 ## Work state
 
-Keep the work item's `agent/state.md` current after each saved document or finished phase: status, next action, and pending decisions. When the state records workflow fields, update `workflow_stage` and `current_artifact` under [workflow records](context-routing.md#workflow-records), using this flow mapping:
+Keep the work item's `agent/state.md` current after each saved document or finished phase: status, next action, and pending decisions. When the state records workflow fields, update `workflow_stage` and `current_artifact` under [workflow records](context-routing.md#work-metadata-and-overview), using this flow mapping:
 
 | RPI flow | `workflow` value | RPI stages |
 | --- | --- | --- |

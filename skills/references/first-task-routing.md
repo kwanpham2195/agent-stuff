@@ -2,21 +2,20 @@
 
 Start with the request, applicable instructions and action skill. Small work stays inline without mandatory planning, research, delegation or artifacts. Before creating any work record, run the [related-work check](context-routing.md#check-for-related-work) and continue, link or supersede what it finds.
 
-The global guide owns the startup sequence: global memory, this routing check, then registered workspace memory. Reuse each read and routing result within the current task; following a link back here does not restart setup. On resume, reconcile changed state. Read linked sections for the current branch, not the whole reference or every skill it mentions.
+The global guide sets when to read memory, this routing check and the workspace index: before the first read or write in any workspace and again when scope changes, never for answers from general knowledge or this conversation. Order: global memory, this check, then registered workspace memory. Reuse each read and routing result within the current task; following a link back here does not restart setup. On resume, reconcile changed state. Read linked sections for the current branch, not the whole reference or every skill it mentions.
 
 ## Responsibility boundaries
 
 | Owner | Responsibility | Load when |
 | --- | --- | --- |
-| Global guide and USER.md | Standing instructions and personal preferences | Session start or resume |
-| This route and workspace index | Workspace selection and source authority | First task, resume, or a changed workspace |
-| Global and registered workspace memory | Reusable facts, with authoritative sources retaining precedence | Startup indexes, then relevant topics |
+| Global guide and `USER.md` | Standing instructions and personal preferences | Session start or resume |
+| This route and workspace index | Workspace selection and source authority | First read or write in a workspace, resume, or a changed workspace |
+| Global and registered workspace memory | Reusable facts, with authoritative sources retaining precedence | First read or write in a workspace, then relevant topics |
 | Work record | Current scope, decisions, pending gates and recovery evidence | Resuming or maintaining durable work |
 | Work lifecycle | Checkpoints, review, acceptance and judgment guidance | Durability or review triggers, substantial handbacks or consequential recommendations |
 | Action skill | Procedure for the requested operation | That operation is needed |
-| RPI | Stage order and artifacts | A workflow is selected or recorded |
+| `rpi` | Stage order and artifacts | A workflow is selected or recorded |
 | Desk | Assigned coordination duties | Explicit assignment or reconciled resumption |
-| Scrum master | Scheduled workflow checks and corrective nudges | Assigned monitoring contract |
 
 Memory supplies context, not roles or permission. A template, installed skill or historical role name does not activate a workflow. Helpers and scheduled jobs retain their explicit source contracts rather than loading user-session startup context.
 
@@ -31,12 +30,11 @@ Memory supplies context, not roles or permission. A template, installed skill or
 ## Load only the applicable branch
 
 - Source conflict, fallback or registration: [context sources](context-routing.md#context-sources).
-- User-facing first task/resume: [global memory](context-routing.md#global-memory), through agent-memory-repo. Helpers and schedules need explicit source permission.
-- Memory maintenance: [memory dream](context-routing.md#memory-dream). Registration: [workspace memory](context-routing.md#workspace-memory-registration).
-- Issue destination setup: [issue tracking](context-routing.md#workspace-issue-tracker-setup). Unattended repository setup: [pickup profiles](context-routing.md#agent-pickup-profiles).
+- User-facing first read or write in a workspace: [global memory](context-routing.md#global-memory), through `agent-memory-repo`. Helpers and schedules need explicit source permission.
+- Memory registration: [workspace memory](context-routing.md#workspace-memory-registration).
+- Issue destination setup: [issue tracking](context-routing.md#workspace-issue-tracker-setup).
 - Saving a decision or artifact: [accepted decisions](context-routing.md#accepted-decisions) and [artifact placement](context-routing.md#place-context-and-artifacts). Preserve repository-required homes, private context boundaries and existing authoritative owners.
-- Creating/updating canonical work: [work metadata](context-routing.md#work-metadata-and-overview). Consuming scheduled reports: [brief fields](context-routing.md#brief-reporting-fields). Selected workflow changes: [workflow records](context-routing.md#workflow-records). Read the named section and its relevant dependencies, not every branch.
-- T3 new work, triage or rule changes: use the assigned Desk route (experimental `desk` skill) under [role applicability](work-lifecycle.md#role-applicability-and-resumption). Installed skills or historical notes do not assign a role.
-- Assigned periodic thread checks: use the experimental `scrum-master` skill and its named runtime contract. Its registered-workspace evidence scope is a specific monitoring exception, not ordinary task access.
+- Creating or updating work and project records: [work metadata](context-routing.md#work-metadata-and-overview). Read the named section and its relevant dependencies.
+- An assigned Desk (experimental `desk` skill) can coordinate work spanning workspaces.
 
 These routes preserve source/authority rules and confer no registration, cross-workspace, scheduler, publication or destructive authority.
