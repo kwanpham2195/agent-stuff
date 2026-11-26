@@ -9,15 +9,14 @@ Personal agent instructions, reusable skills, and a local context management fra
 - `experimental/skills/` contains skills that depend on T3 Code and the context folders. The installer skips them unless you pass `--experimental`; see [Experimental skills](#experimental-skills).
 - `context/templates/` contains empty templates for private local work records.
 - `templates/USER.md` is a blank profile the installer copies to `~/.agents/USER.md` when that file is missing.
-- `scripts/validate-skills.py` checks skill metadata and local references in `skills/`, `experimental/skills/` and `pi/skills/`.
-- `pi/` contains the Pi agents, extensions, themes, skills, modes and example settings.
+- `scripts/validate-skills.py` checks skill metadata and local references in `skills/` and `experimental/skills/`.
 - `model-policy.yaml` and `scripts/model-policy.py` configure and resolve model choices for supported workflows.
 
 ## Day-to-day usage
 
 Describe the task in ordinary language. You do not need to invoke every skill or prescribe their order. With the instructions and skills loaded, the agent uses the task to select relevant guidance. The skill catalog below is a reference for discovering capabilities and requesting a particular method.
 
-Start with [installation](#install) and ensure your agent loads the global instructions and discovers the installed skills. The [Pi setup](#pi-setup) explains the supported installation paths and what each includes. Skills provide instructions; they do not install the tools or credentials a task may require.
+Start with [installation](#install) and ensure your agent loads the global instructions and discovers the installed skills. Skills provide instructions; they do not install the tools or credentials a task may require.
 
 ```text
 Your request
@@ -89,7 +88,7 @@ Name a skill when you want its specific method or deliverable, for example: "Use
 
 ## Skills
 
-The package contains the stable skills below, plus the Pi-specific skills listed under [Pi setup](#themes-and-pi-skills). Each skill is loaded when its task matches; you do not need to name every skill in a request.
+The package contains the stable skills below. Each skill is loaded when its task matches; you do not need to name every skill in a request.
 
 ### Planning, collaboration, and review
 
@@ -129,7 +128,7 @@ Install them with the stable set:
 ./scripts/install --experimental
 ```
 
-The flag can be combined with `--pi`. It checks the experimental destinations for collisions like the others and stops before writing when one exists.
+It checks the experimental destinations for collisions like the others and stops before writing when one exists.
 
 ## Install
 
@@ -141,7 +140,7 @@ Run the installer from a clone:
 ./scripts/install
 ```
 
-Options: `--pi` adds the [Pi setup](#pi-setup), `--claude`, `--codex` and `--cursor` connect those harnesses ([below](#connect-your-harness)), and `--experimental` adds the [experimental skills](#experimental-skills). Run `./scripts/install --help` for usage.
+Options: `--claude`, `--codex` and `--cursor` connect those harnesses ([below](#connect-your-harness)), and `--experimental` adds the [experimental skills](#experimental-skills). Run `./scripts/install --help` for usage.
 
 The installer copies the global instructions and stable skills into `~/.agents`. `--experimental` adds the [experimental skills](#experimental-skills). It also copies `templates/USER.md` to `~/.agents/USER.md` unless that file exists; fill it in with your name, languages, time zone and writing preferences. It stops when another destination already exists. Move or remove an existing destination only after reviewing it.
 
@@ -154,7 +153,6 @@ The installer writes to `~/.agents`. Each harness needs to find the instructions
 | Claude Code | `--claude` | `~/.claude/CLAUDE.md` to `~/.agents/AGENTS.md`, and `~/.claude/skills` to `~/.agents/skills` |
 | Codex | `--codex` | `~/.codex/AGENTS.md` to `~/.agents/AGENTS.md`; Codex reads user skills from `~/.agents/skills` itself |
 | Cursor | `--cursor` | Writes `~/.cursor/rules/agents.mdc` as an always-apply rule that tells the agent to read `~/.agents/AGENTS.md`. Cursor reads user skills from `~/.agents/skills` itself. Cursor has no global `AGENTS.md` file, and the rule points to the file instead of copying it, so edits to `AGENTS.md` apply without re-running the installer |
-| Pi | `--pi` | See the [Pi setup](#pi-setup) |
 
 Set `CLAUDE_HOME`, `CODEX_HOME` or `CURSOR_HOME` to use other locations. The installer stops instead of replacing an existing `CLAUDE.md`, `AGENTS.md`, `agents.mdc` or `skills` path there. To connect a harness after installing, create the same links by hand once you have reviewed the existing files, for example `ln -s ~/.agents/AGENTS.md ~/.codex/AGENTS.md`.
 
@@ -203,65 +201,6 @@ The agent asks before registering or merging workspaces, and it keeps secrets ou
 
 - **Overview board.** You can build an Obsidian Base (a Kanban view over the work notes' properties) for a cross-workspace overview. This repository does not ship one. Without it, agents read the work notes directly. The `obsidian-markdown` and `obsidian-bases` skills help build one; install them separately.
 - **Commit guardrails.** Checks for metadata, secrets and writing quality on the context repository are your own tooling and are not included.
-
-## Pi setup
-
-Pi discovers the shared `skills/` tree directly after the main installer copies it to `~/.agents/skills`. Install the complete local setup, including Pi configuration, with:
-
-```bash
-./scripts/install --pi
-```
-
-The Pi option creates `~/.pi/agent/AGENTS.md` as a link to the shared global instructions. It installs the reviewed agents, extensions, themes, Pi-specific skills, and modes. It copies settings and MCP configuration under their `.example.json` names without activating them. The installer checks every destination before writing and stops without making changes when a destination exists.
-
-If you want only the Pi package resources, install the repository through Pi:
-
-```bash
-pi install git:github.com/kwanpham2195/agent-stuff
-```
-
-The Pi package installs extensions, themes, and skills. It does not install `AGENTS.md`, settings, modes, MCP configuration, or subagent definitions.
-
-### Extensions
-
-- `answer.ts` extracts questions from the last assistant response and presents an interactive answer form.
-- `btw.ts` opens a side conversation for a question without adding that thread to the main conversation.
-- `files.ts` provides file browsing, opening, editing, and diff actions through `/files`.
-- `goal.ts` stores and enforces a long-running objective in the Pi session tree.
-- `head.ts` shows the beginning of the current conversation branch.
-- `no-sleep.ts` uses macOS `caffeinate` while the agent is active.
-- `notify.ts` sends an OSC desktop notification when Pi finishes and waits for input.
-- `permission-gate.ts` asks before dangerous shell commands such as recursive deletion or `sudo`.
-- `prompt-editor.ts` adds mode and model controls to the prompt editor.
-- `session-breakdown.ts` reports session, message, token, model, and cost activity over time.
-- `todos.ts` manages claimable file-based tasks under `.pi/todos` or `PI_TODO_PATH`.
-- `uv.ts` redirects common Python environment and package commands through `uv`.
-
-### Themes and Pi skills
-
-The Pi package includes `catppuccin-macchiato`, `dayowl`, `modern-dark`, and `nightowl` themes.
-
-Two Pi-specific skills are included:
-
-- `pi-skill-creator` creates, evaluates, and improves skills for Pi and OpenCode.
-- `tldraw-offline` controls an open tldraw Desktop canvas through its local API.
-
-### Settings and optional services
-
-`pi/settings.example.json` records the package list, model selection, subagent model assignments, terminal preferences, and theme used by this setup. Model availability depends on your Pi version and authenticated providers. Review the complete file before activating it. Pi may download and execute every third-party entry in `packages` when it loads the active settings.
-
-`pi/mcp.example.json` configures Linear through `mcp-remote`. Remove it if you do not use Linear. Authentication remains in each service's credential storage and is not included here.
-
-Activate either example explicitly after review:
-
-```bash
-cp "$HOME/.pi/agent/settings.example.json" "$HOME/.pi/agent/settings.json"
-cp "$HOME/.pi/agent/mcp.example.json" "$HOME/.pi/agent/mcp.json"
-```
-
-If an active file already exists, merge the settings you want instead of replacing it.
-
-`pi/modes.json` supplies the `default` and `fast` model presets used by `prompt-editor.ts`.
 
 ## Install external skills
 

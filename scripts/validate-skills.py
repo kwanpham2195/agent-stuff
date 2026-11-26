@@ -13,7 +13,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 STABLE_SKILLS = ROOT / "skills"
 EXPERIMENTAL_SKILLS = ROOT / "experimental" / "skills"
-SKILLS_DIRS = (STABLE_SKILLS, EXPERIMENTAL_SKILLS, ROOT / "pi" / "skills")
+SKILLS_DIRS = (STABLE_SKILLS, EXPERIMENTAL_SKILLS)
 # Skills installed from other sources; links to them cannot resolve inside this repository.
 EXTERNAL_SKILLS = {"rpi", "visual-pr", "agent-memory-repo", "agents-md", "confluence"}
 LONG_DESCRIPTION_LIMIT = 350

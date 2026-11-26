@@ -2,22 +2,19 @@
 set -eu
 
 usage() {
-  printf 'Usage: %s [--pi] [--claude] [--codex] [--cursor] [--experimental]\n' "$0"
-  printf '  --pi            also install the Pi agents, extensions, themes and skills\n'
+  printf 'Usage: %s [--claude] [--codex] [--cursor] [--experimental]\n' "$0"
   printf '  --claude        also link Claude Code to the shared instructions and skills\n'
   printf '  --codex         also link Codex to the shared instructions\n'
   printf '  --cursor        also add the shared instructions as a Cursor global rule\n'
   printf '  --experimental  also install the skills under experimental/skills\n'
 }
 
-install_pi=false
 install_experimental=false
 install_claude=false
 install_codex=false
 install_cursor=false
 for arg in "$@"; do
   case $arg in
-    --pi) install_pi=true ;;
     --claude) install_claude=true ;;
     --codex) install_codex=true ;;
     --cursor) install_cursor=true ;;
@@ -29,7 +26,6 @@ done
 
 repo_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 agent_home=${AGENT_HOME:-"$HOME/.agents"}
-pi_agent_home=${PI_AGENT_HOME:-"$HOME/.pi/agent"}
 claude_home=${CLAUDE_HOME:-"$HOME/.claude"}
 codex_home=${CODEX_HOME:-"$HOME/.codex"}
 cursor_home=${CURSOR_HOME:-"$HOME/.cursor"}
@@ -70,17 +66,6 @@ if [ "$install_experimental" = true ]; then
 fi
 check_tree_entries "$repo_dir/context/templates" "$context_templates"
 
-if [ "$install_pi" = true ]; then
-  check_destination "$pi_agent_home/AGENTS.md"
-  check_destination "$pi_agent_home/settings.example.json"
-  check_destination "$pi_agent_home/modes.json"
-  check_destination "$pi_agent_home/mcp.example.json"
-  check_tree_entries "$repo_dir/pi/agents" "$pi_agent_home/agents"
-  check_tree_entries "$repo_dir/pi/extensions" "$pi_agent_home/extensions"
-  check_tree_entries "$repo_dir/pi/skills" "$pi_agent_home/skills"
-  check_tree_entries "$repo_dir/pi/themes" "$pi_agent_home/themes"
-fi
-
 if [ "$install_claude" = true ]; then
   check_destination "$claude_home/CLAUDE.md"
   check_destination "$claude_home/skills"
@@ -114,18 +99,6 @@ if [ "$install_experimental" = true ]; then
 fi
 cp "$repo_dir"/context/templates/* "$context_templates/"
 
-if [ "$install_pi" = true ]; then
-  install -d "$pi_agent_home/agents" "$pi_agent_home/extensions" "$pi_agent_home/skills" "$pi_agent_home/themes"
-  ln -s "$agent_home/AGENTS.md" "$pi_agent_home/AGENTS.md"
-  cp "$repo_dir/pi/settings.example.json" "$pi_agent_home/settings.example.json"
-  cp "$repo_dir/pi/modes.json" "$pi_agent_home/modes.json"
-  cp "$repo_dir/pi/mcp.example.json" "$pi_agent_home/mcp.example.json"
-  cp -R "$repo_dir"/pi/agents/* "$pi_agent_home/agents/"
-  cp -R "$repo_dir"/pi/extensions/* "$pi_agent_home/extensions/"
-  cp -R "$repo_dir"/pi/skills/* "$pi_agent_home/skills/"
-  cp -R "$repo_dir"/pi/themes/* "$pi_agent_home/themes/"
-fi
-
 if [ "$install_claude" = true ]; then
   install -d "$claude_home"
   ln -s "$agent_home/AGENTS.md" "$claude_home/CLAUDE.md"
@@ -146,9 +119,6 @@ if [ "$install_cursor" = true ]; then
 fi
 
 printf 'Installed agent setup in %s\n' "$agent_home"
-if [ "$install_pi" = true ]; then
-  printf 'Installed Pi setup in %s\n' "$pi_agent_home"
-fi
 if [ "$install_claude" = true ]; then
   printf 'Linked Claude Code in %s\n' "$claude_home"
 fi
