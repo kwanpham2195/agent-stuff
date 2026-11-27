@@ -105,10 +105,6 @@ def resolve_ref(skill_path: Path, token: str) -> Path:
         installed = STABLE_SKILLS / os.path.relpath(resolved, EXPERIMENTAL_SKILLS)
         if installed.exists():
             return installed
-    # Chezmoi stores an executable target with this source filename prefix.
-    executable_source = resolved.with_name("executable_" + resolved.name)
-    if executable_source.is_file():
-        return executable_source
     return resolved
 
 

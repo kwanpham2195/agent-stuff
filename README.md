@@ -92,7 +92,7 @@ The package contains the stable skills below. Each skill is loaded when its task
 
 ### Planning, collaboration, and review
 
-[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`ayo`](skills/ayo/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
+[`define-outcome`](skills/define-outcome/SKILL.md), [`delegated-execution`](skills/delegated-execution/SKILL.md), [`docs-review`](skills/docs-review/SKILL.md), [`egm`](skills/egm/SKILL.md), [`in-your-own-words`](skills/in-your-own-words/SKILL.md), [`ketchup`](skills/ketchup/SKILL.md), [`ayo`](skills/ayo/SKILL.md), [`prototype`](skills/prototype/SKILL.md), [`recall`](skills/recall/SKILL.md), [`retro`](skills/retro/SKILL.md), [`sharpen`](skills/sharpen/SKILL.md), [`show-me`](skills/show-me/SKILL.md), [`triage-work`](skills/triage-work/SKILL.md), and [`walkthrough`](skills/walkthrough/SKILL.md).
 
 ### Implementation and verification
 
@@ -104,7 +104,7 @@ The package contains the stable skills below. Each skill is loaded when its task
 
 ### Documentation and writing
 
-[`mermaid-png`](skills/mermaid-png/SKILL.md), [`product-description`](skills/product-description/SKILL.md), [`technical-writing`](skills/technical-writing/SKILL.md), [`unslop`](skills/unslop/SKILL.md), [`visual-explainer`](skills/visual-explainer/SKILL.md), [`write-design-doc`](skills/write-design-doc/SKILL.md), [`write-tbp`](skills/write-tbp/SKILL.md), and [`writing-for-agents`](skills/writing-for-agents/SKILL.md).
+[`mermaid-png`](skills/mermaid-png/SKILL.md), [`product-description`](skills/product-description/SKILL.md), [`unslop`](skills/unslop/SKILL.md), [`visual-explainer`](skills/visual-explainer/SKILL.md), [`write-design-doc`](skills/write-design-doc/SKILL.md), [`write-tbp`](skills/write-tbp/SKILL.md), and [`writing-for-agents`](skills/writing-for-agents/SKILL.md).
 
 ### Local tools and setup
 
@@ -222,6 +222,9 @@ npx skills add firecrawl/anydoc -g --skill convert-documents-to-markdown
 # Terminal automation: drives and verifies TUIs and interactive CLIs in a real PTY
 npx skills add anomalyco/terminal-control -g --skill terminal-control
 cargo install terminal-control
+
+# Optional: review workspace changes, PRs or commits with the host agent's model
+npx skills add alibaba/open-code-review -g --skill open-code-review-delegate
 ```
 
 The instructions also name `rex` for servers, watchers, logs and background terminal work. The Rex app installs that skill itself (`rex skill setup`); it is not available through `npx skills`.

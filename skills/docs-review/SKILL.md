@@ -34,7 +34,7 @@ Diff the draft against the current version.
 
 ## 3. Writing
 
-Apply the maintenance guide, [technical writing](../technical-writing/SKILL.md), [reviewable writing](../references/reviewable-writing.md) and [unslop](../unslop/SKILL.md). Check these failures by name, because they survive a quick read:
+Apply the maintenance guide, [reviewable writing and its clarity rules](../references/writing.md) and [unslop](../unslop/SKILL.md). Check these failures by name, because they survive a quick read:
 
 - **Walls of prose.** A paragraph that carries several cases, steps or conditions becomes a list, a table or several paragraphs.
 - **Hidden sequence.** Steps a reader performs in order are a numbered list.

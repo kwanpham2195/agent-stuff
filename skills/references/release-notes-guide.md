@@ -2,7 +2,7 @@
 
 This document defines general rules and conventions for software release notes.
 
-**Prerequisite**: Apply [technical-writing](../technical-writing/SKILL.md) for shared writing standards. This guide adds release-notes-specific patterns.
+**Prerequisite**: Apply [Writing reviewable artifacts](writing.md) for shared writing standards. This guide adds release-notes-specific patterns.
 
 ## Editorial guidance
 

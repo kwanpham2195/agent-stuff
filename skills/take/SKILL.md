@@ -51,7 +51,7 @@ Create a concise implementation checklist based on:
 - Codebase exploration.
 - Existing repo patterns.
 
-For an issue beyond a trivial edit, run [rpi](../rpi/SKILL.md) under [RPI local rules](../references/rpi-local.md), with the issue as the request. Resume existing RPI documents at their first unfinished step. RPI's research, design and outline replace this checklist. In step 5, create the branch, then use RPI's implement step instead of the checklist. Steps 6 to 8 still apply. Resolve technical unknowns through RPI research or an authorized [prototype](../prototype/SKILL.md); block dependent work when a prototype is inconclusive or cannot run. A trivial issue keeps its checklist inline.
+For an issue beyond a trivial edit, run `rpi` under [RPI local rules](../references/rpi-local.md), with the issue as the request. Resume existing RPI documents at their first unfinished step. RPI's research, design and outline replace this checklist. In step 5, create the branch, then use RPI's implement step instead of the checklist. Steps 6 to 8 still apply. Resolve technical unknowns through RPI research or an authorized [prototype](../prototype/SKILL.md); block dependent work when a prototype is inconclusive or cannot run. A trivial issue keeps its checklist inline.
 
 ### 5. Implement
 

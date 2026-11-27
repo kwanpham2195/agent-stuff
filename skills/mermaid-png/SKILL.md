@@ -16,7 +16,7 @@ mermaid-png diagram.mmd              # writes and prints diagram.png
 mermaid-png diagram.mmd out/flow.png # choose the output path
 ```
 
-`mermaid-png` is on PATH through `~/.local/bin`. If it is missing, run `scripts/mermaid-png` from this skill's folder.
+If `mermaid-png` is not on PATH, run `scripts/mermaid-png` from this skill's folder.
 
 The script draws the diagram with [Pele](https://pele.run), a Mermaid renderer that needs no browser, and turns the SVG into a PNG with `rsvg-convert` at 2x on a white background. It supports every diagram type in Mermaid 12.1.0. The first run installs a pinned Pele into `~/.cache/mermaid-png/`, so it needs `npm` and network once.
 

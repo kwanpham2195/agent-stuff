@@ -14,15 +14,15 @@ This skill runs only in T3 Code. Confirm the session under [confirm the current 
 | You are | Read |
 | --- | --- |
 | A planning thread or the Desk, and the user says "ready for agent" | [packet](references/packet.md) |
-| The dispatcher thread, woken by a message or the 23:00 schedule | [dispatcher](references/dispatcher.md) |
+| The dispatcher thread, woken by a message or the nightly schedule | [dispatcher](references/dispatcher.md) |
 | A lane thread | [lane](references/lane.md), then [packet](references/packet.md#grants) for your authority |
-| The 07:00 results digest | [digest](references/digest.md) |
+| The scheduled results digest | [digest](references/digest.md) |
 
 Runtime records live in `~/.agents/context/workspaces/<workspace-id>/agent-pickup/`: `runtime.md` (dispatcher thread and schedule IDs, caps) and `lanes.md` (the lane ledger, written only by the dispatcher).
 
 ## The state
 
-`ready-for-agent` is a value of the work state's `status`, between `draft` and `active` ([work metadata](../references/context-routing.md#work-metadata-and-overview)). The status is a signal; the authority is the task packet's recorded approval. A task may hold the status only while `agent/packet.md` records the user's approval for the packet's current content hash. A card dragged into the column by hand starts nothing until the 23:00 sweep, which runs the entry check and skips a packet without that approval.
+`ready-for-agent` is a value of the work state's `status`, between `draft` and `active` ([work metadata](../references/context-routing.md#work-metadata-and-overview)). The status is a signal; the authority is the task packet's recorded approval. A task may hold the status only while `agent/packet.md` records the user's approval for the packet's current content hash. A card dragged into the column by hand starts nothing until the nightly sweep, which runs the entry check and skips a packet without that approval.
 
 ```text
 draft -> ready-for-agent        packet approved, entry check passes (mover)

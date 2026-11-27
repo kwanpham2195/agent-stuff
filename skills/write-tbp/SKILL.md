@@ -40,7 +40,7 @@ If you can't find an interesting angle, the topic may not be suitable for a tech
 
 ### 4. Write the draft
 
-Read [blog-guide](../references/blog-guide.md) and [technical-writing](../technical-writing/SKILL.md). Create `assets/<topic>/draft.md` in the target workspace using the blog-guide's structure and shared writing standards.
+Read [blog-guide](../references/blog-guide.md) and [Writing reviewable artifacts](../references/writing.md). Create `assets/<topic>/draft.md` in the target workspace using the blog-guide's structure and shared writing standards.
 
 Target 800-1500 words.
 
@@ -55,4 +55,4 @@ Present the final draft to the user for review. The draft remains in the target 
 ## References
 
 - **Style guide**: See `../references/blog-guide.md` for voice, tone, and structure.
-- **Shared writing standards**: See [technical-writing](../technical-writing/SKILL.md).
+- **Shared writing standards**: See [Writing reviewable artifacts](../references/writing.md).

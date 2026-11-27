@@ -5,7 +5,7 @@ description: Prepare a bounded system design interview with a candidate brief an
 
 # Prepare a system design interview
 
-Before drafting or materially revising the candidate brief or private interviewer guide, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the candidate brief or private interviewer guide, read and apply [Writing reviewable artifacts](../references/writing.md).
 
 ## Establish the exercise
 

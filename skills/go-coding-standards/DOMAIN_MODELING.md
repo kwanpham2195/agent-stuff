@@ -3,14 +3,14 @@
 Apply [shared domain values and state](../coding-standards/references/domain-types-and-state.md). Use defined Go types for IDs, units, and constrained values; constructors/parsers establish invariants before values enter services.
 
 ```go
-type MerchantID string
+type CustomerID string
 
-func ParseMerchantID(raw string) (MerchantID, error) {
-    if raw == "" { return "", ErrInvalidMerchantID }
-    return MerchantID(raw), nil
+func ParseCustomerID(raw string) (CustomerID, error) {
+    if raw == "" { return "", ErrInvalidCustomerID }
+    return CustomerID(raw), nil
 }
-// Avoid using bare string for interchangeable merchant/user IDs.
-// Avoid converting unparsed input directly to MerchantID at call sites.
+// Avoid using bare string for interchangeable customer/user IDs.
+// Avoid converting unparsed input directly to CustomerID at call sites.
 ```
 
 Go defined types alone do not prevent explicit conversion or invalid zero values. Keep construction disciplined at package boundaries and test invariants; do not claim compile-time impossibility the language does not provide.

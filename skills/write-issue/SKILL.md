@@ -5,9 +5,9 @@ description: Reference standards for writing and maintaining local or remote iss
 
 # Writing and maintaining issues
 
-Before drafting or materially revising the issue's human-facing prose, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the issue's human-facing prose, read and apply [Writing reviewable artifacts](../references/writing.md).
 
-Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising an issue title or body, even when technical-writing is not loaded. Before presenting a draft or saving an issue, scan, rewrite, and self-audit the prose you authored. Preserve verbatim user descriptions and quoted evidence.
+Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising an issue title or body. Before presenting a draft or saving an issue, scan, rewrite, and self-audit the prose you authored. Preserve verbatim user descriptions and quoted evidence.
 
 These content standards apply to local and remote issues. Destination-specific APIs, types, labels, milestones, and automation apply only when that remote tracker supports them. Local mode uses the metadata and lifecycle in the [issue skill](../issue/SKILL.md) and never requires GitHub, `gh`, or network access.
 

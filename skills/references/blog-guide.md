@@ -2,7 +2,7 @@
 
 This document defines general rules and conventions for technical blog posts.
 
-**Prerequisite**: Apply [technical-writing](../technical-writing/SKILL.md) for shared writing standards. This guide adds blog-specific patterns.
+**Prerequisite**: Apply [Writing reviewable artifacts](writing.md) for shared writing standards. This guide adds blog-specific patterns.
 
 ## What technical blog posts are
 
@@ -186,4 +186,4 @@ When reviewing a technical blog post, check:
 - [ ] **Links** — Points to actual code in the repo?
 - [ ] **Length** — Appropriate depth for the topic?
 
-For voice and clarity, use the [technical-writing](../technical-writing/SKILL.md) review checks.
+For voice and clarity, use the [Writing reviewable artifacts](writing.md) clarity rules.

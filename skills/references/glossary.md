@@ -49,7 +49,7 @@ Words that change what an agent does. Say one of them and the agent knows the sc
 
 | Say | You get |
 | --- | --- |
-| **Intake** | New work is registered, given a state file and a task thread (or filed as an issue for later). |
+| **Intake** | Record new work or file an issue for later. |
 | **Triage** | The backlog, one item at a time, each with a recommendation. |
 | **Continue / park / close** | The three outcomes for a work item. |
 | **Now / next / later** | The priority you set on an issue. Only you set it. |
@@ -71,7 +71,7 @@ Words that change what an agent does. Say one of them and the agent knows the sc
 | **Checkpoint** | State saved so work survives a pause. |
 | **Handoff** | Work passed to another owner with what they need. |
 | **Recall** | Workspace state rebuilt from records and saved sessions after compaction or a harness change. |
-| **Reconcile** | The state file compared with reality and the difference fixed. |
+| **Reconcile** | Saved evidence checked against the current source and any verified discrepancy resolved. |
 | **Supersede** | A new decision replaces an older one. |
 | **Deliver** | The finished result handed to you for acceptance. |
 
@@ -79,7 +79,3 @@ Words that change what an agent does. Say one of them and the agent knows the sc
 
 | Say | You get |
 | --- | --- |
-| **Ready for agent** | The task's packet is checked and approved, its status becomes `ready-for-agent`, and an agent lane picks it up at once or at 23:00. |
-| **Back to agent** | The PR's feedback goes back to the lane that wrote it, on the same branch. |
-| **Lane** | One agent thread with its own worktree that runs a repository's dependent tasks in order. |
-| **What is waiting for agents?** | Ready tasks, running lanes and anything blocked. |

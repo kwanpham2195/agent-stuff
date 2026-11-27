@@ -92,7 +92,7 @@ Route added-comment checks to the comment sweep in [write-pr](../write-pr/SKILL.
 
 ### 5. Aggregate
 
-Before drafting or materially revising the human-facing review report, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the human-facing review report, read and apply [Writing reviewable artifacts](../references/writing.md).
 
 Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings — the two axes are deliberately separate (see _Why two axes_).
 

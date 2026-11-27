@@ -101,7 +101,7 @@ Distinguish proposed from accepted changes. Pause for missing decisions, changed
 
 ## Plan, act, verify, accept
 
-Beyond trivial edits, `rpi` and its [local rules](rpi-local.md) own research, design, planning and implementation. Apply the verification and acceptance steps below to `rpi` too. Read [Writing reviewable artifacts](reviewable-writing.md) before drafting or materially revising human-facing artifacts.
+Beyond trivial edits, `rpi` and its [local rules](rpi-local.md) own research, design, planning and implementation. Apply the verification and acceptance steps below to `rpi` too. Read [Writing reviewable artifacts](writing.md) before drafting or materially revising human-facing artifacts.
 
 1. Agree the outcome, scope, constraints, observable criteria and evidence. Use [define-outcome](../define-outcome/SKILL.md) for ambiguity. Keep criteria inline or in their authoritative artifact, with proposals clearly marked.
 2. Inspect relevant code, callers, tests and conventions. Stop when the change, contracts and checks are understood. Use `rpi` research for consequential gaps.

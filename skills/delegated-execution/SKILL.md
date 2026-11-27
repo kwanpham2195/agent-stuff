@@ -79,7 +79,7 @@ Resolve these paths relative to this skill directory, then pass only those the a
 - Naming or changing code: [write-discoverable-code](../write-discoverable-code/SKILL.md). Use repository standards for other language-specific concerns.
 - Bug investigation: [work-lifecycle](../references/work-lifecycle.md#plan-act-verify-accept) for evidence and verification, plus the actual `browser` or `terminal` owner for live reproduction. Pass the original scenario and the surface and profile. Include implementation skills if fixing.
 - Explicit research or deeper investigation of a consequential uncertainty: the research steps of [rpi](../rpi/SKILL.md), with subagents launched under [RPI local rules](../references/rpi-local.md#subagents-and-models).
-- Human-facing artifacts, including any file saved under a workspace `review/` folder: [Writing reviewable artifacts](../references/reviewable-writing.md) and [unslop](../unslop/SKILL.md).
+- Human-facing artifacts, including any file saved under a workspace `review/` folder: [Writing reviewable artifacts](../references/writing.md) and [unslop](../unslop/SKILL.md).
 - Authorized commits: [commit](../commit/SKILL.md). Authorized PR work: [pr](../pr/SKILL.md), which routes to PR writing standards.
 
 For implementation, have the worker inspect relevant code, callers, tests, and conventions before editing. It should identify the change location, the affected contracts, and the verification approach. Ordinary exploration needs no research artifact. If an uncertainty prevents a safe change, report the bounded question and investigate within scope or request the missing authority.

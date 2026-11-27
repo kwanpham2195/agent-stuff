@@ -1,16 +1,49 @@
 # RPI local rules
 
-Read whenever the [rpi](../rpi/SKILL.md) or `visual-pr` skill runs, before its first step. `rpi` and `visual-pr` are HumanLayer's skills, installed unedited through `npx skills` and pinned in `external-skills.json`. Follow them as written, except for the points below.
+Read whenever the `rpi` or `visual-pr` skill runs, before its first step. `rpi` and `visual-pr` are HumanLayer's skills, installed unedited through `npx skills` and pinned in `external-skills.json`. Follow them as written, except for the points below.
+
+Give each delegated stage an outcome and acceptance evidence.
 
 ## Default route
 
 The global guide sends implementation, refactoring and investigation beyond a trivial edit here, even when the user does not name RPI. Treat that as an explicit invocation.
 
-- Use the user's requested step or flow, or the work item's recorded `workflow`. Otherwise follow RPI's own chooser: start with research questions and ask which flow to use.
-- Trivial edits, quick lookups and questions answered from existing context stay inline, without RPI documents.
-- A conversational thread is no exception. When a chat request turns into code, docs or pull-request changes, start this route: run RPI's chooser, or go code-first as below and say so.
-- Go code-first when writing the code costs less than writing a plan for it: the change is reversible, the files are known and no product or architecture decision is open. Skip RPI documents. Write the change, or a rough sketch when the direction is uncertain, and show the diff as the review artifact. Record `workflow: oneshot` if the work item tracks it. Switch to RPI's chooser if the sketch exposes a consequential decision or the change keeps growing.
-- When the user says to skip the workflow, implement directly, as RPI's chooser note allows.
+Every task starts with its outcome and ends with verification against it. The steps between are chosen per task.
+
+```text
+outcome (A1..An + evidence, the user confirms) ─► the lightest steps that fit ─► verify: each criterion passed / failed / blocked / awaiting the user
+```
+
+### 1. Agree the outcome first
+
+- Before research questions, write the acceptance contract with [define-outcome](../define-outcome/SKILL.md): who and what problem, the desired outcome, criteria A1..An each with its evidence, and a stop condition when the work is discretionary.
+- Put it in the request document, or inline in chat for small work. Reuse criteria an issue or earlier document already holds.
+- Wait for the user to confirm the criteria before research or design. Proposed criteria are not agreed criteria.
+
+### 2. Choose the lightest steps that fit
+
+Pick the fewest steps that settle the open decisions, and say which you skip and why. The user's requested step or flow, or the work item's recorded `workflow`, wins.
+
+| Work | Steps |
+| --- | --- |
+| Product behavior or a new capability | research, PRD, then TDD only if technical choices are open, outline only for several phases |
+| A technical change with open design choices | research, design discussion, outline if it has several phases |
+| A question about the current system | research only |
+| Reversible, known files, no open decision | code-first: the change or a sketch, with the diff as the review artifact; `workflow: oneshot` |
+| Trivial edits, lookups, answers from context | inline, no documents |
+
+In a PRD, the Success section holds the A1..An criteria. Switch to a heavier step when a sketch exposes a consequential decision or the change keeps growing. When the user says to skip the workflow, implement directly. A conversational thread is no exception: when a chat request turns into code, docs or pull-request changes, start at step 1.
+
+### 3. Trace every step to the criteria
+
+- Each design question, TDD decision and outline phase names the criteria it serves. Question a phase that serves none.
+- Before implementation, write the validation plan: for each criterion, the check, who runs it and when. Code-first work writes it in the change summary.
+- During implementation, follow the matching playbook: [feature](../ayo/references/feature.md) for new or changed behavior, [refactoring](../ayo/references/refactoring.md) for structure, and [diagnostics](../ayo/references/diagnostics.md) for a bug or failed fix.
+
+### 4. Verify against the outcome
+
+- The final report is the criteria table: each criterion passed, failed, blocked or awaiting the user, with its evidence. Passing tests alone do not pass a criterion that needs more.
+- Judgment calls stay awaiting the user until the user decides. Never weaken a criterion to match the result; record any change the user approves.
 
 ## Task directory
 
@@ -22,16 +55,14 @@ The global guide sends implementation, refactoring and investigation beyond a tr
 
 ## Work state
 
-Keep the work item's `agent/state.md` current after each saved document or finished phase: status, next action, and pending decisions. When the state records workflow fields, update `workflow_stage` and `current_artifact` under [workflow records](context-routing.md#work-metadata-and-overview), using this flow mapping:
+Use `index.md` for the chosen workflow, `review/` for its artifacts and the owner thread for pending questions. Check these sources to resume. Keep existing cursor fields only on legacy records.
 
-| RPI flow | `workflow` value | RPI stages |
-| --- | --- | --- |
-| Design discussion | `rpi` | `questions`, `research`, `design`, `outline`, `implementation` |
-| PRD, then TDD | `prd` | `questions`, `research`, `prd`, `tdd`, `outline`, `implementation` |
-| TDD only, or research only | `freeform` | the stages actually used |
-| No documents, from an accepted request | `oneshot` | `implementation` |
-
-Workflow records add `intake` before these stages and `verification` and `delivery` after them. The outline is optional in every flow.
+| RPI flow | `workflow` |
+| --- | --- |
+| Design discussion | `rpi` |
+| PRD, then TDD | `prd` |
+| TDD only, or research only | `freeform` |
+| No documents, from an accepted request | `oneshot` |
 
 ## Subagents and models
 
@@ -49,7 +80,7 @@ When delegation is useful, RPI's subagents are prompt files, not installed agent
 | `codebase-locator`, `codebase-analyzer`, `codebase-pattern-finder`, `web-search-researcher` | exploration | read-only |
 | `outline-implementer-agent` | implementation | writes source and tests for the assigned phase |
 
-Launch on the route delegated execution names for the harness: T3 routing in T3 Code, Claude Code routing in Claude Code, and native children in Codex and Pi. RPI's "run independent investigations in parallel" stays within the policy's role and total caps.
+Launch on the route delegated execution names for the harness: T3 routing in T3 Code, Claude Code routing in Claude Code, and native children in Codex. RPI's "run independent investigations in parallel" stays within the policy's role and total caps.
 
 ## visual-pr
 

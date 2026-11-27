@@ -3,9 +3,9 @@
 Apply [shared expected failures](../coding-standards/references/errors.md), including intentional optional lookup semantics, safe configuration failures, cancellation, and uncertain remote outcomes. Go exposes precise documented categories through native `error`, not a TypeScript Result union.
 
 ```go
-var ErrMerchantNotFound = errors.New("merchant not found")
-type InvalidMerchantIDError struct { /* safe structured context */ }
-func (e InvalidMerchantIDError) Error() string { return "invalid merchant id" }
+var ErrCustomerNotFound = errors.New("customer not found")
+type InvalidCustomerIDError struct { /* safe structured context */ }
+func (e InvalidCustomerIDError) Error() string { return "invalid customer id" }
 ```
 
 Callers classify with `errors.Is`/`errors.As`, never message strings. Context cancellation remains distinct via `context.Canceled`/`context.DeadlineExceeded`. Public functions return the `error` interface as their last result, not a concrete error pointer, to avoid typed-nil interface bugs.
@@ -15,7 +15,7 @@ Callers classify with `errors.Is`/`errors.As`, never message strings. Context ca
 Use `%w` when underlying errors are intentionally matchable parts of the contract, and `%v` or canonical translation when they are not, especially across system/RPC/storage boundaries. Retaining cause context does not require exposing all dependency categories as public matching contracts.
 
 ```go
-return fmt.Errorf("load merchant %s: %w", safeID, err)
+return fmt.Errorf("load customer %s: %w", safeID, err)
 // %w normally comes last; category sentinel may come first:
 return fmt.Errorf("%w: invalid header", ErrParse)
 ```

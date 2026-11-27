@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Write a design doc
 
-Before drafting or materially revising the design, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the design, read and apply [Writing reviewable artifacts](../references/writing.md).
 
 Write for builders, reviewers, operators, and stakeholders without prior context.
 

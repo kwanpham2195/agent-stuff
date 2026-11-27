@@ -1,6 +1,6 @@
 # Writing examples reference
 
-Optional reference for examples of voice, sentence editing, and code presentation. Read only the sections relevant to the current writing problem. The examples and historical guidance below are retained for comparison. [Technical-writing](../technical-writing/SKILL.md) and [unslop](../unslop/SKILL.md) are the authoritative standards when guidance differs; examples do not override their rules.
+Optional reference for examples of voice, sentence editing, and code presentation. Read only the sections relevant to the current writing problem. The examples and historical guidance below are retained for comparison. [Writing reviewable artifacts](writing.md) and [unslop](../unslop/SKILL.md) are the authoritative standards when guidance differs; examples do not override their rules.
 
 ## Core identity
 

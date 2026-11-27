@@ -5,7 +5,7 @@ description: "Create or extend feature-by-feature product behavior documentation
 
 # Product description repo
 
-Before drafting or materially revising the human-facing behavior documents, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the human-facing behavior documents, read and apply [Writing reviewable artifacts](../references/writing.md).
 
 Work in the requested documentation location. The commit messages below are suggested groups: initialize Git or commit only when the user requests it or an authorized repository workflow includes it. Otherwise leave the documents ready for review. Create CLAUDE.md only when explicitly requested.
 

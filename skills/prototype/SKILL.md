@@ -5,7 +5,7 @@ description: Build a throwaway prototype to answer a design question. Use when t
 
 # Prototype
 
-Before drafting or materially revising the prototype's human-facing explanation or proposal, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the prototype's human-facing explanation or proposal, read and apply [Writing reviewable artifacts](../references/writing.md).
 
 A prototype is **throwaway code that answers a question**. The question decides the shape.
 

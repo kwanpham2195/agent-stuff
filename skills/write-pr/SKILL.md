@@ -5,9 +5,9 @@ description: Standards for PR titles, descriptions, and added comments. Supporti
 
 # Writing pull requests
 
-Before drafting or materially revising the PR's human-facing prose, read and apply [Writing reviewable artifacts](../references/reviewable-writing.md).
+Before drafting or materially revising the PR's human-facing prose, read and apply [Writing reviewable artifacts](../references/writing.md).
 
-Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising a PR title or description, even when technical-writing is not loaded. Before presenting a draft or publishing an update, scan, rewrite, and self-audit the prose you authored. Preserve quoted evidence and the human notes defined below exactly.
+Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising a PR title or description. Before presenting a draft or publishing an update, scan, rewrite, and self-audit the prose you authored. Preserve quoted evidence and the human notes defined below exactly.
 
 ## Write for the reviewer
 

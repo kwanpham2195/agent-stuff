@@ -1,6 +1,6 @@
 # Documentation examples reference
 
-Optional reference for documentation openings, progressive disclosure, code examples, and technical articles. Read only the sections relevant to the current document. The examples and historical guidance below are retained for comparison. [Technical-writing](../technical-writing/SKILL.md) and [unslop](../unslop/SKILL.md) are the authoritative standards when guidance differs; examples do not override their rules. The [writing examples](./writing-guide.md) are optional, not a prerequisite.
+Optional reference for documentation openings, progressive disclosure, code examples, and technical articles. Read only the sections relevant to the current document. The examples and historical guidance below are retained for comparison. [Writing reviewable artifacts](writing.md) and [unslop](../unslop/SKILL.md) are the authoritative standards when guidance differs; examples do not override their rules. The [writing examples](./writing-guide.md) are optional, not a prerequisite.
 
 ## Document structure
 
@@ -226,4 +226,4 @@ When reviewing documentation, check:
 - [ ] **Links** — Are related concepts cross-referenced?
 - [ ] **Scannability** — Short paragraphs, clear headers?
 
-For more sentence-editing examples, consult the relevant section of the [writing examples reference](./writing-guide.md). Apply the current standards in [technical-writing](../technical-writing/SKILL.md) and [unslop](../unslop/SKILL.md).
+For more sentence-editing examples, consult the relevant section of the [writing examples reference](./writing-guide.md). Apply the current standards in [Writing reviewable artifacts](writing.md) and [unslop](../unslop/SKILL.md).

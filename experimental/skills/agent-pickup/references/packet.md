@@ -41,7 +41,7 @@ Scope: in <paths>; shared files <lockfiles, changelog>; out <exclusions>; estima
 New tests: <approved scenarios, or "none beyond repairs">
 Live verification: <profile checks that apply, payload, cleanup plan>
 Dependencies: <work IDs and what each must deliver, or none>
-Start window: any time | after 23:00
+Start window: any time | night window
 Budget: 90 agent-minutes, 2 fix rounds (or the agreed values)
 Withheld beyond the standard list: <task-specific limits, or none>
 

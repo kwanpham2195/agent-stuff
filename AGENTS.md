@@ -10,7 +10,7 @@ For implementation, refactoring or investigation beyond a trivial edit, use `rpi
 
 Skills own tool workflows. Install external skills with `npx skills`. If a mentioned skill is absent from the listed skills, look in project-local skills first, then `~/.agents/skills/`.
 
-Before drafting or materially revising any artifact a person reviews, the user included, read and apply [Writing reviewable artifacts](skills/references/reviewable-writing.md).
+Before drafting or materially revising any artifact a person reviews, the user included, read and apply [Writing reviewable artifacts](skills/references/writing.md).
 
 When a diagram, flow or before-and-after would settle the point faster than prose, show it using [show-me](skills/show-me/SKILL.md).
 

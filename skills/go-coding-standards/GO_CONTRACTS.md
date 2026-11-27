@@ -16,10 +16,10 @@ Apply the [shared workflow](../coding-standards/references/workflow.md) and matc
 ## Interface example
 
 ```go
-type MerchantStore interface {
-    FindByID(ctx context.Context, id MerchantID) (Merchant, error)
+type CustomerStore interface {
+    FindByID(ctx context.Context, id CustomerID) (Customer, error)
 }
-func NewService(store MerchantStore, clock Clock, log *slog.Logger) *Service
+func NewService(store CustomerStore, clock Clock, log *slog.Logger) *Service
 ```
 
 The method documents stable categories callers can handle with `errors.Is`/`errors.As`; required absence returns not-found, intentional optionality uses an explicit `(value, ok)` or documented optional result. The adapter parses rows and returns domain values, preserving safe causes deliberately. Each I/O path propagates caller context. An interface earns its place through meaningful translation, variation, or substitution, not merely existence of one implementation.

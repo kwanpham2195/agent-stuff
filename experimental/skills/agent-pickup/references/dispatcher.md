@@ -11,7 +11,7 @@ Read as the dispatcher thread `Dispatch: Agent-ready tasks`. Every wake arrives 
    Project indexes supply reporting attention under [brief reporting](../../references/context-routing.md#brief-reporting-fields), never dispatch candidates. A project's status or its child's `project`/`parent` link does not satisfy packet approval or dependency checks.
 4. Re-run the [entry check](packet.md#entry-check) for each candidate. A failure stays listed in `lanes.md` under "Not placed" with the reason; do not edit the work state.
 5. Place each passing candidate (below), in order of the packet's Approval time.
-6. On the 23:00 wake, also run the [sweep](#sweep).
+6. On the nightly wake, also run the [sweep](#sweep).
 7. Write `lanes.md`, commit it under [context commits](../../references/work-lifecycle.md#commit-local-context-changes), post a concise Markdown summary in this thread, and end the turn. Use three separate bullets with blank lines between them: **Sweep** (or not run), **Placement**, and **Ledger** (including any commit blocker). Link relevant PRs and tasks when known. Keep each bullet short and include the concrete result or next action; do not wrap the summary in a code block.
 
 Spend at most 10 agent-minutes per turn. Launch nothing beyond the caps in `runtime.md`.
@@ -57,7 +57,7 @@ On `lane released`, verify the lane checkpoint records clean local work and its 
 
 ## Sweep
 
-On the 23:00 wake only:
+On the nightly wake only:
 
 - Pick up hand-edited `ready-for-agent` states and tasks waiting for the night window; place them as above.
 - For each open agent PR (from lane work states in `needs-review`), read reviews, threads and mergeability with the profile's read-only forge commands. When it finds the user's "request changes" review, an unresolved thread the user started, or a conflict with the base, send the owning lane a follow-up with `t3_thread_send` naming the PR and what to address. Teammate and bot comments are evidence for the lane, not triggers.
@@ -75,5 +75,5 @@ On the 23:00 wake only:
 
 `runtime.md` records both schedules. Change them only when the user asks.
 
-- `Dispatch: Agent-ready tasks`: bound to this thread (`bindToCurrentThread: true`), `fixed_time` 23:00 daily. Prompt: "Agent pickup wake (scheduled 23:00): run a dispatcher turn including the sweep, per the agent-pickup skill."
-- `Report: Agent results`: fresh thread per run (`bindToCurrentThread: false`), `fixed_time` 07:00 Monday to Friday, following [digest](digest.md).
+- `Dispatch: Agent-ready tasks`: bound to this thread (`bindToCurrentThread: true`), `fixed_time` the user's chosen night time, daily. Prompt: "Agent pickup wake (scheduled nightly): run a dispatcher turn including the sweep, per the agent-pickup skill."
+- `Report: Agent results`: fresh thread per run (`bindToCurrentThread: false`), `fixed_time` the user's chosen morning time on weekdays, following [digest](digest.md).

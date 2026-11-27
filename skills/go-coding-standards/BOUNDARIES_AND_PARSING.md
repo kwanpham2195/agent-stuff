@@ -3,13 +3,13 @@
 Apply [shared parsing and evidence](../coding-standards/references/parsing-and-evidence.md). Go decoding into a struct establishes field representation, not domain/cross-field integrity.
 
 ```go
-type createMerchantRequest struct {
-    MerchantID string `json:"merchant_id"`
+type createCustomerRequest struct {
+    CustomerID string `json:"customer_id"`
 }
 
-func (h *Handler) CreateMerchant(w http.ResponseWriter, r *http.Request) {
-    var req createMerchantRequest
-    // Decode, reject unknown command fields, parse MerchantID, then call service.
+func (h *Handler) CreateCustomer(w http.ResponseWriter, r *http.Request) {
+    var req createCustomerRequest
+    // Decode, reject unknown command fields, parse CustomerID, then call service.
 }
 // Avoid passing http.Request or a raw decoded request to domain/service packages.
 ```

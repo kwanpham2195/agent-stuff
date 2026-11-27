@@ -14,7 +14,7 @@ The user types `ayo` with a situation, such as "ayo, agent seems lost" or "ayo, 
 | The agent seems lost or states things it cannot back | [recall](../recall/SKILL.md), then cite evidence | Each claim tied to a file and line or command output; the rest marked as guesses |
 | The user is back and needs what changed | [ketchup](../ketchup/SKILL.md) | Changes since their last message and every decision still waiting |
 | The goal, scope or acceptance is unclear | [define-outcome](../define-outcome/SKILL.md) | An agreed outcome with observable criteria |
-| An unclear idea or work with stages | [rpi](../rpi/SKILL.md) | Research, plan and implementation, one open choice at a time |
+| An unclear idea or work with stages | `rpi` | Research, plan and implementation, one open choice at a time |
 | Adding or changing user-visible behavior | [feature playbook](references/feature.md) | Six steps from outcome to review |
 | Improving structure without changing behavior | [refactoring playbook](references/refactoring.md) | Baseline, sketch, slice and before-and-after comparison |
 | A bug, crash, slow path, leak or trace | [diagnostics](references/diagnostics.md) | Root cause with runtime evidence, and the same fault searched for elsewhere |

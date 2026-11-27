@@ -5,7 +5,7 @@ Apply [shared cancellation, work ownership, retries, and workflows](../coding-st
 `context.Context` is the first parameter for I/O, blocking, retrying, and long-running operations. Propagate it downstream; do not replace caller lifetimes with hidden background contexts. Derived dependency timeouts still compose with the caller. Call the returned cancel function when ownership requires it.
 
 ```go
-func (s *Service) Find(ctx context.Context, id MerchantID) (Merchant, error) {
+func (s *Service) Find(ctx context.Context, id CustomerID) (Customer, error) {
     return s.store.FindByID(ctx, id)
 }
 // Avoid context.Background() here, which drops caller cancellation.

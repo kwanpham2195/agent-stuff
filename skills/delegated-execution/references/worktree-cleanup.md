@@ -1,6 +1,6 @@
 # Worktree cleanup
 
-Use this reference when reclaiming a managed worktree or other delegated-run resource. Cleanup is a separate operation for each path, and a terminal child status never authorizes deletion. App-owned worktrees, such as Patchdesk review worktrees under `~/.cache/patchdesk/`, are not delegated-run resources; leave them to the owning app.
+Use this reference when reclaiming a managed worktree or other delegated-run resource. Cleanup is a separate operation for each path, and a terminal child status never authorizes deletion. Worktrees an app owns, such as a review tool's own worktrees, are not delegated-run resources; leave them to that app.
 
 ## Audit before planning
 

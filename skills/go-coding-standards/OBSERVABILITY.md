@@ -5,9 +5,9 @@ Apply [shared sensitive data and diagnostics](../coding-standards/references/sen
 Use a project-native protected secret value whose formatting/serialization is redacted. Keep raw fields inaccessible to accidental logging and expose raw data only at final I/O. Check formatting and marshaling paths, not just one log call.
 
 ```go
-logger.ErrorContext(ctx, "merchant lookup failed",
+logger.ErrorContext(ctx, "customer lookup failed",
     "operation", "findByID", "provider", "postgres",
-    "errorKind", safeErrorKind(err), "merchantID", approvedID)
+    "errorKind", safeErrorKind(err), "customerID", approvedID)
 // Avoid logging arbitrary request structs, credential-bearing errors, or raw causes.
 ```
 
