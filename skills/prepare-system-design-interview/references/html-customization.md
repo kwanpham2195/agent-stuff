@@ -2,7 +2,7 @@
 
 For HTML requests, copy and customize [candidate-brief.html](../assets/candidate-brief.html) and, only when requested, [interviewer-guide.html](../assets/interviewer-guide.html). Each is standalone, offline and runnable. Explicit text or Markdown requests stay in that format.
 
-These skeletons derive from the Interviews workspace brief, private guide and editorial diagram design. They preserve the paper/ink/orange palette, system/light/dark themes, 46 px toolbar controls, sticky navigation, collapsible detail and focused jumps. They contain anonymous illustrative content, not a ready-made exercise.
+These skeletons use anonymous illustrative content. They preserve the paper/ink/orange palette, system/light/dark themes, 46 px toolbar controls, sticky navigation, collapsible detail and focused jumps. They are not a ready-made exercise.
 
 ## Editable content
 

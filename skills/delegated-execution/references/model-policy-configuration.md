@@ -22,7 +22,7 @@ providers:
     driverKind: codex
 ```
 
-Use only an explicitly approved account and live instance/driver evidence. No first-match guessing or personal/company substitution occurs. A stale or missing binding blocks. Bind other aliases only when their account choice is approved; aliases themselves grant no access.
+Use only an explicitly approved account and live instance/driver evidence. No first-match guessing or cross-account substitution occurs. A stale or missing binding blocks. Bind other aliases only when their account choice is approved; aliases themselves grant no access.
 
 ## Commands
 

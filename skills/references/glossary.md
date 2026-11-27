@@ -74,8 +74,3 @@ Words that change what an agent does. Say one of them and the agent knows the sc
 | **Reconcile** | Saved evidence checked against the current source and any verified discrepancy resolved. |
 | **Supersede** | A new decision replaces an older one. |
 | **Deliver** | The finished result handed to you for acceptance. |
-
-## Hand work to agents (T3)
-
-| Say | You get |
-| --- | --- |

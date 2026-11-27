@@ -1,6 +1,6 @@
 # RPI local rules
 
-Read whenever the `rpi` or `visual-pr` skill runs, before its first step. `rpi` and `visual-pr` are HumanLayer's skills, installed unedited through `npx skills` and pinned in `external-skills.json`. Follow them as written, except for the points below.
+Read whenever the `rpi` or `visual-pr` skill runs, before its first step. `rpi` and `visual-pr` are HumanLayer's skills, installed unedited through `npx skills`. Follow them as written, except for the points below.
 
 Give each delegated stage an outcome and acceptance evidence.
 

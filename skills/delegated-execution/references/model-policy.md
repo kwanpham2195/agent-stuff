@@ -6,11 +6,11 @@ Versioned [model-policy.yaml](../../../model-policy.yaml) is the sole authority 
 
 ## T3 Code defaults
 
-For confirmed T3 Code work, resolve general tasks through the difficulty procedure below and helpers/specialists through `t3.roles`. Retain the established account bindings and configured role models/effort. Pi is disabled and must not be selected by default for new work. Explicit Opus requests select Claude Code by default. Retain explicit supported harness choices; reconcile requirements or unavailable selections before dispatch. Outside T3 Code, resolve only the active `direct.<harness>.roles` context.
+For confirmed T3 Code work, resolve general tasks through the difficulty procedure below and helpers/specialists through `t3.roles`. Retain the established account bindings and configured role models/effort. Explicit Opus requests select Claude Code by default. Retain explicit supported harness choices; reconcile requirements or unavailable selections before dispatch. Outside T3 Code, resolve only the active `direct.<harness>.roles` context.
 
-For an explicit Opus request without a harness choice, construct a complete T3 candidate using the existing `claude-default` binding and the live Claude Code Opus model ID. Preserve explicit effort choices through the native `effort` option; otherwise use the configured Opus effort in `t3.difficulties.hardest`, validated against current native descriptors. Use `direct.claude` only for applicable role defaults, not to replace an explicit model choice. Never carry Codex/Pi options into Claude Code or enable fast mode without a request. Validate the complete candidate through the resolver and check task/project constraints. Model selection grants no helper launch, additional spend or permission.
+For an explicit Opus request without a harness choice, construct a complete T3 candidate using the existing `claude-default` binding and the live Claude Code Opus model ID. Preserve explicit effort choices through the native `effort` option; otherwise use the configured Opus effort in `t3.difficulties.hardest`, validated against current native descriptors. Use `direct.claude` only for applicable role defaults, not to replace an explicit model choice. Never carry options from another harness into Claude Code or enable fast mode without a request. Validate the complete candidate through the resolver and check task/project constraints. Model selection grants no helper launch, additional spend or permission.
 
-The prior quota fallback specifically used Pi, which is now disabled. Do not execute that path or silently replace it with Claude Code. Ask the user to confirm a replacement quota fallback before using one. An explicit Opus request selects Claude Code as above and does not itself authorize an automatic quota fallback. Invalid config, unavailable models, stale bindings and project conflicts never trigger fallback. Carry no prior model options and report the actual reason when an authorized fallback is used.
+Do not silently choose a quota fallback. Ask the user to confirm one before using it. An explicit Opus request selects Claude Code as above and does not itself authorize an automatic quota fallback. Invalid config, unavailable models, stale bindings and project conflicts never trigger fallback. Carry no prior model options and report the actual reason when an authorized fallback is used.
 
 ### Resolve task and project choices
 
@@ -38,10 +38,9 @@ Classify task-owned helpers as `exploration` or `implementation`, and specialist
 
 ## Resolve models and roles
 
-- Resolve configured IDs and aliases through the active harness's live catalog. A short catalog is incomplete; use targeted lookup before claiming a model unavailable. Bind logical providers explicitly to current instance IDs and expected drivers; never guess an account or substitute personal/company providers.
-- Pi role mapping: exploration = `scout`; implementation = `worker`; review = `reviewer`; advisor = `oracle`.
+- Resolve configured IDs and aliases through the active harness's live catalog. A short catalog is incomplete; use targeted lookup before claiming a model unavailable. Bind logical providers explicitly to current instance IDs and expected drivers; never guess an account or substitute another provider account.
 - Specialist classification is independent of thread level. Recurring jobs retain their own selections and effort contracts.
-- Size each brief to the resolved model. `gpt-6.1-terra` often stops with nothing done when a brief has several steps. Give it one step per brief, such as one commit, one draft, one publish or one probe, with exact files and a stop condition. `gpt-6.1-sol` completes multi-file changes, several review fixes or a long review in one brief.
+- Size each brief to the resolved model. `gpt-6.1-terra` often stops with nothing done when a brief has several steps. Give it one step per brief, such as one commit, one draft, one publish or one probe, with exact files and a stop condition. `gpt-6.2-sol` completes multi-file changes, several review fixes or a long review in one brief.
 - When an explicit choice puts Terra on work that resolves to Sol, keep Terra and split the work into ordered single-step briefs. Do not send the whole task in one brief.
 
 ## Concurrent subagents
@@ -63,7 +62,7 @@ A child the user asks to both review and change work counts as review and implem
 
 Before launch or resume, reconcile active children against both total and role capacity. Queue excess work until the required capacity is available. Retain a child's slot until it finishes or is confirmed stopped; unknown runtime state, a steering receipt, or a stop request does not release capacity. For a task spanning roles, reserve a slot in each applicable role and count the child once toward the total. Changing fixed concurrency and runtime launch caps needs separate authorization, which an owner budget notification does not supply. Do not evade them by changing models, agent names, or workflows.
 
-Use native role limits where supported. Otherwise, the parent must schedule within these caps and track active children across its workflows. Pi's `globalConcurrencyLimit` caps all children in one workflow. It does not enforce separate role caps or a session-wide total. Do not describe these instructions as native enforcement.
+Use native role limits where supported. Otherwise, the parent must schedule within these caps and track active children across its workflows. Do not describe these instructions as native enforcement.
 
 ## Code-review exception
 
@@ -79,7 +78,7 @@ Optional adversarial synthesis uses existing evidence, or later independent roun
 - Another review or correction consumes the same outcome allowance. Advisors retain their separate consent policy.
 - Reuse exploration findings during implementation. Avoid duplicate investigations or repeating a review after unchanged code has passed.
 - Prefer fresh context for independent exploration and review, with only relevant source pointers and evidence. Preserve context needed for implementation and ongoing advisor dialogue.
-- Pi defaults: `globalConcurrencyLimit: 3`, `maxActiveAsyncRunsPerSession: 1`, `maxSubagentSpawnsPerRun: 8`, `maxSubagentSpawnsPerSession: 100`, configured in `~/.pi/agent/extensions/subagent/config.json`. The first two bound concurrent work, and the latter two bound cumulative launches. Ask before raising or overriding these limits. Concurrency alone does not cap total token use.
+- Ask before raising or overriding a harness's concurrency and spawn limits. Concurrency alone does not cap total token use.
 
 ## Apply before dispatch
 

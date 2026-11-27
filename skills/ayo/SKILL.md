@@ -19,7 +19,7 @@ The user types `ayo` with a situation, such as "ayo, agent seems lost" or "ayo, 
 | Improving structure without changing behavior | [refactoring playbook](references/refactoring.md) | Baseline, sketch, slice and before-and-after comparison |
 | A bug, crash, slow path, leak or trace | [diagnostics](references/diagnostics.md) | Root cause with runtime evidence, and the same fault searched for elsewhere |
 | Two fixes with the same premise failed | [diagnostics](references/diagnostics.md) | The premise written down and tested before a third fix |
-| Events in another order: retries, timeouts, concurrent callers | `statechart`, as [diagnostics](references/diagnostics.md) describes | Every order checked and the shortest bug path replayed against the real code |
+| Events in another order: retries, timeouts, concurrent callers | A state-machine model, as [diagnostics](references/diagnostics.md) describes | Every order checked and the shortest bug path replayed against the real code |
 | A costly design decision | [write-design-doc](../write-design-doc/SKILL.md) | A design for review |
 | A throwaway check of logic or appearance | [prototype](../prototype/SKILL.md) | An answer from a disposable experiment |
 | A diagram or contract would settle a review question | [show-me](../show-me/SKILL.md) | The flow, structure or input and output shown |

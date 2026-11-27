@@ -103,7 +103,7 @@ Use stronger callout syntax for warnings:
 
 Reference related concepts inline rather than explaining everything:
 
-> For more information about how to synchronize the store with other processes, see the [Persistence](/docs/persistence) page.
+> For more information about how to synchronize the store with other processes, see the persistence documentation.
 
 ### API references use consistent format
 
@@ -117,7 +117,7 @@ Link to API docs using the `[MethodName](?)` pattern:
 
 Always link to runnable examples when available:
 
-> For an example of how to create custom shapes, see our [custom shapes example](/examples/shapes/tools/custom-shape).
+> For an example of how to create custom shapes, see our custom shapes example.
 
 ## Technical articles ("nuggets")
 

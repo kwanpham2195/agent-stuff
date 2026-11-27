@@ -9,7 +9,7 @@ import { pathToFileURL } from "node:url";
 const [pelePath, input, output] = process.argv.slice(2);
 const { render, PeleError } = await import(pathToFileURL(pelePath).href);
 
-// Pele's defaults reject large charts; these match the statechart skill's limits.
+// Pele's defaults reject large charts; these are sized for large diagrams.
 const options = { fontSize: 16, limit: 1_000_000, outputLimit: 8_000_000, maxEdges: 10_000 };
 const theme = { "--pele-font": "Helvetica, Arial, sans-serif", "--pele-font-mono": "Menlo, monospace" };
 

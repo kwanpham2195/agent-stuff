@@ -5,8 +5,8 @@ Read this when the retrospective asks which skills or models a session used, whe
 ## Count from the log
 
 - For a Claude Code session, run `python3 -I scripts/session-usage.py <session.jsonl>`. It counts unique tool-use IDs. Report its exact numbers, not estimates from memory.
-- For T3 threads, count delegate launches from `t3_thread_read` items, deduplicated as [evidence sources](evidence-sources.md#t3-code) describes.
-- Count the whole thread, as [evidence sources](evidence-sources.md#t3-code) defines it. A session log continued after compaction keeps the earlier entries. State the first and last timestamps you counted.
+- For orchestrator threads, count delegate launches from thread-read items, deduplicated as [evidence sources](evidence-sources.md#orchestrator-threads) describes.
+- Count the whole thread, as [evidence sources](evidence-sources.md#orchestrator-threads) defines it. A session log continued after compaction keeps the earlier entries. State the first and last timestamps you counted.
 
 ## Skills
 

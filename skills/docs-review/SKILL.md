@@ -45,7 +45,7 @@ Apply the maintenance guide, [reviewable writing and its clarity rules](../refer
 
 ## 4. Format and rendering
 
-- Run the target format's checks. For Confluence, read [the confluence skill](../confluence/SKILL.md#confluence-format-checks) and validate storage with its `validate_storage.py` when editing several pages.
+- Run the target format's checks. For Confluence, use the `confluence` skill, if installed, and validate storage when editing several pages.
 - Render the result the way readers see it: the Confluence page after publish, the Markdown preview, or the PNG for a diagram. Check headings, tables, lists, code blocks, images and unexpected blank gaps or line breaks.
 
 ## 5. Report

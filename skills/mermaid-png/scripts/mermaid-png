@@ -11,7 +11,7 @@ fi
 
 input=$1
 output=${2:-${input%.*}.png}
-here=$(dirname "$(realpath "$0")")  # follow the ~/.local/bin link back to the skill
+here=$(dirname "$(realpath "$0")")  # follow the symlink back to the skill
 
 # Pele lives outside any repository, pinned so diagrams do not change under us.
 pele_version=1.13.0
