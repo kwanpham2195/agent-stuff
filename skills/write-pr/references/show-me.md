@@ -1,107 +1,136 @@
 ---
 name: show-me
-description: Help the user understand the current topic visually with concise diagrams, code-shape sketches, and focused HTML artifacts.
+description: Make a topic easier to grasp with a small picture, such as a sketch of code structure, a tree, a diff, or a rendered diagram.
 ---
 
-Help the user understand the current topic of conversation visually. Skip the preamble and keep prose brief. Pick the smallest view that makes the key point clear.
+Reach for a picture when it explains faster than a paragraph would. Go straight to it, write only the text it needs, and choose the lightest form that carries the point.
 
-- Show logic or an algorithm as pseudocode:
+## Choosing a form
+
+| What you are explaining                        | Form                       |
+| ---------------------------------------------- | -------------------------- |
+| Decision logic or an algorithm                 | Pseudocode                 |
+| Order of calls at runtime                      | Indented call tree         |
+| Screen or component layout                     | Component tree             |
+| Which module owns what, or a large reshuffle   | Shallow directory tree     |
+| How parts talk to each other, or data movement | Diagram rendered as image  |
+| A change to something that already exists      | `diff` block               |
+| A new thing the reader may copy                | Complete code block        |
+
+Diagrams are never pasted into a PR as Mermaid source. Render them to PNG and attach the image with `gh pr edit --attach`, following [mermaid-png](../../mermaid-png/SKILL.md).
+
+## Forms in detail
+
+### Pseudocode
+
+Use it for rules and algorithms. Keep the branching visible and leave out syntax.
 
 ```text
-on(save)
-  if content is unchanged
-    return cached result
-  write new content
-  return fresh result
+on(upload)
+  if file already stored under the same hash
+    return the existing link
+  store the file
+  return a new link
 ```
 
-- Show runtime control flow as a call tree:
+### Call tree
+
+Indent each call under the one that makes it, in execution order.
 
 ```text
-submitForm
-  createSession
-    persistPrompt
-    launchAgent
-  navigateToSession
+handleCheckout
+  validateCart
+  chargeCard
+    createPayment
+    confirmPayment
+  sendReceipt
 ```
 
-- Show UI structure as a component tree, including state and module boundaries that matter:
+### Component tree
+
+Draw the nesting, and note a state hook or a package boundary only when it affects the point being made.
 
 ```tsx
-<SessionPage> (apps/example/src/routes/session.tsx)
-  useSessionEvents()
-  <SessionToolbar>
-    <RunSkillButton> (packages/ui)
+<OrderPage> (web/src/pages/order.tsx)
+  useOrderQuery()
+  <OrderHeader>
+    <CancelButton> (shared/ui)
 ```
 
-- Show file responsibility or a broad refactor as a shallow file tree:
+### Directory tree
+
+Show one or two levels, with a short comment for each entry's job.
 
 ```text
-src/
-├── commands/       # parses user actions
-├── sessions/       # owns session state
-└── transport/      # sends API requests
+server/
+├── routes/      # maps URLs to handlers
+├── billing/     # owns invoices and payments
+└── queue/       # runs background work
 ```
 
-- Show component interaction, control flow, or data flow as a diagram rendered to PNG and uploaded with `gh pr edit --attach`. Never paste Mermaid text into a PR. See [mermaid-png](../../mermaid-png/SKILL.md).
+### Diff
 
-- Use `diff` when the point is what changes and the surrounding shape already exists. Match the diff shape to the topic.
+Choose a diff when the reader already knows the base and needs to see only what moved. Mark added lines with `+` and removed lines with `-`, and keep unchanged lines that anchor the position. The same style works for any of the forms above.
 
-For a component change:
+A component tree after a change:
 
 ```diff
- <SessionPage>
-   useSessionEvents()
-   <SessionToolbar>
-+    <RunSkillButton />
-   <SessionTimeline>
-+    <SkillResultCard />
+ <OrderPage>
+   useOrderQuery()
+   <OrderHeader>
++    <RefundButton />
+   <OrderItems>
++    <RefundBanner />
 ```
 
-For a file-layout change:
+A directory tree after a change:
 
 ```diff
- src/
- ├── commands/
-+│   └── show-me.ts       # expands the slash command
- ├── sessions/
--└── transport.ts
-+└── transport/
-+    ├── client.ts
-+    └── stream.ts
+ server/
+ ├── routes/
++│   └── refunds.ts      # handles refund requests
+ ├── billing/
+-└── invoices.ts
++└── invoices/
++    ├── create.ts
++    └── void.ts
 ```
 
-For a call-tree or call-stack change:
+A call tree after a change:
 
 ```diff
- submitForm
-   createSession
-     persistPrompt
-+    expandSkillMention
-     launchAgent
--  navigateToSession
-+  navigateToSession
-+    subscribeToEvents
+ handleCheckout
+   validateCart
+   chargeCard
++    checkFraudScore
+     createPayment
+-  sendReceipt
++  sendReceipt
++    recordAuditEntry
 ```
 
-For a state or control-flow change:
+Logic after a change:
 
 ```diff
- on(save)
--  write content
-+  if content is unchanged
-+    return cached result
-+  write new content
-+  invalidate cache
+ on(upload)
+-  store the file
++  if file already stored under the same hash
++    return the existing link
++  store the file
++  index the hash
 ```
 
-- Show the whole block when most of it is new, when omitted context would hide ownership or order, or when the user needs a copyable target shape:
+### Full block
+
+Show the whole thing, not a diff, when most of it is new, when leaving out the surroundings would blur who owns what or in which order things run, or when the reader will copy it.
 
 ```ts
-function expandSkill(command: string): string {
-  const skillName = command.slice(1)
-  return `use the ${skillName} skill`
+function parseRetryHeader(value: string | null): number {
+  const seconds = Number(value)
+  return Number.isFinite(seconds) ? seconds * 1000 : 0
 }
 ```
 
-- Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question.
+## Placement
+
+Put each picture beside the sentence or two that explains it. Include only the calls, files, props, states, and boundaries that bear on the user's current question. Leave the rest out.

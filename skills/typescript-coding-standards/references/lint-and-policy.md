@@ -1,34 +1,33 @@
-# Lint policy and prevention
+# Lint rules and enforcement
 
-Use this reference when changing lint policy, writing a custom rule, or evaluating cleanup tooling. [Parsing](parsing-and-schemas.md), [type safety](typescript-safety.md), and [cohesion](modules-services-and-adapters.md#cohesive-complexity-reduction) own engineering behavior; this reference owns how to enforce it honestly.
+Open this file when a task touches linter settings, a home-grown rule, or a bulk code-fix tool. The code-level expectations themselves live in the [parsing guide](parsing-and-schemas.md), the [safety guide](typescript-safety.md), and the [module guide](modules-services-and-adapters.md#reducing-complexity-without-losing-cohesion). This page is only about what a lint setup can honestly demonstrate.
 
-## Establish actual enforcement
+## What to report
 
-Read the active root configuration, command/task graph, installed plugin entrypoints, and pinned plugin API. Identify what runs, which paths it checks, which source copies are deliberately ignored, and which rules are only proposals. Keep rule catalogs and numeric thresholds in configuration rather than maintaining a second document cache.
+For a cleanup, state whether it removed work, merely re-typed existing parsing, or narrowed an API, and attach the relevant [regression evidence](testing.md#regression-evidence-for-parsing-and-recovery) and [inference checks](testing.md#compile-time-behavior). Passing lint, a reduced warning count, and a green fixture each show something different, so do not substitute one for another. Name the blind spots that remain. In docs, keep rules that are live apart from rules that are merely suggested, and do not trade away a safety property or public contract to make a rule easier.
 
-Distinguish native type-aware diagnostics from JavaScript custom rules. An AST/scope API with empty `parserServices` cannot query TypeScript inference merely because root typechecking is enabled. Such a rule can prove only its supported syntactic/local-binding cases; imported results, encoded schema types, and interprocedural provenance need stronger tooling or review.
+## Start from what actually executes
 
-**Complete when:** every enforcement claim names its actual configuration/implementation owner, and every proposed rule states the evidence its API can and cannot observe.
+Inspect the top-level config, whichever scripts or tasks invoke the linter, the installed plugin versions, and the ignore lists. Only after that can you claim a rule applies somewhere. Something mentioned in a design note but absent from config is an idea, not a safeguard. Numbers and rule lists belong in config, never duplicated in documents.
 
-## Choose the prevention mechanism
+## What a rule cannot see
 
-| Problem | Appropriate evidence |
-| --- | --- |
-| Known type widened through an explicit annotation or local assertion chain | Conservative AST/binding rule with clear limits; native type-aware checks for semantic cases. |
-| Impossible guard on an established value | Native unnecessary-condition diagnostics, reviewed against runtime trust and intentional constant loops. |
-| Generated decoder exposes incidental parse options | A narrow exported-decoder-factory candidate, resolving import/export aliases and distinguishing deliberate low-level codecs from application parsers. |
-| Duplicate validation, extra reads, or fail-open legacy parsing | Producer/invariant review and observable regression tests; syntax-equivalent calls may own different checks. |
-| Unused exported parser/helper | Consumer-aware workspace audit, including public/dynamic/type-only entrypoints. |
-| Excessive cyclomatic complexity | Actual repository ceiling plus cohesive refactoring review; the count does not establish correct ownership or simpler caller reasoning. |
+A rule working from syntax and local scope has no access to compiler types, regardless of whether the project type-checks in other tasks. It is fine for patterns confined to one file. Anything flowing in through imports, derived from schemas, or passed between functions needs type-aware linting or a reviewer. Whenever you propose a rule, spell out both what it detects and what it misses.
 
-These are mechanism choices, not instructions to enable new rules automatically. A native unnecessary-condition pilot must preserve legitimate runtime validation and intentional loops; use the pinned rule's supported constant-loop option when appropriate. An exported-decoder rule needs a policy for genuine low-level unknown codecs before broad activation. Avoid autofixes that require provenance or public-API decisions the rule cannot establish.
+## Pairing problems with checks
 
-## Verify policy changes
+- Widened or re-asserted types: a syntactic rule for the obvious shapes, type-aware rules for anything deeper.
+- Dead conditions: the compiler-backed unnecessary-condition rule, with its options set so that real runtime validation and deliberate infinite loops are left alone.
+- Parsers or helpers that leak internals through their exports: a narrow rule that follows re-exports, plus a stated exception for intentional low-level APIs.
+- Unused exports: a workspace audit that includes public entrypoints, dynamic loading, and type-only imports.
+- Duplicate validation or lenient legacy parsing: trace the data's origin and write regression tests, since identical-looking calls may do different jobs.
+- Complexity: the configured ceiling, and a review that any split keeps related logic together. A lower score is not the same as easier code.
 
-Use the lint tool's real rule-test harness and exercise the actual root configuration, not a duplicated approximation of it. Include import/export aliases, accepted domain code, unrelated same-name APIs, and false-positive boundaries. For a numeric ceiling, test an accepted boundary and a rejected value immediately above it.
+These are menu items. Switching a new rule on is a separate decision, and an autofix that would have to judge data origin or public API shape should not be offered.
 
-If maintained plugin sources or installer assets are excluded from ordinary application lint/format, verify those owned copies explicitly. Keep distribution identity checks separate from project-only tooling tests.
+## Verifying a rule
 
-For semantic cleanup, follow [regression tests](testing.md#parsing-and-recovery-regressions) and [public inference](testing.md#compile-time-behavior). Record whether work was removed, parsing was merely retyped, or an API surface was narrowed. A clean lint run, a lower count, and a passing fixture establish different evidence.
-
-**Complete when:** rules have positive/negative fixtures and actual-root enforcement evidence; all owned source copies are accounted for; remaining semantic limitations and diagnostics are reported; and documentation distinguishes installed policy from candidates without weakening safety or public contracts.
+- Exercise it with the linter's built-in rule tester, then again against the project's real top-level config.
+- Fixtures should include renamed imports, re-exports, acceptable code, look-alike APIs from other packages, and near misses.
+- A numeric limit needs one case exactly at the limit and one beyond it.
+- Code that regular lint skips, such as bundled plugin sources, needs its own check.

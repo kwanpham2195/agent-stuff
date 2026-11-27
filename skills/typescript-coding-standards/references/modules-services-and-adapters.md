@@ -1,41 +1,41 @@
 # TypeScript modules, services, and adapters
 
-Apply [shared ownership and deletion test](../../coding-standards/references/modules-and-dependencies.md). Roles describe responsibilities, not required TypeScript constructs or folders.
+Apply the [shared ownership and deletion test](../../coding-standards/references/modules-and-dependencies.md). The roles below describe responsibilities; they do not require particular TypeScript constructs or folder layouts.
 
-Plain functions, immutable value classes, and static-style classes are valid domain implementations. Dependency-bearing plain TypeScript services use explicit service interfaces and implementation classes with constructor-injected service objects. Operation-specific capabilities remain explicit inputs. Effect services, tags, `make`, Layers, and requirements follow [Effect services](effect-services.md).
+Domain logic may be plain functions, immutable value classes, or static-style classes. A service with dependencies in plain TypeScript gets an interface plus an implementation class that receives its collaborators as service objects through the constructor; capabilities tied to a single operation remain explicit arguments. For Effect services, tags, `make`, layers, and requirements, see [Effect services](effect-services.md).
 
-## Capability names
+## Naming capabilities
 
-Use stable capability names, not consumer-qualified `UsersForPasswordReset`. When interface and ordinary implementation naturally share a name, use a compact `I` prefix:
-
-```ts
-export interface IEmailService {
-  sendWelcomeEmail(...): Result<void, SendWelcomeEmailError>;
-  sendPasswordResetEmail(...): Result<void, SendPasswordResetEmailError>;
-}
-export class EmailService implements IEmailService { /* ... */ }
-```
-
-Naturally distinct implementation names need no prefix:
+Name a capability for what it does, not for one consumer (avoid `UsersForPasswordReset`). When the interface and its normal implementation would naturally share a name, prefix the interface with a short `I`:
 
 ```ts
-export interface UserStore {
-  findActiveByEmail(email: EmailAddress): Promise<Result<ActiveUser, UserLookupError>>;
+export interface IMailer {
+  sendReceipt(order: Order): Result<void, SendReceiptError>;
+  sendShippingNotice(order: Order): Result<void, SendShippingNoticeError>;
 }
-export class PostgresUserStore implements UserStore { /* ... */ }
-export class PasswordReset {
-  constructor(private readonly users: UserStore) {}
+export class Mailer implements IMailer { /* ... */ }
+```
+
+When implementation names are naturally distinct, skip the prefix:
+
+```ts
+export interface CustomerDirectory {
+  findByPhone(phone: PhoneNumber): Promise<Result<Customer, CustomerLookupError>>;
+}
+export class SqlCustomerDirectory implements CustomerDirectory { /* ... */ }
+export class AccountRecovery {
+  constructor(private readonly customers: CustomerDirectory) {}
 }
 ```
 
-A wider concrete implementation can satisfy a narrow consumer contract. Avoid interface confetti such as a named interface for every individual method without a meaningful seam.
+A concrete class with a wider surface may satisfy a consumer's narrower interface. Do not create an interface for every single method when no real seam exists.
 
-## Adapters and concrete clients
+## When an adapter is justified
 
-An EmailService may use a private ResendClient while EmailSender would only forward. Introduce EmailSender with ResendEmailSender/MailgunEmailSender when variation or meaningful mechanics earns it. Apply the shared existing-owner audit and report why reuse/extension does not fit.
+A `Mailer` can use a private `SendgridClient` directly while a separate `MailSender` would only pass calls through. Add the sender abstraction, with provider-specific implementations, once there is real variation or meaningful protocol work behind it. Run the shared check for an existing owner first, and report why reusing or extending it does not work.
 
-## Cohesive complexity reduction
+## Reducing complexity without losing cohesion
 
-Preserve exact TypeScript success/error types and Effect requirements through helpers, along with shared ordering, transaction, and resource constraints. A lower branch count does not prove reduced caller burden. Follow [lint policy](lint-and-policy.md) without weakening enforcement or partitioning solely to fit metrics.
+Whatever you extract must keep the exact success and error types and Effect requirements, along with ordering, transaction, and resource rules from the shared guidance. Fewer branches do not mean less work for the caller. Follow the [lint policy](lint-and-policy.md), and do not split code only to satisfy a metric.
 
-Generic helpers and file placement follow [imports and files](imports-exports-and-files.md). Keep domain/application policy out of `prelude.ts` or utilities. Effect uses context capabilities rather than ad hoc dependency bags.
+Where generic helpers and files live is covered in [imports and files](imports-exports-and-files.md). Keep domain and application policy out of `prelude.ts` and utility grab-bags. In Effect, pass dependencies as context capabilities, not as ad hoc bags of values.

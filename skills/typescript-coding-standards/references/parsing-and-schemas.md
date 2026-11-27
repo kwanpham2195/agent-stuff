@@ -1,30 +1,36 @@
 # TypeScript parsing and schemas
 
-Apply [shared parsing and provenance](../../coding-standards/references/parsing-and-evidence.md). `unknown` and boundary DTO types remain honest representations until parsing. `satisfies` and field types establish compile-time evidence, not cross-field runtime proof.
+Follow the [shared guidance on parsing and provenance](../../coding-standards/references/parsing-and-evidence.md). Until it is parsed, treat data as `unknown` or as the boundary's DTO type. `satisfies` and field types give compile-time evidence only; they do not prove rules spanning fields.
+
+## Picking a library
+
+In order of preference: the schema library the project already uses; Effect Schema in Effect projects; Standard Schema compatibility for generic helpers; Zod 4 otherwise; a handwritten parser when it is clearer for a small domain type. Typed parse failures follow the [error guide](errors.md).
+
+```ts
+const SignupBody = z.strictObject({ email: EmailSchema, plan: PlanSchema });
+```
+
+Do not export generic `isRecord`, `isObject`, or `isArray` guards in place of concrete parsers. Local `Array.isArray` or object checks inside a parser are fine. A cast that applies a brand must meet the [safety guide](typescript-safety.md).
 
 ## Provenance
 
-Use a typed decoder only when input is assignable to its encoded type. Do not widen or cast to force that selection. For Effect decoder selection, read [decoder selection and public parsers](effect-schema-and-data.md#decoder-selection-and-public-parsers).
+Use a typed decoder only for input that is already assignable to its encoded type. Do not widen or cast just to qualify. For decoder selection in Effect, see [decoder selection and public parsers](effect-schema-and-data.md#pick-the-decoder-by-the-input-you-hold).
 
 ```ts
 const raw: unknown = JSON.parse(text);
-const input = CreateUserInput.parse(raw);
-// Avoid: JSON.parse(text) as CreateUserInput
-// Avoid: schema.parse(body); users.create(body); // discards refined output
+const input = SignupBody.parse(raw);
+// Never: JSON.parse(text) as SignupBody
+// Never: schema.parse(body); service.create(body); // throws away refined output
 ```
 
-Derive each schema-owned representation type from its schema. If Effect Schema directly produces the final branded domain type, derive that type without an intermediate representation.
+Derive every schema-owned representation type from its schema. If Effect Schema already produces the final branded domain type, derive from that directly, with no intermediate representation.
 
-## Parser APIs
+## Parsers and names
 
-Name parsers `parseX(input): Result<X, ParseXError>`, smart constructors `makeX`/`createX`, and true predicates `isX(value): value is X`. Reserve `assertX` for tests/framework boundaries requiring throws. Do not alias parsers as `validateX`/`normalizeX`.
+- Parsers are `parseX(input): Result<X, ParseXError>`.
+- Smart constructors are `makeX` or `createX`.
+- Real type predicates are `isX(value): value is X`.
+- `assertX` is for tests or frameworks that need a throw.
+- Do not rename parsers to `validateX` or `normalizeX`.
 
-Keep reusable codecs private beside their boundary/schema and export intentional, normally unary application wrappers. Library parse options stay private unless explicitly part of the low-level contract. See the Effect decoder reference for private-codec/unary-wrapper examples.
-
-Choose, in order: established schema library; Effect Schema in Effect projects; Standard Schema compatibility for generic helpers; Zod 4 otherwise; a handwritten parser when clearer for a small domain type. Typed parse errors follow [errors](errors.md).
-
-```ts
-const CreateUserBody = z.strictObject({ email: EmailAddressSchema, role: RoleSchema });
-```
-
-Do not export generic `isRecord`, `isObject`, or `isArray` guards as a substitute for concrete parsers. Local `Array.isArray`/object checks inside parser implementations are appropriate. Branding assertions must satisfy [TypeScript safety](typescript-safety.md).
+Keep reusable codecs private next to the boundary or schema, and export deliberate wrappers, usually taking one argument. Library parse options stay private unless the low-level contract includes them. The Effect schema notes show the private-codec-plus-wrapper pattern.

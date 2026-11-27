@@ -1,229 +1,175 @@
 # Documentation examples reference
 
-Optional reference for documentation openings, progressive disclosure, code examples, and technical articles. Read only the sections relevant to the current document. The examples and historical guidance below are retained for comparison. [Writing reviewable artifacts](writing.md) and [unslop](../unslop/SKILL.md) are the authoritative standards when guidance differs; examples do not override their rules. The [writing examples](./writing-guide.md) are optional, not a prerequisite.
+Optional reference for writing docs: how to open a page, order the material, show code, and link between pages. It also covers short technical articles. Read only the sections that apply to the document at hand.
 
-## Document structure
+The examples here are kept for comparison. If this guide disagrees with [Writing reviewable artifacts](writing.md) or [unslop](../unslop/SKILL.md), those two win. The [writing examples](./writing-guide.md) are optional reading, not a prerequisite.
 
-### Opening pattern
+## Page structure
 
-Start with a clear, direct definition:
+### Opening sentence
 
-> The Editor class is the main way of controlling tldraw's editor.
+Begin with a plain definition of the thing the page covers.
 
-> In tldraw, a shape is something that can exist on the page, like an arrow, an image, or some text.
+> The `Scheduler` class runs queued jobs in the background.
 
-> In tldraw, persistence means storing information about the editor's state to a database and then restoring it later.
+> In this app, a workspace is a shared folder of projects that a team can edit together.
 
-**One concept per sentence.** If your opening packs definition, use cases, and API references together, split it:
+> Caching means keeping a copy of a result so the next request can skip the work.
 
-**Don't:**
+Put one idea in each sentence. If the opening mixes a definition, use cases, and API names, split it up.
 
-> The scribble system draws temporary freehand paths for pointer-based interactions, used for visual feedback during erasing, laser drawing, or scribble-brush selection, accessed through Editor#scribbles.
+Avoid:
 
-**Do:**
+> The notifier sends short messages to users when a build changes state, used for alerts about failures, completed deploys, or queued retries, and reached through `app.notifier`.
 
-> The scribble system draws temporary freehand paths for pointer-based interactions. Use scribbles to show visual feedback during tool operations like erasing, laser pointer drawing, or scribble-brush selection.
+Prefer:
 
-The API reference can come after the opening paragraph or inline where first relevant.
+> The notifier sends short messages to users when a build changes state. Use it for alerts about failures, completed deploys, or queued retries.
 
-### Concept, explanation, code
+Mention the API entry point after the opening paragraph, or at the first place it is needed.
 
-Every concept should be followed by a working example:
+### Pair each concept with code
 
-> You can access the editor in two ways:
+After you explain an idea, show it working. For example, after saying there are two ways to get a client:
+
+> You can create a client in two ways.
 >
-> 1. From the Tldraw component's `onMount` callback:
+> 1. From the `createApp` function:
 >
-> ```tsx
-> function App() {
->  return (
->   <Tldraw
->    onMount={(editor) => {
->     // your editor code here
->    }}
->   />
->  )
-> }
+> ```ts
+> const app = createApp({
+> 	onReady(client) {
+> 		// use the client here
+> 	},
+> })
 > ```
 
-### Progressive disclosure
+### Go from simple to advanced
 
-Move from simple to complex:
+Order the material by how many readers need it.
 
-1. Start with the most common use case
-2. Add complexity incrementally
-3. Leave edge cases and advanced patterns for later sections
+1. Begin with the most common case.
+2. Add options and complexity one step at a time.
+3. Put edge cases and advanced patterns near the end.
 
-**Example from persistence docs:**
+A page about saving data could run like this:
 
-1. First: `persistenceKey` prop (simplest)
-2. Then: State snapshots (more control)
-3. Then: The `store` prop (full control)
-4. Finally: Migrations (advanced)
+1. A single `storageKey` option, which is the easiest route.
+2. Exporting and restoring snapshots, for more control.
+3. Supplying your own storage backend, for full control.
+4. Schema migrations, for advanced use.
 
-### Short paragraphs
+### Keep paragraphs short
 
-Keep paragraphs to 1-3 sentences. Dense blocks of text are hard to scan:
+Aim for one to three sentences. Long blocks are hard to scan.
 
-**Do:**
+Prefer:
 
-> Meta information is information that is not used by tldraw but is instead used by your application. For example, you might want to store the name of the user who created a shape, or the date that the shape was created.
+> Metadata is extra information that your application attaches to a record. For example, you might store the name of the person who created it, or when it was created.
 
-**Don't:**
+Avoid:
 
-> Meta information is additional data that can be attached to shapes and is not used internally by tldraw but can be leveraged by your application for custom functionality. This could include things like the user who created the shape, timestamps, custom identifiers, or any other application-specific data that you want to associate with shapes but don't want to store in the props object.
+> Metadata is additional data that can be attached to records and is not used internally by the library but can be leveraged by your application for custom functionality, such as the creator, timestamps, custom identifiers, or any other application-specific values you want to keep with the record without placing them in the main fields.
 
-### Tables for related information
+### Use tables for parallel items
 
-Use tables to organize related methods, options, or concepts:
+When several methods or options share a shape, list them in a table.
 
-| Method             | Description                                    |
-| ------------------ | ---------------------------------------------- |
-| `Editor#setCamera` | Moves the camera to the provided coordinates.  |
-| `Editor#zoomIn`    | Zooms the camera in to the nearest zoom step.  |
-| `Editor#zoomOut`   | Zooms the camera out to the nearest zoom step. |
+| Method         | Description                          |
+| -------------- | ------------------------------------ |
+| `app.start()`  | Starts the background workers.       |
+| `app.pause()`  | Stops taking new jobs.               |
+| `app.stop()`   | Finishes current jobs, then exits.   |
 
-### Notes and callouts
+### Asides and callouts
 
-Use blockquotes for important asides:
+Use a blockquote for a helpful aside.
 
-> If all you're interested in is the state below `root`, there is a convenience method, `Editor#getCurrentToolId`, that can help.
+> If you only need the current status, call `app.status()` instead of reading the whole job list.
 
-Use stronger callout syntax for warnings:
+Use your docs framework's warning callout for things that can break a reader's setup.
 
 ```
 <Callout type="warning">
-  You must make sure that the tldraw version in your client matches the version on the server.
+  The client and server must run the same major version.
 </Callout>
 ```
 
-## Cross-referencing
+## Cross-references
 
-### Link liberally
+### Link generously
 
-Reference related concepts inline rather than explaining everything:
+Point to a related page instead of re-explaining it.
 
-> For more information about how to synchronize the store with other processes, see the persistence documentation.
+> To learn how to sync local state with other processes, see the storage guide.
 
-### API references use consistent format
+### Link API names the same way every time
 
-Link to API docs using the `[MethodName](?)` pattern:
+Use your docs framework's convention for linking to API reference pages, and use it consistently. Link the first mention on a page.
 
-> Use the [Editor#createShapes](?) method.
+### Link to running examples
 
-> See [TLInstancePresence](?) for the full record type.
+If a runnable example exists, link to it.
 
-### Point to working examples
+> For a full plugin that registers custom commands, see the command plugin example.
 
-Always link to runnable examples when available:
+## Short technical articles
 
-> For an example of how to create custom shapes, see our custom shapes example.
+A technical article tells how a team solved an interesting problem. It reads more like an engineering blog post than a reference page. For the full guidance, read [blog-guide](blog-guide.md). The main differences from reference docs are below.
 
-## Technical articles ("nuggets")
+**Opening.** Reference pages open with a definition. Articles open by framing a problem, in a sentence or two, so the reader knows what it is about and why it is interesting.
 
-Technical articles are short pieces about how a team or project solved interesting problems. They're different from reference documentation—more like posts you'd find on a company engineering blog.
+Reference opening:
 
-### Different opening pattern
+> The `Scheduler` class runs queued jobs in the background.
 
-Reference docs start with definitions. Technical articles start by **framing the problem**—a sentence or two that tells the reader what this is about and why it's interesting before diving in.
+Article opening:
 
-**Reference doc opening:**
+> Most task queues promise "at least once" delivery, and most users read that as "exactly once". We learned the difference after a customer received the same invoice email three times. Here is how we made our scheduler safe to retry.
 
-> The Editor class is the main way of controlling tldraw's editor.
+A good article opening sets the context, states a tension, and shows what is at stake before it explains the fix. Root it in something a person experienced, such as a behavior, a convention, or a plain sense of what feels right.
 
-**Nugget opening:**
+**Arc.** Frame the problem, give the key insight, walk through the implementation, then close with where the code lives, the trade-offs, and what remains open.
 
-> The tldraw SDK is all about making the little details work. If you've ever used dashed lines in tldraw, you might have noticed that the dashes always line up with the corners of your shape, the handles of a spline, or the start and end of an arrow. While this might seem like the obvious way that dashes _should_ work, you might be surprised to learn that SVG offers no such feature. We implement these perfect dashes entirely ourselves.
->
-> Here's how it works.
+**Tone.** Articles are warmer than reference pages. Use phrases like "the trick is" to mark the main idea. Add short asides about what made the problem hard. Describe the path, including attempts that failed. End with an opinion about the trade-off. Do not ramble, do not claim importance without evidence, and do not turn jokey.
 
-The opening establishes context (what we're talking about), tension (there's a problem or unmet expectation), and stakes (why you should care) before getting into the solution.
+**Voice.** Describe what we did instead of telling the reader what to do.
 
-The goal is to root the technical article in some anecdotal context. These problems don't just emerge from nowhere, but rather they come from details, behaviors, conventions, or general "what feels right" expectations within the relevant product or technical domain. The real problem is how to write the code and convince the computer to do the thing that makes the experience feel right. Often times, that work is unintuitive and interesting in that it reveals something about the interaction or about the technologies involved.
+Avoid:
 
-### Structure
+> Make every job idempotent, then retry freely.
 
-Technical articles typically follow this arc:
+Prefer:
 
-1. **Frame the problem** — What's this about? What problem did we encounter and solve? Why was it hard, unintuitive, or interesting?
-2. **Show the insight** — What's the key idea that makes the solution work?
-3. **Walk through the implementation** — Code and explanation, building up complexity
-4. **Wrap up** — Where this lives in the codebase, tradeoffs, links to files. Also unexplored areas, more we could do, or related problems.
-
-### Tone differences
-
-Technical articles are warmer than reference docs. They can:
-
-- Use "the trick is..." or "the insight is..." to signal key ideas
-- Include brief asides about why something is hard or interesting
-- Show the journey, not just the destination ("we tried X, but Y worked better")
-- End with opinions ("that's worth the tradeoff")
-
-They still shouldn't:
-
-- Ramble or over-explain
-- Use hollow importance claims ("this is crucial for...")
-- Get too casual or jokey
-
-### Describe what we did, not what to do
-
-Technical articles explain how a team or project solved a problem—they're not tutorials. Frame solutions as "here's what we do" rather than prescriptive instructions.
-
-**Don't:**
-
-> The solution: don't decide immediately. Watch what the fingers do, then commit once the pattern is clear.
-
-> Instead of guessing, implement a state machine that starts undecided.
-
-**Do:**
-
-> Since we don't have enough information to know either way, we defer the decision. The gesture handler watches what the pointers do, then commits once we know enough to recognize the interaction pattern.
-
-> Instead of guessing, we use a state machine that starts undecided and resolves as more information comes in.
-
-The reader learns from seeing our approach, not from being told what to do.
-
-### Example openings
-
-**Too abrupt (reads like docs):**
-
-> Tldraw calculates dash patterns that fit paths exactly. Complete dashes at both ends, even spacing throughout.
-
-**Better (starts with our experience):**
-
-> When we added dashed lines to tldraw, we wanted them to look right—complete dashes at both ends, even spacing, corners that line up on rectangles. SVG's `stroke-dasharray` doesn't do this.
-
-**Also good (frames the problem we faced):**
-
-> Arrow routing sounds simple until you try it. Given two shapes, draw a line between them that doesn't pass through anything else. We spent a while getting this right.
+> We could not guarantee a job ran once, so we made each job safe to run twice, and the scheduler retries freely.
 
 ## Priorities
 
-1. **Accuracy** — Code must work. API refs must be correct.
-2. **Clarity** — Understand on first read.
-3. **Brevity** — Say it once, move on. Cut sections that repeat what's already shown elsewhere.
-4. **Scannability** — Short paragraphs, clear headers, lots of code.
+When goals compete, favor them in this order.
 
-### Avoid redundant sections
+1. **Accuracy.** Code must run. API references must be right.
+2. **Clarity.** The reader should understand it on the first pass.
+3. **Brevity.** Say it once. Cut sections that repeat what appears elsewhere.
+4. **Scannability.** Use short paragraphs, clear headings, and plenty of code.
 
-If detailed examples already demonstrate a pattern, don't repeat the same information in a "Common use cases" section with shorter snippets. Either:
+### Do not repeat yourself
 
-- Keep only the detailed examples (preferred)
-- Keep only the quick-reference snippets
-- Ensure each section adds genuinely new information
+When detailed examples already show a pattern, do not add a "Common uses" section with the same code shortened. Pick one:
 
-**Don't:** Show a complete eraser implementation, then have a "Common use cases > Eraser" section with the same code trimmed down.
+- Keep the detailed examples only (preferred).
+- Keep only the quick-reference snippets.
+- Make sure each section adds information the others lack.
 
-**Do:** Show complete implementations once. If you need a quick-reference section, make it a table pointing to the detailed examples.
+Show a full implementation once. If a quick-reference section is useful, make it a table that points to the full examples.
 
-## Evaluation checklist
+## Review checklist
 
-When reviewing documentation, check:
+When reviewing documentation, ask:
 
-- [ ] **Opening sentence** — Does it immediately define what this thing is?
-- [ ] **Code examples** — Is every concept followed by working code?
-- [ ] **Progressive disclosure** — Does complexity build gradually?
-- [ ] **Links** — Are related concepts cross-referenced?
-- [ ] **Scannability** — Short paragraphs, clear headers?
+- [ ] **Opening.** Does the first sentence say what the thing is?
+- [ ] **Code.** Does working code follow every concept?
+- [ ] **Order.** Does complexity grow gradually?
+- [ ] **Links.** Do related concepts link to each other?
+- [ ] **Scannability.** Are paragraphs short and headings clear?
 
-For more sentence-editing examples, consult the relevant section of the [writing examples reference](./writing-guide.md). Apply the current standards in [Writing reviewable artifacts](writing.md) and [unslop](../unslop/SKILL.md).
+For more sentence-level examples, see the relevant part of the [writing examples](./writing-guide.md). Apply the standards in [Writing reviewable artifacts](writing.md) and [unslop](../unslop/SKILL.md).

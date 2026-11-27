@@ -1,26 +1,26 @@
 # TypeScript testing
 
-Apply [shared tests and verification](../../coding-standards/references/testing.md). Match checks to the changed behavior and reuse sufficient existing coverage. Use an end-to-end happy-path test through the real public entrypoint when integration across components is material to the change. Exercise important expected errors at the closest reliable real interface. Do not add tests that mirror reversible, low-impact changes. Report concrete blockers from unreliable third parties or unreasonable setup/runtime/cost.
+The [shared testing and verification rules](../../coding-standards/references/testing.md) apply. Size the checks to what changed and lean on existing coverage that is already enough. If several components must work together for the change to matter, add one happy-path test that enters through the real public interface. Cover the errors that matter at the nearest realistic boundary. Skip tests that merely restate a low-stakes, easily reversed change. If a flaky third party or an impractical setup, runtime, or cost prevents a check, say exactly what blocked it.
 
-`vi.mock`/`jest.mock` module patching is forbidden. Replace via constructors, faithful adapters, Effect services/Layers, or representative local infrastructure.
+Module patching with `vi.mock` or `jest.mock` is not allowed. Substitute dependencies through constructors, faithful adapters, Effect services and layers, or local infrastructure that behaves like the real thing.
 
-A spy assertion is allowed only when the interaction itself is observable behavior. Prefer public records from a recording implementation over `vi.spyOn`/`jest.spyOn` on implementation methods. This narrow TypeScript allowance does not apply to Go's stricter addition.
+Assert on a spy only when the call itself is the behavior users or neighbors can observe. Otherwise read the public record of a recording implementation instead of spying on a method with `vi.spyOn` or `jest.spyOn`. This small allowance is specific to TypeScript; the Go rules are stricter.
 
 ```ts
 expect(await passwordReset.requestReset(email)).toEqual(ok({ delivery: "queued" }));
 expect(emailAdapter.sentEmails).toContainEqual({ to: email, template: "reset" });
-// Prefer this production seam over spying on the provider's send method.
+// Reading the recorded output beats spying on the provider's send method.
 ```
 
-Use `fast-check` for ordinary TypeScript properties; in Effect prefer its FastCheck integration and Schema-derived arbitraries. Colocate `.test.ts`/`.test.tsx` and domain `.arbitrary.ts` files unless repository layout differs. Valid arbitraries construct through owning production parsers; independent corrupt boundary fixtures follow shared rules.
+Write property tests with `fast-check`; in Effect code, prefer Effect's FastCheck support and arbitraries derived from schemas. Keep `.test.ts` and `.test.tsx` files, and domain `.arbitrary.ts` files, beside the code unless the repository lays things out differently. Arbitraries for valid data should build values with the production parsers. Corrupt boundary fixtures are written separately, as the shared rules describe.
 
 In Vite+ projects use `vp test` and ordinary APIs from `vite-plus/test` unless Effect-specific testing applies. In non-Effect Vitest property tests use established Fast-Check integration such as `@fast-check/vitest`. Effect tests follow [Effect testing](effect-testing.md).
 
 For Drizzle persistence not depending on Cloudflare semantics, use in-memory `better-sqlite3`, real migrations, and the production service-facing adapter. Cloudflare D1, Durable Objects, Agents, bindings, workerd serialization, Workers APIs, alarms, WebSockets, or runtime-specific behavior require `@cloudflare/vitest-pool-workers` and relevant local bindings/runtime. Node-only evidence does not prove workerd behavior. These are scoped implementation choices, not permission to add dependencies outside the task.
 
-## Parsing and recovery regressions
+## Regression evidence for parsing and recovery
 
-Follow [shared parsing/recovery evidence](../../coding-standards/references/testing.md#persistence-parsing-and-recovery). TypeScript regression checks additionally retain exact public parser/error/Effect requirement contracts under the compile-time guidance below.
+The [shared evidence rules for parsing and recovery](../../coding-standards/references/testing.md#persistence-parsing-and-recovery) apply. In TypeScript, such a regression test should also pin the exact public parser, error, and Effect requirement types, using the compile-time section below.
 
 ## Completion check
 
@@ -28,4 +28,4 @@ Complete when [shared testing completion](../../coding-standards/references/test
 
 ## Compile-time behavior
 
-Test accepted/rejected ordinary call sites and the whole function contract without rescue annotations/casts: input, arity/options, success, expected errors, and Effect requirements. Parameter-only assertions miss widened channels. Parsing/recovery regressions and runtime claim limits follow [shared testing](../../coding-standards/references/testing.md#persistence-parsing-and-recovery).
+Check that normal call sites compile when they should and fail when they should, and check the function's full contract without helper annotations or casts: arguments and options, result, expected errors, and Effect requirements. Asserting only on parameters lets a widened error or requirement channel slip by. Parsing/recovery regressions and runtime claim limits follow [shared testing](../../coding-standards/references/testing.md#persistence-parsing-and-recovery).

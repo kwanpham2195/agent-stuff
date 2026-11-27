@@ -1,69 +1,50 @@
-# Effect configuration
+# Reading configuration
 
-This reference covers Effect `Config` recipes, providers, and config-backed Layers. For configuration ownership, startup failure handling, and resource lifecycle, also apply [`configuration-and-resources.md`](configuration-and-resources.md).
+How to declare settings with `Config`. Decisions about who may read the environment and how startup reacts to bad input are in the [configuration and resources guide](configuration-and-resources.md).
 
-Install environment-backed providers at the composition root, then read typed runtime configuration through Effect `Config` recipes.
+## Quick review
 
-```ts
-export const dataDirectoryConfig = Config.schema(
-  AbsolutePath,
-  "APP_DATA_DIR",
-)
+- Each setting is read through a `Config`.
+- Secrets are redacted.
+- No default can mask a malformed value.
+- When two providers exist, it is stated which wins.
 
-export const layerFromEnvironment = Layer.effect(
-  Configuration.Service,
-  Effect.gen(function* () {
-    const apiKey = yield* Config.redacted("API_KEY")
-    const optionalModel = yield* Config.option(Config.string("MODEL"))
-    const enabled = yield* Config.boolean("FEATURE_ENABLED").pipe(
-      Config.withDefault(false),
-    )
+## Config-aware constructors
 
-    return Configuration.Service.of({ apiKey, optionalModel, enabled })
-  }),
-)
-```
-
-## Config Recipes
-
-- `Config<T>` is yieldable and reads the current `ConfigProvider` reference.
-- The default provider is `ConfigProvider.fromEnv()`.
-- Use `Config.redacted(...)` for credentials.
-- Use `Config.schema(...)` or `Config.mapOrFail(...)` for refined values.
-- Use `Config.option(...)` for semantic absence.
-- Use `Config.withDefault(...)` for missing-data defaults only; malformed values still fail.
-- `Config.orElse(...)` catches any config parse failure; use it when every such failure should select the fallback.
-- Use `Config.unwrap(...)` / `Config.Wrap<T>` for `layerConfig(...)` helpers.
+Beside a constructor that takes plain, decoded options you may offer one that takes a record of `Config` values (typed with `Config.Wrap`, resolved with `Config.unwrap`). Only add it for a real caller that composes configs like this.
 
 ## Providers
 
-- Use `ConfigProvider.layer(provider)` to replace the active provider for an app or suite.
-- Use `ConfigProvider.layerAdd(provider)` for fallbacks; pass `{ asPrimary: true }` when the added provider must override the current provider.
-- Use `ConfigProvider.fromEnv(...)` for environment variables.
-- Use `ConfigProvider.constantCase` when camelCase schema keys should read `SCREAMING_SNAKE_CASE` env vars.
-- Use `ConfigProvider.nested(...)` to scope a provider under a prefix.
+Values come from the process environment unless you swap the provider, and that swap belongs at the program's entry point.
 
-For tests that supply configuration, follow [`effect-testing.md#configuration`](effect-testing.md#configuration).
+- The provider layer substitutes the source for a whole app or test run.
+- A second provider can be added as a fallback; document which takes priority.
+- Translate key naming style with the provider's helpers rather than spelling each name twice.
 
-## Layer Config Helpers
+Tests that supply settings: [Effect testing notes](effect-testing.md#configuration).
 
-A `layerConfig(options: Config.Wrap<Options>)` helper earns its place when callers need to compose runtime `Config` recipes. Keep `layer(options)` as the concrete constructor for callers that already have decoded options.
+## Guidance
+
+- Secrets go through `Config.redacted`, so they cannot be logged by accident.
+- A default fills in a missing key only. A present but malformed value must still error.
+- Mark a genuinely optional setting with `Config.option`.
+- Do validation inside the config (schema-based or fallible mapping) instead of in the consumer.
+- A fallback combinator swallows every parse error. Use it only if that is what you want.
+- Use `Config.nested` to share a key prefix.
+
+## Pattern
+
+Describe the whole settings group as one `Config`, decode it when the service layer is built, and let a bad value stop startup with a typed error.
 
 ```ts
-export const layerConfig = (
-  config: Config.Wrap<ClientOptions>,
-) =>
-  Layer.effect(
-    Client.Service,
-    Config.unwrap(config).pipe(
-      Effect.flatMap(makeClient),
-      Effect.map((client) => Client.Service.of(client)),
-    ),
-  )
+const settings = Config.all({
+  apiKey: Config.redacted("PAYMENTS_KEY"),
+  endpoint: Config.url("PAYMENTS_URL"),
+  timeoutMs: Config.integer("PAYMENTS_TIMEOUT_MS").pipe(Config.withDefault(5000)),
+});
+
+export const PaymentsLive = Layer.effect(
+  Payments,
+  Effect.map(settings, makePayments),
+);
 ```
-
-Expose only the constructor forms required by actual callers.
-
-## Completion check
-
-Every runtime value is decoded through a typed `Config` recipe; credentials use `Config.redacted`; defaults distinguish missing values from malformed values; every `Config.orElse` fallback intentionally covers all parse failures; provider replacement, fallback, and precedence are explicit; every `layerConfig` has a caller that composes `Config` recipes; and configuration tests follow the linked testing strategy.

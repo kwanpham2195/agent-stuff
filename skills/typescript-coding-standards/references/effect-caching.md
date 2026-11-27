@@ -1,55 +1,49 @@
-# Caching, Memoization, And Request Dedupe
+# Caches and batching
 
-Use `effect/Cache` when its keyed memoization, TTL, capacity, lifecycle, and eviction semantics fit. When it fits, do not hand-roll `Map`/TTL/prune caches, in-flight deduplication maps, or LRU logic.
+Before writing a `Map` with expiry timestamps or a table of in-flight promises, check whether the library already covers the need.
 
-## Core Rules
+## Choosing
 
-- `Cache.make({ capacity, lookup, timeToLive })` caches per-key lookups with one fixed TTL for all entries.
-- Concurrent `Cache.get` calls for the same missing key share one pending lookup; use that behavior for in-flight deduplication.
-- `capacity` is required and supplies the cache's eviction bound.
-- `Cache.invalidate(cache, key)` and `Cache.refresh(cache, key)` handle explicit staleness; `Cache.has` checks without triggering a lookup.
-- Cache construction is effectful. Build each cache once in its owning Layer or Scope and share the handle.
-- For a single value without a key, use `Effect.cached(effect)` or `Effect.cachedWithTTL(effect, ttl)`.
-- For cached resources that need cleanup, such as connections or clients, use `ScopedCache`.
+| Need | Tool |
+| --- | --- |
+| One value, computed once | `Effect.cached` |
+| One value that should go stale | `Effect.cachedWithTTL` |
+| Many keys loaded lazily | `Cache` |
+| Entries that must be closed when evicted | `ScopedCache` |
+| Backend answers several keys per call | `Effect.request` with a resolver |
+| One backend call per key | `Effect.forEach` with a concurrency limit |
 
-## Exit-Aware TTL
+## Quick review
 
-`Cache.makeWith(lookup, { capacity, timeToLive(exit, key) })` computes each entry's TTL from the lookup's `Exit`. Give transient failures and degraded fallbacks a zero TTL (`0`, `"0 millis"`, or `Duration.zero`) so the caller receives the result while the next lookup can try again. A short negative-cache TTL can protect an upstream from repeated stable failures such as not-found results.
+- Does the tool fit how keys arrive and what the backend can do?
+- Does each cache state a size limit, an entry lifetime, and how entries are invalidated?
+- Was each cache created once, by the layer or scope that owns it?
+
+## Batching
+
+A request resolver collects requests made at about the same time and sends them as one backend call. Limit the batch size with the library's helper, and split by destination when requests go to different places. A backend with no multi-key endpoint gains nothing from a resolver; bound the parallelism of single calls instead.
+
+## Never share request-bound values
+
+A handle that is only valid during one request must not sit in a process-wide cache, however stable its key looks. See [per-request clients](effect-alchemy.md#per-request-clients).
+
+## The keyed cache
+
+- Making one is itself an effect. Do it in the owner's layer and hand out the handle.
+- Concurrent readers of an absent key share one load, so a separate deduplication table is redundant.
+- The size limit is required and is effectively the memory budget. Choose it deliberately.
+- Remove stale entries with `invalidate`; reload with `refresh`.
+- Lifetimes can be computed from the load outcome. Failed or degraded results should expire immediately so the next caller retries. A short lifetime for "not found" protects the backend from repeated misses.
 
 ```ts
-import { Cache, Duration, Effect, Exit } from "effect"
-
-const makeResolver = Effect.gen(function* () {
-  const cache = yield* Cache.makeWith(
-    (channelRef: string) => resolveUncached(channelRef), // returns { where, cacheable }
-    {
-      capacity: 300,
-      timeToLive: (exit) =>
-        Exit.isSuccess(exit) && exit.value.cacheable ? "10 minutes" : Duration.zero,
-    },
-  )
-  return (channelRef: string) =>
-    Cache.get(cache, channelRef).pipe(Effect.map((resolved) => resolved.where))
-})
+const program = Effect.gen(function* () {
+  const profiles = yield* Cache.make({
+    capacity: 200,
+    timeToLive: "10 minutes",
+    lookup: (id: UserId) => loadProfile(id),
+  });
+  return yield* profiles.get(userId);
+});
 ```
 
-## Acquire Expensive Clients Once
-
-Acquire stable clients once in their owning Layer or Scope, then reuse them only while that runtime context remains valid. A request-bound handle belongs to the current invocation, not an isolate-wide Layer/cache; a canonical cache key does not extend its I/O lifetime. When Alchemy bindings or Durable Object clients are involved, read [invocation-owned clients](effect-alchemy.md#invocation-owned-clients). Also apply [`effect-services.md`](effect-services.md) when construction changes.
-
-## Request Batching (`Effect.request` + `RequestResolver`)
-
-A `RequestResolver` batches pending requests when one backend call can answer multiple keys, such as SQL `IN (...)`, DataLoader-style endpoints, or batch GET. Per-item endpoints use `Effect.forEach(items, f, { concurrency: n })`, optionally through a `Cache` for deduplication and memoization.
-
-`RequestResolver.batchN(resolver, n)` bounds batch size; `RequestResolver.makeGrouped` groups requests that resolve through different targets.
-
-Selection guide:
-
-- Same key requested repeatedly over time → `Cache`.
-- Same key requested concurrently in one burst → `Cache` (shared pending lookup).
-- Many distinct keys, backend has a batch endpoint → `Effect.request` + `RequestResolver`.
-- Many distinct keys, per-item endpoint only → `Effect.forEach(..., { concurrency: n })`, optionally through a `Cache`.
-
-## Completion Check
-
-For every cache or batching path, the chosen primitive matches the key pattern and backend; each keyed cache has an intentional capacity, TTL and invalidation policy, and lifetime owner; stable dependencies are acquired once; same-key concurrency uses built-in deduplication; and each `RequestResolver` maps multiple keys to one backend call.
+Signatures vary by release, including the variant that takes a lifetime function; check the installed one.

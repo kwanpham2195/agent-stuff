@@ -5,58 +5,58 @@ description: "Create, update, inspect, fix, watch, or land pull requests. Use fo
 
 # PR
 
-Create or update a pull request for the current branch. Creation and ordinary updates remain governed by this workflow; maintenance and landing use the explicit modes below.
+This skill prepares and publishes a pull request for the current branch. It owns creating a PR and ordinary updates to one. Maintenance and landing run in the modes below.
 
 ## Modes
 
-- `inspect` reads the exact repository, PR, base, head, checks, reviews, and findings and returns a bounded report.
-- `fix` changes only the owning branch after the user authorizes the finding and records a falsifiable reproduction or source proof.
-- `watch` observes the active forge's checks and review state without changing code, review threads, or merge state. In T3 use the parent-owned app watch/unwatch controls under maintenance; a monitoring request does not authorize fixes or landing.
-- `land` requires an explicit land request and follows [landing](references/landing.md); it never follows from `watch` or a green check alone.
+- `inspect`: read the repository, PR, base, head, checks, reviews, and findings at their exact identities, then return a bounded report.
+- `fix`: change only the branch that owns the code, and only after the user authorizes the specific finding. Record a reproduction that could fail, or proof from the source.
+- `watch`: observe checks and review state on the active forge. Do not change code, review threads, or merge state. In T3, use the parent-owned watch and unwatch controls described in maintenance. A request to monitor does not authorize fixes or landing.
+- `land`: only on an explicit request to land. Follow [landing](references/landing.md). A `watch` result or a passing check never triggers it.
 
-Read [maintenance](references/maintenance.md) for these boundaries, exact-head evidence, finding triage, bounded reruns, and human-note preservation. Read [landing](references/landing.md) only for an explicit landing request. Stacked PR topology belongs to the installed `gh-stack` owner; do not use Graphite or an external orchestrator.
+Read [maintenance](references/maintenance.md) for the boundaries of these modes, evidence tied to the exact head, finding triage, bounded reruns, and how to preserve human notes. Read [landing](references/landing.md) only when the user explicitly asks to land. The installed `gh-stack` skill owns stacked PR topology. Do not use Graphite or any outside orchestrator.
 
-Use `../write-pr/SKILL.md` as the standards reference for PR titles, descriptions, release notes, API changes, code changes tables, and human-note preservation.
+The standards for PR titles, descriptions, release notes, API changes, change tables, and preserving human notes live in `../write-pr/SKILL.md`. Apply them.
 
 ## Workflow
 
-1. Gather context:
-   - Current branch: `git branch --show-current`
-   - Working tree: `git status --short`
-   - Existing PR: `gh pr view --json number,title,url 2>/dev/null`
-   - Recent branch commits: `git log <base-branch>..HEAD --oneline 2>/dev/null || git log -3 --oneline`, using the repository or existing PR's configured base branch.
-2. Check for overlapping work so we don't step on a teammate's toes:
-   - List open PRs touching the same area: `gh pr list --state open --json number,title,url,author,headRefName,updatedAt`, and search for related work: `gh pr list --search "<keywords>" --state open`.
-   - Compare their changed files against ours (`gh pr view <number> --json files --jq '.files[].path'`) to judge real overlap, not just a shared filename.
-   - If someone already has a PR open for this: prefer building on their work over racing it. Offer to base our branch on theirs, contribute a review or a follow-up commit, or hand our changes over. Only open a competing PR when the approaches genuinely diverge, and when we do, link to theirs and explain how ours differs so the choice is easy for reviewers.
-   - Surface what you found to the user before proceeding when there's meaningful overlap.
-3. Prepare the branch:
-   - If on the configured base branch, create a descriptive branch only when branch mutation is within the user's requested scope.
-   - Commit only relevant, explicitly scoped changes, excluding secrets and private content. A content-only PR request does not authorize new code commits.
-   - Push when required to create or update the requested PR. Never force push.
-4. Run an initial review pass before asking a human to look. For a large or complex diff, use delegated reviewers when delegation is available and authorized; otherwise review inline. Inspect the diff from the configured base branch, then fold clear findings into scoped fixes:
-   - Does the change actually solve the stated problem, end to end, rather than papering over a symptom?
-   - Does it leave the codebase better than we found it — clearer names, no dead or duplicated code, no drive-by regressions?
-   - Any weird abstractions, premature generality, or unnecessary code that a reviewer would flag? Prefer the smaller, more direct version.
-   - Sweep the diff's added comments for slop, following `../write-pr/SKILL.md` § The comment sweep. On an update, this catches whatever the branch grew since the PR was opened, which on a long-lived branch is most of it.
-   - Fix what's clearly worth fixing so the human review starts from a strong diff. If a finding needs a product or design call, raise it with the user instead of guessing.
-   - Commit and push fixes from this pass only when those mutations are within the user's requested PR scope. Never force push.
-5. If no PR exists, create one with `gh pr create`. When running in a T3 thread, immediately link every opened PR, including each stack layer, to the thread using its actual URL or repository/number. A delegated creator immediately returns the PR identity so its parent registers it before further PR work; it does not own monitoring. Reconcile an uncertain create/link receipt before retrying rather than opening a duplicate.
-6. If a PR exists, read its title, labels, and number with `gh pr view --json title,labels,number`. When the body is needed, fetch it through the REST API and inspect the changed-file list with `gh pr view --json files --jq '.files[].path'`.
-7. Update the title or body with `gh pr edit` if the existing PR does not match the current diff or the `write-pr` standards.
-8. Search for related issues and link them in the PR description with `Closes #123` or `Relates to #123` where appropriate.
-9. Share the PR URL with the user. In T3 maintain the correct thread's PR links as ownership or PR identity changes; unlink only a mistaken or obsolete link, never as permission to close/delete a PR. Requested monitoring follows the [T3 watch protocol](references/maintenance.md#t3-registration-and-monitoring).
+1. Collect context.
+   - The current branch: run `git branch --show-current`.
+   - Uncommitted changes: run `git status --short`.
+   - An existing PR for this branch: run `gh pr view --json number,title,url 2>/dev/null`.
+   - The commits on the branch: run `git log <base-branch>..HEAD --oneline 2>/dev/null || git log -3 --oneline`. Use the repository's configured base branch, or the existing PR's base.
+2. Look for overlapping work before you add to the pile.
+   - List open PRs with `gh pr list --state open --json number,title,url,author,headRefName,updatedAt`. Search for related ones with `gh pr list --search "<keywords>" --state open`.
+   - Read the file list of each candidate with `gh pr view <number> --json files --jq '.files[].path'`. Overlap means touching the same code, not only sharing a filename.
+   - When someone already has a PR for the same goal, build on it instead of racing it. Offer to base your branch on theirs, add a review or follow-up commit, or give them your changes. Open a competing PR only when the two approaches really differ. In that case, link to theirs and say how yours differs so reviewers can choose easily.
+   - If the overlap is significant, tell the user what you found before you continue.
+3. Get the branch ready.
+   - If you are on the base branch, create a descriptively named branch, but only if changing branches is within what the user asked for.
+   - Commit only the relevant changes the user scoped. Never commit secrets or private content. A request that is only about PR text does not allow new code commits.
+   - Push when that is needed to create or update the PR. Never force push.
+4. Review your own diff before any human sees it. For a large or complex diff, delegate to reviewers if delegation is available and authorized. Otherwise review it yourself. Read the diff against the configured base branch and turn clear findings into small fixes. Ask:
+   - Does the change solve the stated problem end to end, or does it only hide a symptom?
+   - Is the codebase better afterward, with clear names, no dead or duplicated code, and no unrelated regressions?
+   - Would a reviewer flag an odd abstraction, speculative generality, or code that is not needed? If so, pick the smaller and more direct version.
+   - Do the comments the diff adds read well? Sweep them using the comment sweep section of `../write-pr/SKILL.md`. On a long-lived branch, an update picks up most of the comments added since the PR opened.
+   - Fix what is clearly worth fixing so the human review starts from a strong diff. When a finding needs a product or design decision, take it to the user and do not guess.
+   - Commit and push fixes from this pass only if that is within the PR scope the user requested. Never force push.
+5. If there is no PR yet, create one with `gh pr create`. In a T3 thread, link each PR you open to the thread right away, using its URL or its repository and number. That includes every layer of a stack. A delegated creator returns the PR identity at once so its parent can register it before any further PR work. The delegate does not monitor. If the result of a create or link call is uncertain, check the actual state before you retry, so you do not open a duplicate.
+6. If a PR already exists, read its title, labels, and number with `gh pr view --json title,labels,number`. When you need the body, fetch it through the REST API. Get the changed files with `gh pr view --json files --jq '.files[].path'`.
+7. Edit the title or body with `gh pr edit` whenever the PR no longer matches the current diff or the `write-pr` standards.
+8. Look for related issues and link them in the description with `Closes #123` or `Relates to #123` as fits.
+9. Give the user the PR URL. In T3, keep the right thread's PR links accurate as ownership or PR identity changes. Unlink only a link that is wrong or obsolete. Unlinking never allows you to close or delete a PR. If the user asked for monitoring, follow the [T3 watch protocol](references/maintenance.md#t3-registration-and-monitoring).
 
-## Handling problems
+## When something goes wrong
 
-Committing automatically runs hooks. Fix formatting, lint, type, or import issues when the fix is mechanical.
+Commits run hooks automatically. If a hook fails on formatting, lint, types, or imports, fix it when the fix is mechanical.
 
-If a hook failure requires meaningful product or implementation decisions, stop and ask the user how to proceed.
+If fixing a hook failure means making a real product or implementation decision, stop and ask the user.
 
-Never force commit or force push.
+Never bypass hooks or force push.
 
 ## Rules
 
-- Follow `../write-pr/SKILL.md` for all PR content standards.
-- Do not include AI attribution in commit messages, PR titles, or PR descriptions.
-- Do not add yourself or an AI tool as a co-author.
+- Apply `../write-pr/SKILL.md` to everything that goes into a PR.
+- Leave AI attribution out of commit messages, PR titles, and PR descriptions.
+- Do not list yourself or an AI tool as a co-author.

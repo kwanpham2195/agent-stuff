@@ -3,7 +3,7 @@ name: show-me
 description: "Explain technical work or prepare developer review artifacts with diagrams, structural diffs, short code, pseudocode, and concrete contracts."
 ---
 
-Help the user understand the current topic of conversation visually. Skip the preamble and keep prose brief. Pick the smallest view that makes the key point clear.
+Make the subject at hand easier to grasp with a visual. Lead with the view rather than an introduction, and keep the text around it short. Pick whichever format is smallest while still carrying the main point.
 
 Show real code directly when it is short and says more than a table, diagram or pseudocode would. It keeps exact names, types, calls and error handling that other formats paraphrase away. Use another format when the code would be long, or when its noise would hide the point.
 
@@ -60,110 +60,112 @@ Good:
 
 - Follow the owning document's required formats. Apply agreed presentation conventions across the requested scope.
 
-- Show logic or an algorithm as pseudocode when branching or execution order needs explanation and the real code is too long or too noisy to show:
+- Put each visual next to the brief text it backs up, and include only what bears on the question being asked: the calls, files, props, states, and boundaries involved.
+
+- For a runtime question such as "what calls what", draw a call tree:
 
 ```text
-on(save)
-  if content is unchanged
-    return cached result
-  write new content
-  return fresh result
+handleCheckout
+  reserveStock
+    lockInventoryRows
+    writeReservation
+  chargeCard
+  sendReceipt
 ```
 
-- Show runtime control flow as a call tree:
+- For ownership questions or a sweeping refactor, sketch a shallow directory tree with a comment on each entry:
 
 ```text
-submitForm
-  createSession
-    persistPrompt
-    launchAgent
-  navigateToSession
+app/
+├── routes/         # maps URLs to handlers
+├── billing/        # owns invoices and payments
+└── clients/        # wraps outbound API calls
 ```
 
-- Show UI structure as a component tree, including state and module boundaries that matter:
+- For UI structure, draw the component hierarchy and mark any state or module boundary that affects the answer:
 
 ```tsx
-<SessionPage> (apps/example/src/routes/session.tsx)
-  useSessionEvents()
-  <SessionToolbar>
-    <RunSkillButton> (packages/ui)
+<CartScreen> (src/routes/cart.tsx)
+  useCartTotals()
+  <CartSummary>
+    <PromoCodeField> (src/components/promo)
 ```
 
-- Show file responsibility or a broad refactor as a shallow file tree:
+- When branching or ordering is the point and the real code is too long or too noisy, write pseudocode:
 
 ```text
-src/
-├── commands/       # parses user actions
-├── sessions/       # owns session state
-└── transport/      # sends API requests
+when(upload arrives)
+  if the checksum matches a stored file
+    reuse the stored file
+  else
+    store the bytes
+    record the checksum
+  reply with the file id
 ```
 
 - Draw states and transitions as a state diagram, data movement as a flowchart, and interactions between actors as a sequence diagram. Render each one as a PNG with [mermaid-png](../mermaid-png/SKILL.md).
 
-- When a flow has too many parts to read in one diagram, show a short series instead. Each diagram redraws the previous one and adds one part.
+- If a flow has too many parts for one diagram, split it into a short series. Each diagram repeats the one before and adds a single part.
 
-- Use `diff` when the point is what changes and the surrounding shape already exists. Match the diff shape to the topic.
+- A `diff` block fits when the reader cares about what changes and already knows the overall shape. Format the diff to look like the subject it modifies.
 
-For a component change:
-
-```diff
- <SessionPage>
-   useSessionEvents()
-   <SessionToolbar>
-+    <RunSkillButton />
-   <SessionTimeline>
-+    <SkillResultCard />
-```
-
-For a file-layout change:
+Components:
 
 ```diff
- src/
- ├── commands/
-+│   └── show-me.ts       # expands the slash command
- ├── sessions/
--└── transport.ts
-+└── transport/
-+    ├── client.ts
-+    └── stream.ts
+ <CartScreen>
+   useCartTotals()
+   <CartSummary>
++    <ShippingEstimate />
+   <CartFooter>
++    <SavedForLaterList />
 ```
 
-For a call-tree or call-stack change:
+Directories:
 
 ```diff
- submitForm
-   createSession
-     persistPrompt
-+    expandSkillMention
-     launchAgent
--  navigateToSession
-+  navigateToSession
-+    subscribeToEvents
+ app/
+ ├── routes/
++│   └── export.ts        # serves the CSV export
+ ├── billing/
+-└── gateway.ts
++└── gateway/
++    ├── http.ts
++    └── retry.ts
 ```
 
-For a state or control-flow change:
+Call trees:
 
 ```diff
- on(save)
--  write content
-+  if content is unchanged
-+    return cached result
-+  write new content
-+  invalidate cache
+ handleCheckout
+   reserveStock
+     lockInventoryRows
++    checkBackorderLimit
+     writeReservation
+-  chargeCard
++  chargeCard
++    recordLedgerEntry
 ```
 
-- Show the whole block when most of it is new, when omitted context would hide ownership or order, or when the user needs a copyable target shape:
+Control flow:
+
+```diff
+ when(upload arrives)
+-  store the bytes
++  if the checksum matches a stored file
++    reuse the stored file
++  else
++    store the bytes
++    record the checksum
+```
+
+- Print the code in full if most of it is new, if trimming it would obscure ownership or sequencing, or if the reader wants a shape to copy:
 
 ```ts
-function expandSkill(command: string): string {
-  const skillName = command.slice(1)
-  return `use the ${skillName} skill`
-}
+export const toSlug = (title: string) =>
+  title.trim().toLowerCase().replace(/\s+/g, "-")
 ```
 
-- For a visual UI, layout, state comparison, or concept too dense for a plain-text diagram, create one focused HTML page. For a chat reply in T3 Code, publish it as in-chat HTML; it stays in the chat. For a saved artifact, use [visual-explainer](../visual-explainer/SKILL.md) and save the page with the work item's `review/` files or the repository's docs. Match the product's colors, type, spacing, and components; use real labels and data; support desktop and mobile;
-
-- Place each visual next to the short text it supports. Keep only the calls, files, props, states, and boundaries needed to answer the user's current question.
+- Build one focused HTML page when the topic is a UI, a layout, a side-by-side of states, or an idea too dense for plain text. For a chat reply in T3 Code, publish it as in-chat HTML; it stays in the chat. For a saved artifact, use [visual-explainer](../visual-explainer/SKILL.md) and save the page with the work item's `review/` files or the repository's docs. Borrow the product's palette, type, spacing and components, fill the page with real labels and data, and check that it holds up on both desktop and mobile.
 
 ## Planning reviews and code walkthroughs
 

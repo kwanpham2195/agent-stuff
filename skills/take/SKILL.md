@@ -5,105 +5,114 @@ description: Find a GitHub issue, assign it, implement it, verify it, and open a
 
 # Take
 
-Find an issue, implement it, and open a pull request.
+Take an issue from first read to an open pull request.
 
-Read [work-lifecycle](../references/work-lifecycle.md) for bounded context, authority, checkpoints, review, and resumption. Use [context-routing](../references/context-routing.md) to resolve the workspace before searching or creating local records. Reuse an existing owning issue/plan and its accepted decisions; keep small work inline.
+Read [work-lifecycle](../references/work-lifecycle.md) for bounded context, authority, checkpoints, review, and resumption. Use [context-routing](../references/context-routing.md) to find the right workspace before you search for or create local records. If an owning issue or plan already exists, reuse it and the decisions already accepted in it. Keep small work inline.
 
 ## Workflow
 
-### 0. Resume existing work first
+### 0. Check for work already under way
 
-Check `git status -sb` and any existing entry artifact. If this issue already has work in progress, reconcile its checkout/branch, current PR or tracker state, prior evidence, dirty-work ownership, and pending reviews before taking the next authorized action. Do not repeat assignment, branch creation, or PR creation merely because this workflow starts at step 1. Stored checkboxes and old passing tests need reconciliation against the current revision.
+Start with `git status -sb` and look for an existing entry artifact. If this issue already has work in progress, reconcile before you act:
 
-For an existing phased plan, load the current phase's read-first set and relevant linked decisions/prototype findings. For a small task, use the issue, relevant code, and an inline checklist. The issue owns assigned scope and status; a plan, when present, owns sequencing. Link these authorities rather than creating competing progress records.
+- the checkout and branch,
+- the current PR or tracker state,
+- earlier evidence,
+- who owns any uncommitted changes,
+- reviews that are still pending.
 
-### 1. Find the issue
+Then take the next authorized step. Do not assign, branch, or open a PR a second time just because the workflow begins at step 1. Checked boxes and old test results need to be rechecked against the current revision.
 
-The user may reference an issue by number, URL, or description.
+If a phased plan exists, load the read-first set for the current phase and the decisions and prototype findings it links to. For a small task, the issue, the relevant code, and an inline checklist are enough. The issue owns the assigned scope and status. A plan, if there is one, owns the order of work. Link to each rather than starting a second progress record.
 
-If there is one clear match, proceed. If several issues match, ask the user to choose from issue numbers and titles. If none match, ask whether to create a new issue using the `issue` skill.
+### 1. Locate the issue
 
-### 2. Understand the issue
+The request may give a number, a URL, or only a description.
 
-Read the full issue and comments. Identify:
+- One clear match: continue.
+- Several matches: show the numbers and titles and ask the user to pick one.
+- No match: offer to file a new one with the `issue` skill, and wait for the answer.
 
-- Issue type: bug, feature, enhancement, cleanup, docs, or task.
-- Requested behavior and acceptance criteria.
-- Technical notes and affected files.
-- Relevant discussion or clarifications.
+### 2. Read and understand it
 
-Agent-drafted issues may include `## Confidence` and `## Open questions` sections. Treat an unanswered `Critical:` question as a blocker. An `_Awaiting answer._` entry or `More Info Needed` label blocks implementation only when it represents missing user intent that codebase exploration cannot resolve. Resolve those blockers with the user; non-critical questions marked `_Deferred by user; not blocking implementation._` may remain open.
+Read the whole issue and its comments. Note:
 
-If the issue lacks detail, explore the codebase before deciding whether implementation is safe.
+- The kind of issue: defect, new feature, enhancement, cleanup, documentation, or chore.
+- The behavior the reporter wants, and the acceptance criteria.
+- Any technical notes and the files involved.
+- Discussion or clarifications that change the picture.
 
-### 3. Assign the issue
+Issues drafted through intake may carry a readback, open questions, and a readiness statement. Older ones may have `## Confidence` and `## Open questions` headings. Handle the questions this way:
 
-Assign the issue to the current GitHub user. If someone else is already assigned, ask the user whether to proceed.
+- An unanswered `Critical:` question blocks the work.
+- An `_Awaiting answer._` entry or a `More Info Needed` label blocks the work only when it stands for user intent that reading the code cannot supply.
+- Settle blockers with the user.
+- A question marked `_Deferred by user; not blocking implementation._` can stay open.
 
-### 4. Plan the implementation
+If the issue is thin, read the codebase before you decide whether it is safe to build.
 
-Check `git status --short` before creating a branch. Preserve unrelated dirty work and ask before carrying ambiguous changes into the implementation branch.
+### 3. Assign it
 
-Create a concise implementation checklist based on:
+Set the current GitHub user as the assignee. If another person is already assigned, check with the user before you continue.
 
-- The issue description.
-- Acceptance criteria.
-- Codebase exploration.
-- Existing repo patterns.
+### 4. Plan
 
-For an issue beyond a trivial edit, run `rpi` under [RPI local rules](../references/rpi-local.md), with the issue as the request. Resume existing RPI documents at their first unfinished step. RPI's research, design and outline replace this checklist. In step 5, create the branch, then use RPI's implement step instead of the checklist. Steps 6 to 8 still apply. Resolve technical unknowns through RPI research or an authorized [prototype](../prototype/SKILL.md); block dependent work when a prototype is inconclusive or cannot run. A trivial issue keeps its checklist inline.
+Run `git status --short` before you create a branch. Keep unrelated uncommitted work intact, and ask before carrying changes you cannot place into the new branch.
 
-### 5. Implement
+Write a short checklist drawn from the issue, its acceptance criteria, what you learned from the code, and the patterns the repository already uses.
 
-Create a new branch from the repository's configured base branch. Do not assume `main` or `master`, and do not pull or rebase implicitly.
+If the issue is more than a trivial edit, use `rpi` under the [RPI local rules](../references/rpi-local.md), with the issue as the request. Pick up any existing RPI documents at their first unfinished step. RPI's research, design, and outline stages take the place of this checklist, and in step 5 you create the branch and then follow RPI's implement stage instead of the checklist. Steps 6 to 8 still apply. Settle technical unknowns through RPI research or an authorized [prototype](../prototype/SKILL.md). If a prototype is inconclusive or cannot run, hold back the work that depends on it. A trivial issue keeps its inline checklist.
 
-Work through the checklist:
+### 5. Build
 
-- Read files before editing them.
-- Follow existing patterns.
-- Keep changes focused on the issue.
-- Avoid speculative improvements.
-- Update docs, examples, tests, or API reports when the issue requires it.
+Branch from the repository's configured base branch. Do not assume the name is `main` or `master`. Do not pull or rebase unless asked.
 
-Work through the authorized checklist or plan using [bounded working context](../references/work-lifecycle.md#keep-working-context-bounded). Keep small-task progress inline; update the owning artifact when durable work has one. If work grows beyond inline context, use the lifecycle's mode-selection rule before creating a record. Use [delegated-execution](../delegated-execution/SKILL.md) only when delegation is authorized.
+Follow the checklist:
+
+- Read a file before you change it.
+- Match existing patterns.
+- Stay focused on the issue, and skip speculative extras.
+- Change docs, examples, tests, or API reports too if the issue needs them.
+
+Track progress with [bounded working context](../references/work-lifecycle.md#keep-working-context-bounded). Keep progress for small tasks inline. When durable work has an owning artifact, update it. If the task outgrows inline context, apply the lifecycle's rule for choosing a mode before you create a record. Use [delegated-execution](../delegated-execution/SKILL.md) only when delegation is authorized.
 
 ### 6. Verify
 
-Run the smallest relevant checks first. Use broader checks when the change touches shared behavior.
+Start with the narrowest checks that cover your change. Widen them if you touched behavior that other code shares.
 
-Choose final checks from the repository's instructions and package scripts. For example:
+Take the final checks from the repository's instructions and package scripts, for example:
 
 ```bash
 <package-manager> run typecheck
 <package-manager> run lint
 ```
 
-For focused package changes, prefer the relevant workspace tests before repo-wide checks. Do not run placeholder commands literally.
+For a change within one package, run that workspace's tests before repo-wide checks. Never run placeholder commands as written.
 
-### 7. Create the PR
+### 7. Open the PR
 
-Use the `pr` skill.
+Use the `pr` skill. In the PR:
 
-- Link the issue with `Closes #<issue-number>`.
-- Include relevant context from the issue discussion.
-- Include a clear test plan.
+- Close the issue from the description with `Closes #<issue-number>`.
+- Carry over the context from the issue thread that a reviewer needs.
+- Describe how to test it.
 
-### 8. Summarize
+### 8. Report back
 
-End with:
+Finish with:
 
-- Issue implemented.
-- Key changes and files modified.
-- Verification performed.
-- PR link.
-- Manual testing steps, if relevant.
-- Any acceptance criteria that could not be met and why.
+- The issue you implemented.
+- The main changes and the files they touch.
+- The verification you ran.
+- The PR link.
+- Steps for testing by hand, where useful.
+- Acceptance criteria you could not meet, and why.
 
-For durable work, update the owning checkpoint for completion or handoff using [work-lifecycle](../references/work-lifecycle.md#checkpoint-before-context-is-lost). For small work, the summary above is the checkpoint; include unresolved review, blockers, and the next action if partial. Publishing local context or updating remote records still requires the applicable authority.
+For durable work, record completion or handoff in the owning checkpoint, following [work-lifecycle](../references/work-lifecycle.md#checkpoint-before-context-is-lost). For small work, the report is the checkpoint. If the work is partial, include open reviews, blockers, and the next action. Publishing local context or updating remote records still needs its own authority.
 
 ## Rules
 
-- Ask the user when a consequential requirement remains unclear after exploration. An unresolved `_Awaiting answer._` placeholder blocks only the work that depends on its answer.
-- Infer routine implementation choices from the request, accepted criteria, and repository conventions. Ask before choosing consequential unspecified product behavior.
-- Keep the implementation scoped to the issue.
-- Never include AI attribution in commits, issues, or PRs.
+- If an important requirement is still unclear after you have read the code, ask the user. A leftover `_Awaiting answer._` placeholder blocks only the work that depends on it.
+- Settle routine implementation choices from the request, the agreed criteria, and the repository's conventions. Ask before deciding unspecified product behavior that matters.
+- Keep the change within the scope of the issue.
+- Leave AI attribution out of commits, issues, and PRs.

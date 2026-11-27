@@ -1,51 +1,59 @@
 # Comments and JSDoc
 
-Apply [shared documentation and audience rules](../../coding-standards/references/documentation.md). Every exported JavaScript or TypeScript symbol has JSDoc at its original declaration.
+The [shared documentation rules](../../coding-standards/references/documentation.md) cover audience and tone. TypeScript adds the points below.
 
-Public methods and properties of an exported class also require JSDoc. Shared policy governs non-obvious internal documentation.
+## Documenting fields
 
-Document each original declaration once; re-exports rely on that documentation. Write explicit documentation in place of inheritance tags such as `@inheritDoc`.
-
-Attach `/** ... */` JSDoc directly to its declaration. Include tags when they add caller-relevant information:
+Explain properties of exported object types when their meaning goes beyond name and type.
 
 ```ts
-/**
- * Parse and validate an email address at an external input boundary.
- *
- * @param input - Raw input received from outside the application.
- * @returns A validated email address, or `InvalidEmailAddress` when validation fails.
- */
-export function parseEmailAddress(input: string): Result<EmailAddress, InvalidEmailAddress>;
-```
+/** Settings for one outgoing call. */
+export type CallSettings = {
+  /** Upper bound for the whole call, retries included. */
+  readonly deadline: Duration;
 
-Add `@template` when a type parameter has a role or constraint the signature does not make clear:
-
-```ts
-/**
- * Map the success value of a result while preserving its error channel.
- *
- * @template E - Error channel preserved without invoking `fn`.
- * @param fn - Transforms the success value; it is skipped when `result` contains an error.
- * @returns A result containing the transformed success value or the original error.
- */
-export function mapResult<T, U, E>(result: Result<T, E>, fn: (value: T) => U): Result<U, E>;
-```
-
-Reserve `@throws` for unrecoverable defects, framework-required behavior, and temporary `notYetImplemented` paths. Describe expected typed errors in `@returns` or the operation's documented outcomes.
-
-Document exported object fields whose semantics extend beyond their names and types:
-
-```ts
-/** Options that bound and identify an outbound request. */
-export type RequestOptions = {
-  /** Total request budget, including connection setup and retries. */
-  readonly timeout: Duration;
-
-  /** Correlation identifier forwarded unchanged to downstream services. */
-  readonly correlationId: CorrelationId;
+  /** Identifier handed, unchanged, to every downstream service. */
+  readonly traceId: TraceId;
 };
 ```
 
-## Completion check
+## `@throws`
 
-Complete when shared documentation policy passes and every exported symbol/public class member has JSDoc, inherited members have explicit documentation, non-obvious fields are documented, and tags follow the rules above.
+Reserve it for unrecoverable defects, behavior a framework demands, and `notYetImplemented` placeholders. Expected typed failures belong in the `@returns` text or in the operation's description.
+
+## Type parameters
+
+Use `@template` when a parameter's role or limits are not clear from the signature.
+
+```ts
+/**
+ * Convert the success value, leaving any failure untouched.
+ *
+ * @template E - Failure type, passed through unchanged.
+ * @param convert - Applied only when `outcome` succeeded.
+ * @returns The converted success, or the original failure.
+ */
+export function mapOutcome<A, B, E>(outcome: Result<A, E>, convert: (a: A) => B): Result<B, E>;
+```
+
+## What gets a doc comment
+
+- Every exported symbol, written where it is first declared.
+- The public methods and properties of an exported class.
+- Not re-exports: they rely on the original comment. Write the text out instead of using `@inheritDoc`.
+
+Place the `/** ... */` block directly above the declaration, and include only tags that tell a caller something the signature does not.
+
+```ts
+/**
+ * Validate a postal code received from an untrusted source.
+ *
+ * @param raw - The unchecked text from the caller.
+ * @returns A `PostalCode`, or `InvalidPostalCode` when the text is rejected.
+ */
+export function parsePostalCode(raw: string): Result<PostalCode, InvalidPostalCode>;
+```
+
+## Checklist
+
+Shared documentation rules pass, every exported symbol and public class member is documented at its declaration, no `@inheritDoc` shortcuts remain, unclear fields are explained, and tags follow the points above.

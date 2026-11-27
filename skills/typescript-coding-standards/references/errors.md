@@ -1,47 +1,55 @@
 # TypeScript errors
 
-Apply [shared failures and defects](../../coding-standards/references/errors.md). Every known failure appears as a custom tagged error in the return type, even if the immediate caller cannot recover.
+Follow the [shared rules on failures and defects](../../coding-standards/references/errors.md). Every expected failure must appear in the return type as a custom tagged error, even if the immediate caller cannot do anything about it.
 
-Use Effect's typed error channel in Effect projects; `better-result` when available/accepted in scope; otherwise the established result shape or a small local tagged union. Do not add an error dependency merely from preference. Outside Effect, prefer `better-result`'s `TaggedError` for custom expected-error classes when available even if Result itself is not adopted.
+## Defining errors
 
-```ts
-type Result<T, E extends Error> =
-  | { readonly _tag: "ok"; readonly value: T }
-  | { readonly _tag: "err"; readonly error: E };
-// Prefer:
-function findUser(id: UserId): Promise<Result<User, UserNotFound | UserStoreUnavailable>>;
-// Avoid: Promise<User> rejecting for ordinary absence/storage failures
-```
-
-Promise rejection is throwing. The direct third-party owner catches unknown rejection and classifies it before it crosses the module interface. Check cancellation first. Framework-required throws stay at the framework boundary; encode/document distinguishable public expected variants with its mechanism.
-
-Custom errors extend `Error`, `better-result`'s `TaggedError`, or the pinned [Effect Schema error constructor](effect-schema-and-data.md#errors). Use a stable `as const` tag, safe structured fields, useful stable message, and optional `cause: unknown`.
+Extend `Error`, extend `better-result`'s `TaggedError`, or use the [schema-based error class](effect-schema-and-data.md#errors) from Effect. Give each class a stable `as const` tag, safe structured fields, a helpful fixed message, and an optional `cause: unknown`.
 
 ```ts
-export class UserStoreUnavailable extends Error {
-  readonly _tag = "UserStoreUnavailable" as const;
+export class PaymentGatewayDown extends Error {
+  readonly _tag = "PaymentGatewayDown" as const;
   constructor(
-    readonly operation: "findActiveByEmail",
-    readonly provider: "postgres",
+    readonly step: "authorize" | "capture",
     readonly cause: unknown,
   ) {
-    super(`User store unavailable during ${operation}`);
+    super(`Payment gateway unavailable during ${step}`);
   }
 }
 ```
 
-Required lookup returns `UserNotFound`; intentional optional lookup may return `User | undefined` or Effect `Option`. Keep precise operation unions, not `Result<User, AppError>`.
+A lookup that must succeed returns a not-found error. A lookup where absence is normal may return `T | undefined` or Effect's `Option`. Describe each operation's failures precisely; avoid a catch-all `AppError`.
 
-Reuse established defect helpers where semantics/reuse earns them; otherwise keep local or native:
+## Choosing a mechanism
+
+- In an Effect project use the typed error channel.
+- Elsewhere use `better-result` if it is already present or accepted for the task; otherwise reuse whatever result type exists, or a small local tagged union. Do not add a dependency for taste.
+- Outside Effect, `better-result`'s `TaggedError` is a good base class for expected errors even if you do not use its `Result`.
 
 ```ts
-casesHandled(unexpectedCase: never): never;
+type Outcome<A, E extends Error> =
+  | { readonly ok: true; readonly value: A }
+  | { readonly ok: false; readonly error: E };
+
+// Do this:
+declare function loadOrder(id: OrderId): Promise<Outcome<Order, OrderMissing | OrderStoreDown>>;
+// Not this: a Promise<Order> that rejects for a missing order or a dead database
+```
+
+A rejected promise is a thrown error. The code that directly calls a third-party API must catch the unknown rejection and classify it before it leaves the module, checking for cancellation first. Where a framework requires throwing, do that only at the framework edge and still make the public expected variants distinguishable.
+
+## Defects
+
+Reuse the project's existing helpers for impossible states if they have enough use to justify themselves; otherwise keep the code local or native:
+
+```ts
+casesHandled(value: never): never;
 shouldNeverHappen(message?: string): never;
 notYetImplemented(message?: string): never;
 ```
 
-Known configuration failures remain typed until startup safely reports/terminates.
+Known configuration problems remain typed until startup can report them safely and stop.
 
 ## Boundary translation
 
-For tagged Effect unions prefer `Effect.catchTag`/`catchTags` to preserve explicit category policy and unchanged application errors. New tags remain visible in inference. Use `Effect.mapError`/shared mappers only when the whole input channel intentionally has one meaning, retaining concrete errors and requirements. Defects/interruption and cause-level supervision follow shared rules.
+With tagged Effect unions, prefer `Effect.catchTag` or `catchTags`: they keep each category's policy explicit and leave unrelated errors alone, and any new tag shows up in inference. Use `mapError` or a shared mapper only when every member of the incoming error type should mean the same thing, and keep the concrete error and requirement types. Defects, interruption, and cause-level handling follow the shared rules.

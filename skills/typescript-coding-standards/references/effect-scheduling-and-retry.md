@@ -1,141 +1,59 @@
-# Scheduling And Retry
+# Retry, polling, and timing
 
-Use `Schedule` to express retry, polling, pacing, and repeated background work.
+`Schedule` values say when to go again. Use them for retries, polling, and recurring jobs rather than loops with manual sleeps.
 
-## Core Rules
+## Quick review
 
-- `Effect.retry(...)` retries typed failures; defects and interruptions are not retried.
-- `Effect.repeat(...)` repeats successful effects; failures stop repetition unless the pass handles them first.
-- The source effect runs once before the schedule is stepped.
-- `Schedule.recurs(3)` means three retries/repetitions after the initial run.
-- `Schedule.spaced(...)` waits after work completes.
-- `Schedule.fixed(...)` aligns executions to a cadence.
-- Use `Schedule.exponential(...)` or `Schedule.fibonacci(...)` for backoff.
-- Add `Schedule.jittered` to avoid synchronized retry storms.
-- Use `Schedule.recurs(...)` for a counter schedule or `Schedule.upTo({ times })` to bound a delay schedule.
-- Use `Schedule.tapInput(...)` to log retry inputs.
-- Use `Schedule.tap(...)` when full schedule metadata matters.
-- Use `Effect.retryOrElse(...)` when exhausted retries need a fallback/reporting effect.
-- Retry only at the narrowest boundary with proven idempotency.
-- Keep exhausted failures visible unless the boundary has a truthful fallback.
+Who owns each retry or loop, and what stops it? Is every retried effect safe to repeat? What happens to a failed pass or item? Do tests avoid real time?
 
-When retries can duplicate side effects, read [`workflows-transactions-and-idempotency.md`](workflows-transactions-and-idempotency.md) to choose the retry owner and safety guarantee.
+## Related timing tools
 
-## Polling Workers
+`Effect.timeout` bounds how long something may take, `Effect.delay` postpones the start, `Effect.sleep` is for when waiting is the point. For tests, advance a test clock ([Effect testing notes](effect-testing.md)).
 
-Handle expected pass failures through the typed error channel.
+## Background loops
+
+For a worker that does a pass over and over:
+
+- Log expected failures of a pass and keep going.
+- Do not swallow defects; supervision should see them.
+- Cause-level recovery belongs only in a top-level supervisor that is meant to log and carry on.
 
 ```ts
-const pass = runPass().pipe(
-  Effect.tapError((error) =>
-    Effect.logError("Worker.pass_failed", error),
-  ),
+const worker = pass.pipe(
+  Effect.tapError((e) => Effect.logError("pass failed", e)),
   Effect.ignore,
-)
-
-const run = pass.pipe(
-  Effect.repeat(Schedule.spaced("1 second")),
-)
+  Effect.repeat(Schedule.spaced("5 seconds")),
+);
 ```
 
-This shape says expected operational pass failures are logged and the worker continues. Defects still defect and can reach supervision.
+Within a pass over many items, isolate failures item by item, with limited concurrency, but only if skipping the item or retrying it next pass is the intended outcome.
 
-Use cause-level recovery only at supervision boundaries where the policy is truly "report non-interrupt failure and continue".
+## Server-suggested delays
+
+When a typed error holds a requested wait, compute the delay from the error as the larger of your backoff and that value, in the schedule rather than inside the retried effect. HTTP-specific handling lives in [effect-http-clients.md](effect-http-clients.md).
+
+## Semantics worth remembering
+
+- `Effect.retry` reacts to typed failure only; a defect or interruption is never retried.
+- `Effect.repeat` reacts to success; a failure stops it.
+- The first attempt happens before the schedule is asked anything. "Recurs 3 times" therefore gives four runs at most.
+- `spaced` measures from the end of one run; `fixed` holds a steady rhythm.
+- Backoff is `exponential` or `fibonacci`, nearly always with `jittered` added.
+- Every retry needs a ceiling: attempts, elapsed time, or both.
+- Use `Effect.retryOrElse` if running out of attempts should trigger a fallback.
+- Retry the narrowest step that is safe to repeat and let the last failure surface unless there is a genuine fallback. For side-effect duplication risks, see [workflow and idempotency guide](workflows-transactions-and-idempotency.md).
 
 ```ts
-const logNonInterruptCauseAndContinue = (message: string) =>
-  Effect.catchCauseIf(
-    (cause) => !Cause.hasInterrupts(cause),
-    (cause) => Effect.logError(message, cause),
-  )
+const backoff = Schedule.exponential("200 millis").pipe(
+  Schedule.jittered,
+  Schedule.intersect(Schedule.recurs(5)),
+);
+
+const sync = (id: string) =>
+  pushRecord(id).pipe(
+    Effect.retry(backoff),
+    Effect.tapError((e) => Effect.logError("sync gave up", e)),
+  );
 ```
 
-Recover expected typed failures with `Effect.catchIf(...)`, `Effect.catchFilter(...)`, `Effect.catchTag(...)`, or `Effect.retry(...)`.
-
-## Per-Item Failure Isolation
-
-For batch workers, catch expected item-level typed failures around each item so one bad item does not stall the batch.
-
-```ts
-yield* Effect.forEach(
-  items,
-  (item) =>
-    processItem(item).pipe(
-      Effect.tapError((error) =>
-        Effect.logError("Worker.item_failed", error).pipe(
-          Effect.annotateLogs({ itemId: item.id }),
-        ),
-      ),
-      Effect.ignore,
-    ),
-  { discard: true, concurrency: 5 },
-)
-```
-
-This isolation is truthful when the product policy retries the item later or deliberately skips it.
-
-## Reusable Retry Policy
-
-```ts
-const reconciliationRetrySchedule: Schedule.Schedule<unknown, ReconciliationError> =
-  Schedule.exponential("100 millis").pipe(
-    Schedule.jittered,
-    Schedule.upTo({ times: 5 }),
-  )
-
-const reconcileWithRetry = (target: Target) =>
-  reconcile(target).pipe(
-    Effect.retry(
-      reconciliationRetrySchedule.pipe(
-        Schedule.tapInput((error) =>
-          Effect.logWarning("Agent.Reconciliation.retrying").pipe(
-            Effect.annotateLogs({ operation: error.operation }),
-          ),
-        ),
-      ),
-    ),
-    Effect.tapError((error) =>
-      Effect.logError("Agent.Reconciliation.stopped", error),
-    ),
-  )
-```
-
-Use this shape when retry state is useful for logs or metrics. The final `tapError` reports exhaustion while preserving the typed failure.
-
-## Rate-Limit-Aware Typed Retry
-
-For provider errors that carry `retryAfterMs`, let the schedule use the larger of the backoff delay and the provider delay.
-
-```ts
-type RateLimited = {
-  readonly retryAfterMs?: number | undefined
-}
-
-const providerRetrySchedule: Schedule.Schedule<RateLimited, RateLimited> =
-  Schedule.exponential("200 millis").pipe(
-    Schedule.jittered,
-    Schedule.upTo({ times: 5 }),
-    Schedule.passthrough,
-    Schedule.modifyDelay(({ input, duration }) =>
-      Effect.succeed(
-        input.retryAfterMs === undefined
-          ? duration
-          : Duration.max(duration, Duration.millis(input.retryAfterMs)),
-      ),
-    ),
-  )
-```
-
-Use this for operation-level retries over typed provider errors. For Effect `HttpClient`-level 429 handling and proactive pacing, read [`effect-http-clients.md`](effect-http-clients.md).
-
-## Timeouts And Delays
-
-- Use `Effect.timeout(...)` when the operation has a real deadline.
-- Use `Effect.delay(...)` when one operation should start later.
-- Use `Effect.sleep(...)` when sleeping itself is the domain behavior.
-- Use `Effect.repeat(...)` with `Schedule` for recurring work.
-- In tests, control time with `TestClock`; read [`effect-testing.md`](effect-testing.md).
-
-## Completion Check
-
-Every retry and repetition has an explicit owner and termination policy, including intentional unbounded workers. Every retried side effect has a proven safety guarantee. Polling and batch workers state whether each expected failure continues, retries, skips, or stops. Exhausted failures remain typed and visible unless the owning boundary provides a truthful fallback. Time-based tests use deterministic clock control.
+Exact combinator names differ by release; check the installed version.

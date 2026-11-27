@@ -1,108 +1,79 @@
-# Effect testing
+# Testing with Effect
 
-Apply the test levels, observable-outcome rules, and completion check in [`testing.md`](testing.md) to every Effect test. This reference adds Effect runtime, time, synchronization, and test-Layer rules.
+General rules for tests are in [general testing guide](testing.md). This file adds the Effect-specific mechanics.
 
-## Defaults
+## Quick review
 
-- Use `it.effect` by default.
-- Use `it.live` when real time or live runtime services are the behavior under test.
-- Drive sleeps, schedules, retries, leases, and timeouts with `TestClock.setTime` or `TestClock.adjust`.
-- Fork a sleeping effect before advancing `TestClock`.
-- Assert interruption and finalization when they are observable parts of the behavior under test.
-
-For retry or schedule tests, also read [`effect-scheduling-and-retry.md`](effect-scheduling-and-retry.md).
-
-```ts
-it.effect("finds a user", () =>
-  Effect.gen(function* () {
-    const users = yield* UserRepo.Service
-    const result = yield* users.find(UserId.make("u1"))
-    expect(Option.isSome(result)).toBe(true)
-  }).pipe(Effect.provide(UserRepo.layerTest)),
-)
-```
-
-## Explicit synchronization
-
-- Use `Deferred` for one-shot readiness or completion signals.
-- Use `Queue` to hand test-controlled work or observed events across fibers.
-- Use `Latch` for reusable open/close coordination gates.
-- Use `Ref` for shared test observation state.
-- Coordinate through an existing lifecycle, status, or result interface. Put test-only controls on a test-control service; public interfaces expose observations required by production callers.
-
-```ts
-it.effect("publishes exactly once", () =>
-  Effect.gen(function* () {
-    const ready = yield* Deferred.make<void>()
-
-    const fiber = yield* Effect.gen(function* () {
-      yield* Deferred.succeed(ready, undefined)
-      return yield* publisher.publishNext()
-    }).pipe(Effect.forkScoped)
-
-    yield* Deferred.await(ready)
-    const message = yield* Fiber.join(fiber)
-
-    expect(message).toEqual(expectedMessage)
-  }),
-)
-```
-
-## Reusable test implementations
-
-Read [`effect-services.md`](effect-services.md#test-layers) before designing a reusable test Layer. When reusable state, failure injection, or observation belongs to a real service seam, expose a `TestService` for test control and inspection while production code continues through the real `Service` tag.
-
-```ts
-export interface Interface {
-  readonly send: (message: Message) => Effect.Effect<void, SendError>
-}
-
-export class Service extends Context.Service<Service, Interface>()(
-  "@app/Notifier",
-) {}
-
-export interface TestInterface extends Interface {
-  readonly sentMessages: () => Effect.Effect<ReadonlyArray<Message>>
-  readonly failNextSend: (error: SendError) => Effect.Effect<void>
-}
-
-export class TestService extends Context.Service<TestService, TestInterface>()(
-  "@app/Notifier/Test",
-) {}
-
-export const layerTest = Layer.effectContext(
-  Effect.gen(function* () {
-    const sent = yield* Ref.make<ReadonlyArray<Message>>([])
-    const nextFailure = yield* Ref.make<Option.Option<SendError>>(Option.none())
-
-    const service = TestService.of({
-      send: Effect.fn("Notifier.Test.send")(function* (message) {
-        const failure = yield* Ref.getAndSet(nextFailure, Option.none())
-        if (Option.isSome(failure)) return yield* Effect.fail(failure.value)
-        yield* Ref.update(sent, (messages) => [...messages, message])
-      }),
-      sentMessages: Effect.fn("Notifier.Test.sentMessages")(function* () {
-        return yield* Ref.get(sent)
-      }),
-      failNextSend: Effect.fn("Notifier.Test.failNextSend")(function* (error) {
-        yield* Ref.set(nextFailure, Option.some(error))
-      }),
-    })
-
-    return Context.empty().pipe(
-      Context.add(Service, service),
-      Context.add(TestService, service),
-    )
-  }),
-)
-```
-
-Keep service members function-valued, including zero-argument operations, so `Effect.fn` applies uniformly. `Layer.mock` fits a tiny local partial implementation whose omitted members fail loudly when called.
+Does [general testing guide](testing.md#completion-check) pass? Does the runner suit the subject? Is all timing driven by the test clock? Is coordination explicit? Are fakes reached through the real tag? Is visible cancellation or cleanup asserted?
 
 ## Configuration
 
-For tests that provide runtime configuration or choose whether to exercise Config decoding, read [`effect-configuration.md`](effect-configuration.md#providers).
+Test settings and decoding: [configuration notes](effect-configuration.md#providers).
 
-## Completion check
+## Fake services
 
-The completion check in [`testing.md`](testing.md#completion-check) passes; the test runtime matches the behavior under test; every temporal test drives time with `TestClock`, with sleeping effects started before the clock advances; concurrent readiness and ordering use explicit synchronization; reusable test implementations cross the production service tag while test controls remain on the test-control tag; observable interruption and finalization contracts are asserted; and every applicable service, retry/schedule, and configuration pointer above has been followed.
+Read [services and layers notes](effect-services.md#test-layers) first. When a fake needs shared state, injected failures, or inspection, add a second tag for control and serve both tags from a single layer so they see the same state. Production code only ever asks for the real tag.
+
+```ts
+export class SmsControl extends Context.Tag("SmsControl")<
+  SmsControl,
+  {
+    readonly outbox: Effect.Effect<ReadonlyArray<Sms>>;
+    readonly breakNext: (e: SmsError) => Effect.Effect<void>;
+  }
+>() {}
+
+export const SmsTest = Layer.unwrapEffect(
+  Effect.gen(function* () {
+    const outbox = yield* Ref.make<ReadonlyArray<Sms>>([]);
+    const pending = yield* Ref.make<Option.Option<SmsError>>(Option.none());
+    const send = (sms: Sms) =>
+      Ref.getAndSet(pending, Option.none()).pipe(
+        Effect.flatMap(
+          Option.match({
+            onSome: Effect.fail,
+            onNone: () => Ref.update(outbox, (all) => [...all, sms]),
+          }),
+        ),
+      );
+    return Layer.merge(
+      Layer.succeed(SmsSender, { send }),
+      Layer.succeed(SmsControl, {
+        outbox: Ref.get(outbox),
+        breakNext: (e) => Ref.set(pending, Option.some(e)),
+      }),
+    );
+  }),
+);
+```
+
+For a small one-off, a partial mock whose unused members fail loudly is enough.
+
+## Fiber coordination
+
+Use explicit signals in place of sleeps.
+
+- `Deferred`: something happens once.
+- `Queue`: pass events or work across fibers.
+- `Latch`: a gate that can reopen.
+- `Ref`: collect observations.
+
+Hook into the interfaces the code already exposes. Controls meant only for tests belong on a separate test-control service.
+
+## Running effects
+
+- `it.effect` from `@effect/vitest` provides controllable test services, including the clock. `it.live` uses real services and fits only when real time or live runtime behavior is the subject.
+- Never wait for real time. Fork the sleeping effect, then advance with `TestClock.adjust`.
+- If cancellation or cleanup is visible to callers, assert on it.
+- Retry and schedule tests: also see [retry and scheduling notes](effect-scheduling-and-retry.md).
+
+```ts
+it.effect("gives up after the delay", () =>
+  Effect.gen(function* () {
+    const fiber = yield* Effect.fork(pollOnce);
+    yield* TestClock.adjust("30 seconds");
+    const outcome = yield* Fiber.join(fiber);
+    expect(outcome).toEqual({ status: "timed-out" });
+  }).pipe(Effect.provide(StubClient.layer)),
+);
+```

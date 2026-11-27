@@ -5,29 +5,37 @@ description: Standards for PR titles, descriptions, and added comments. Supporti
 
 # Writing pull requests
 
-Before drafting or materially revising the PR's human-facing prose, read and apply [Writing reviewable artifacts](../references/writing.md).
+Before you draft or substantially revise a PR's prose, read and apply [Writing reviewable artifacts](../references/writing.md).
 
-Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising a PR title or description. Before presenting a draft or publishing an update, scan, rewrite, and self-audit the prose you authored. Preserve quoted evidence and the human notes defined below exactly.
+Apply [unslop](../unslop/SKILL.md) every time you write or revise a PR title or description. Before you show a draft or publish an update, scan your own text, rewrite what needs it, and audit the result. Keep quoted evidence and the human notes described below exactly as they are.
 
 ## Write for the reviewer
 
-Assume the reviewer knows the architecture but has not read the diff. Default to a few sentences, expanding only when the change warrants it. Order framing from coarse to granular: the concrete goal, motivation, and use case first; then changed behavior and structure; then API decisions, alternatives, uncertainty, and minimal before/after usage examples when API, data shape, or usage changes.
+Picture a reviewer who understands the architecture but has not opened the diff. Their attention is limited, so give them the context the code cannot, then stop. A few sentences usually do it. Grow the description only when the change calls for more.
 
-Do not restate the diff, narrate files or functions, or add tables that merely repeat signatures. Motivation and tradeoffs must come from commits, linked issues, or the author. Ask the user when the rationale is missing; never invent it.
+Order the content from broad to specific, so a reader can stop at any point and still have a correct picture:
+
+1. The concrete goal, the motivation, and the use case.
+2. What changed in behavior and structure.
+3. API decisions, alternatives you rejected, and anything you are unsure about. Add a small before/after usage example when an API, a data shape, or a usage pattern changes.
+
+Do not repeat the diff. Skip file-by-file tours, step-by-step accounts of what a function does, and tables that only restate signatures.
+
+Take the motivation and the trade-offs from commits, linked issues, or the author. If the reason for the change is missing, ask the user. Never make one up.
 
 ## PR title
 
-Follow the repository's title convention. Otherwise use Conventional Commits:
+Use the repository's title convention when it has one. Otherwise write a Conventional Commits title:
 
 ```
 <type>(<scope>): <description>
 ```
 
-Use `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, or `chore` as appropriate. Scope is an optional noun naming the affected area.
+Pick the type from `feat`, `fix`, `docs`, `refactor`, `perf`, `test`, and `chore`. The scope is an optional noun for the area affected, for example `fix(parser)`.
 
 ## PR body
 
-Use the repository's PR template when present. The following templates are optional starting points: keep only sections that help explain this change. Body change-type labels are repository-specific and need not match Conventional Commit prefixes.
+If the repository has a PR template, use it. The templates below are starting points only. Keep the sections that help explain this particular change and drop the others. The change-type labels in the body belong to the repository, so they need not match the commit type.
 
 ```md
 [{TICKET_ID}]({TICKET_URL})
@@ -36,7 +44,7 @@ Use the repository's PR template when present. The following templates are optio
 
 ### Change type
 
-- [x] `bugfix` | `improvement` | `feature` | `api` | `other`
+- [x] <one of: bugfix, improvement, feature, api, other>
 
 ### Change outline
 
@@ -44,33 +52,33 @@ Use the repository's PR template when present. The following templates are optio
 
 ### Test plan
 
-1. Step to test...
-2. Another step...
+1. First step to try...
+2. Next step...
 
 - [ ] Unit tests
-- [ ] End to end tests
+- [ ] End-to-end tests
 
 ### Release notes
 
-- Brief description of changes for users
+- One line for users describing the change
 ```
 
-### Description paragraph
+### The description paragraph
 
-Lead with the actual situation that prompted the work and the resulting behavior, not a circular restatement of the mechanism or a hypothetical use case. Link related issues here, but make the paragraph understandable without opening them.
+Start from the real situation that led to the work, and say what is now possible or fixed. Do not restate the mechanism in other words, and do not make up a hypothetical use case. Put links to related issues in this paragraph, but write it so a reader gets the point without following them.
 
-### Bug fix and improvement PRs
+### Bug fixes and improvements
 
-For bug fixes and improvements, a before/after structure can help a reviewer see what changed and why. A small fix may need only a paragraph and its validation result.
+For these, a before/after layout helps the reviewer see what changed and why. A very small fix may need only a paragraph and the result of its check.
 
 ```md
 [{TICKET_ID}]({TICKET_URL})
 
-This PR fixes a bug where <symptom a user or developer would hit>.
+This PR fixes a bug where <the symptom a person would see>.
 
 ### Before
 
-<what the code did and why that produced the symptom>
+<what the code did, and why that caused the symptom>
 
 ### After
 
@@ -78,11 +86,11 @@ This PR fixes a bug where <symptom a user or developer would hit>.
 
 ### Implementation notes
 
-<optional: what exactly changed and how — decisions, trade-offs, anything non-obvious>
+<optional: choices, trade-offs, anything non-obvious>
 
 ### Change type
 
-- [x] `bugfix` | `improvement`
+- [x] <bugfix or improvement>
 
 ### Change outline
 
@@ -90,121 +98,124 @@ This PR fixes a bug where <symptom a user or developer would hit>.
 
 ### Test plan
 
-- [ ] Describe checks actually run and their results; claim a before/after failure only when observed
+- [ ] Checks you actually ran, with results. Say a test failed before the change only if you saw it fail.
 
 ### Release notes
 
-- Fix <symptom> | Improve <behavior>
-
+- Fix <symptom>, or Improve <behavior>
 ```
 
-- **Intro** — one sentence. For a bug: "This PR fixes a bug where X," where X is the observable symptom, not the cause or the fix. For an improvement: "This PR improves X so that Y," where Y is what a user or developer can now do. Link the issue here if there is one. If the PR does more than one thing, add a second sentence ("It also ...") rather than a list.
-- **Before** — the behavior before, and the mechanism that produced it. For a bug, name the function or path at fault; this is the one place a short description of *how* the old code went wrong belongs, because it is the cause the reviewer is checking the fix against. For an improvement, describe what the user or developer had to do (or couldn't do) and what in the code made it that way.
-- **After** — the behavior after. State what the code now does, at the same level of detail as Before. Note any spec or doc that was updated alongside.
-- **Implementation notes** — optional. Include only when there is something the Before/After pair doesn't carry: an approach you chose over another, a subtlety in the change, a follow-up you deliberately left out. Skip the heading entirely when there is nothing to say; most small fixes have nothing.
-- Include the remaining sections only when required by the repository or useful to the reviewer. For bug fixes, distinguish a regression test from an independently observed failure on the base revision.
+How to fill it in:
+
+- **Intro.** One sentence. For a bug, "This PR fixes a bug where X", where X is the symptom a person can observe, not the cause and not the fix. For an improvement, "This PR improves X so that Y", where Y is what people can now do. Put the issue link here. If the PR does a second thing, add one more sentence beginning "It also" and skip the list.
+- **Before.** Say what happened and why. For a bug, name the function or code path at fault. This is the single place where the old code's mechanism belongs, because the reviewer checks the fix against that cause. For an improvement, describe what people had to do, or could not do, and what in the code forced that.
+- **After.** Describe the new behavior at the same level of detail. Mention any spec or doc you updated with it.
+- **Implementation notes.** Optional. Add them only when the before/after pair leaves something out: a choice between approaches, a subtle point, or a follow-up you left for later. Leave out the whole heading when there is nothing to add. Most small fixes need none.
+- Add the other sections only when the repository requires them or they help the reviewer. For a bug fix, separate a regression test you wrote from a failure you saw on the base revision.
 
 ### Change type
 
-- Tick exactly one type with `[x]`
-- Delete unticked items
+- Tick exactly one box with `[x]`.
+- Delete the boxes you did not tick.
 
 ### Change outline
+
 - When a structural outline would help, read [references/show-me.md](references/show-me.md) and [references/change-outline.md](references/change-outline.md).
-- Make **Change outline** a compact structural view, not a file-by-file narrative. Include only useful schema/endpoint contracts, pseudocode, shallow file trees, component trees, and call/control/data-flow views. Prefer focused `diff` blocks for existing shapes and complete code blocks for mostly new shapes.
+- Keep the outline compact and structural. Do not write a file-by-file story. Include only what helps: schema or endpoint contracts, pseudocode, a shallow file tree, a component tree, or a call, control, or data flow. Use `diff` blocks for shapes that already exist and full code blocks for shapes that are mostly new.
 
 ### Test plan
 
-- List manual testing steps if applicable
-- Remove the numbered list if changes cannot be manually tested
-- Tick checkboxes for included test types
+- List manual steps when the change can be tried by hand.
+- Delete the numbered list when it cannot.
+- Tick the boxes for the kinds of tests the PR includes.
 
 ### Release notes
 
-- Write brief notes describing user-facing changes
-- Use imperative mood: "Add...", "Fix...", "Remove..."
-- Omit this section entirely for internal work (CI, tooling, tests, etc.) that has no user-facing impact
+- Write short notes on what users will notice.
+- Use the imperative: "Add...", "Fix...", "Remove...".
+- Leave the section out for internal work such as CI, tooling, or tests that users never see.
 
-## Concepts, examples, and FAQ (only when a reviewer genuinely needs them)
+## Concepts, examples, and FAQ
 
-Include these only when reviewers need vocabulary or usage context beyond the code. Place them before the standard sections unless the repository template specifies otherwise. Each row must explain something the code does not.
+Add these only when a reviewer needs shared vocabulary or usage context that the code does not give. Size alone is not a reason. Unless the repository template says otherwise, put them before the standard sections. Every row must say something the code does not.
 
-Pull from this menu, in roughly this order, using only what fits:
+Choose from this list, roughly in this order, and use only what fits:
 
-- **Concepts** — a table of the new terms/types the PR introduces, with `Term | Type | Meaning` columns. Use this when readers need a shared vocabulary to follow the rest of the description.
-- **Module augmentation** — short code blocks showing how consumers extend the new types, when the PR exposes augmentable interfaces.
-- **Editor API** / **Component props** — `Method | Description` and `Prop | Type | Description` tables for new public surface.
-- **Per-shape / per-feature breakdown** — tables showing what each affected shape/module returns or accepts under the new system.
-- **Example** — a realistic, copy-pastable code snippet showing how a default implementation uses the new system, plus a second snippet showing how a consumer would override it.
-- **FAQ** — anticipated "How do I…?" questions with short code answers. Cover the obvious customization paths a downstream user will reach for first.
-- **New examples** — bullet list of any new entries added under `apps/examples/src/examples/`, with a one-line description each, so reviewers know where to look for runnable demos.
+- **Concepts.** A table with `Term | Type | Meaning` columns for the new terms the PR introduces.
+- **Type extension.** Short code blocks showing how consumers extend new types, if the PR exposes interfaces meant to be extended.
+- **Public surface.** `Method | Description` and `Prop | Type | Description` tables for new public methods and props.
+- **Per-module breakdown.** A table of what each affected module returns or accepts under the new design.
+- **Example.** A realistic snippet that shows a default implementation using the new design, and a second that shows a consumer overriding it.
+- **FAQ.** The "How do I...?" questions a downstream user will ask first, each with a short code answer.
+- **New examples.** A list of any runnable examples the PR adds, each with one line on what it shows, so reviewers know where to look.
 
-## API changes section
+## API changes
 
-Include when changes affect Public Facing API:
+Add this section when the change touches the public API.
 
 ```md
 ### API changes
 
-- Added `Editor.newMethod()` for X
-- Breaking! Removed `Editor.oldMethod()`
-- Changed `Editor.method()` to accept optional `options` parameter
+- Added `client.newMethod()` for X
+- Breaking! Removed `client.oldMethod()`
+- Changed `client.method()` to take an optional `options` argument
 ```
 
 ## Code changes table
 
-Include a LOC table only when the user or repository template requests one. Otherwise a short scope sentence is enough.
+Include a lines-of-code table only when the user or the repository template asks for one. Otherwise one sentence on the scope is enough.
 
-Use non-overlapping categories from the actual repository, such as core code, tests, generated files, documentation/examples, apps, templates, and config/tooling. Count additions/deletions from the diff, omit empty rows, and explain binary or generated-file exclusions.
+Use categories that do not overlap and that match the repository, for instance core code, tests, generated files, documentation, apps, templates, and config. Count additions and deletions from the diff. Leave out empty rows. Say so when binary or generated files are excluded.
 
 ```md
 ### Code changes
 
-| Section         | LOC change |
-| --------------- | ---------- |
-| Core code       | +10 / -2   |
-| Tests           | +5 / -0    |
-| Automated files | +0 / -1    |
-| Documentation   | +2 / -0    |
-| Apps            | +3 / -1    |
-| Templates       | +0 / -0    |
-| Config/tooling  | +1 / -0    |
+| Area            | Lines changed |
+| --------------- | ------------- |
+| Source          | +42 / -7      |
+| Tests           | +18 / -0      |
+| Generated files | +0 / -3       |
+| Docs            | +6 / -1       |
+| Config and CI   | +2 / -2       |
 ```
 
 ## Related issues
 
-Search for and link relevant issues that this PR addresses.
+Look for issues that this PR addresses and link them.
 
 ## The comment sweep
 
-A pre-flight check on the diff, not the description: read the diff's added comments as carefully as its added code, and cut before opening the PR.
+This check runs on the diff, not on the description. Read the comments the diff adds as closely as the code it adds, and cut before you open the PR.
 
 ```bash
 git diff "$pr_base"...HEAD -U0 | rg -n '^\+\s*(//|/\*|\*)'
 ```
 
-Resolve `pr_base` from the PR or repository before running that command. Judge the added comments against the repository's documented comment rules, when present. For a description-only request, report code concerns without editing or committing code. One useful test:
+Set `pr_base` from the PR or the repository first. Judge each added comment against the repository's written comment rules, if it has any. When the request is only about the description, report code concerns and do not edit or commit code.
 
-> **A good comment names a failure mode, not a mechanism.**
+One test to apply:
 
-The mechanism is on screen already. What isn't is what goes wrong without it. A block that only describes what the code does is cuttable in full; a block that says "otherwise X" keeps that sentence and loses the paragraph explaining it twice.
+> **A comment earns its place by saying what breaks without it, not how the code works.**
 
-**Expect length, not category, to be the defect.** Most substantial comment blocks that need editing already name a real force — they are the right kind of comment at two or three times the necessary length. So the usual edit is a trim to the load-bearing lines, not a delete.
+Anyone can see the mechanism in the code. What they cannot see is what breaks without it. A comment that only says what the code does can go entirely. A comment that says "otherwise X" keeps that sentence and loses the paragraph that explains the same thing twice.
 
-Leave alone, or trim at most: diagrams, enumerated case lists where the list is the specification, provenance (an issue number, "we tried X and it did Y"), and anything carrying an invariant. In `packages/*`, doc comments on the `@public` surface are the API reference — hold them to the same "says something the code doesn't" bar, but they are a deliverable, not overhead.
+**Length is usually the flaw, not the kind of comment.** Most long comments that need work already name a real hazard. They are the right comment at two or three times the length. So the usual edit is to trim to the lines that matter, not to delete.
 
-## Human notes (preserve exactly)
+Leave these alone, or trim them lightly: diagrams, case lists where the list is the specification, provenance such as an issue number or "we tried X and got Y", and anything that states an invariant. Doc comments on a public API are the reference documentation. Hold them to the same bar of saying something the code does not, but treat them as a deliverable rather than overhead.
 
-The PR author often writes a personal note at the very top of the description, prefaced with a "person" emoji such as 🅯 or 👨 (or similar). This block is human-written and readers trust it as such.
+## Human notes (keep exactly)
 
-- When **updating** an existing PR description, if the body starts with a paragraph/section led by a person emoji, you MUST preserve it **byte-for-byte exactly** at the top — do not rewrite, reflow, reword, retitle, or "improve" it, even slightly.
-- If the human note is longer than a single paragraph, it will be delimited at the end by a `---` horizontal rule. Preserve everything from the person emoji through (and including) that `---` exactly.
-- If there is no `---`, the human note is just the leading paragraph led by the person emoji.
-- Make all your edits to the content **below** the human note (and below the `---` if present).
-- When **creating** a new PR, do not invent a human note — leave that for the author to add.
+An author may put a personal note at the top of the PR description. Readers trust that block because a person wrote it.
 
-## Important
+A human note is the author's own text at the very top of the body, set apart from the rest. The most reliable sign is a block that ends with a `---` rule. A paragraph the author labelled as a note also counts. If you cannot tell whether the opening text is a note, treat it as one, and ask the user if it matters.
 
-- Follow the user's and repository's attribution policy; do not add AI or co-author credit on your own
-- Never use title case for descriptions - use sentence case
-- Never put yourself as co-author of any commits
+- When you update an existing description that starts with a human note, keep that note byte for byte. Do not reword, reflow, retitle, or tidy it.
+- If the note ends with a `---` rule, the note includes everything up to and including that rule. Without a rule, the note is just the opening paragraph.
+- Make all your changes below the note, and below its rule if it has one.
+- When you create a new PR, do not write a human note. Leave that to the author.
+
+## Always
+
+- Follow the user's and the repository's attribution policy. Do not add AI or co-author credit on your own.
+- Write descriptions in sentence case, never title case.
+- Never list yourself as a co-author of a commit.

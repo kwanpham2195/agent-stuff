@@ -1,149 +1,81 @@
-# Effect services
+# Services and layers
 
-Apply [`modules-services-and-adapters.md`](modules-services-and-adapters.md) for ownership and Adapter decisions.
+In Effect a service is a capability that appears in the type of every program using it, with the implementation supplied when the app is assembled. Ownership and adapter placement are covered in [module and adapter guide](modules-services-and-adapters.md).
 
-Treat a service as an **authority seam**: a cohesive capability whose requirements propagate through Effect context. The application capability module owns its interface, tag, and expected errors. Each concrete implementation owner keeps its construction and applicable production or reusable test Layers with that implementation.
+## Service or plain value?
 
-## Service test
+It earns a service if it reaches outside the process, manages a resource or lifecycle, depends on time, randomness, or config, or genuinely has different production and test implementations. First check whether Effect already supplies it (`Clock`, `Random`, `FileSystem`, `HttpClient`).
 
-A real service owns at least one meaningful capability:
+Plain functions or values are better for request data, calculations, parsers, per-call options, framework objects confined to an adapter, and thin forwarding wrappers. "I want to substitute it in a test" alone does not justify a service. Record which you chose and why.
 
-- authority over persistence, credentials, external I/O, runtime resources, configuration, time, randomness, or lifecycle;
-- cohesive effect sequencing or policy reused across entrypoints;
-- state or behavior with real production and test/runtime variation.
+## Test layers
 
-Prefer an existing Effect service such as `Clock`, `Crypto`, `Random`, `Config`, `HttpClient`, `FileSystem`, or `Path` before defining an application service.
-
-Keep these as values or pure modules:
-
-- parsed domain inputs and per-call request data;
-- deterministic calculations, parsers, and constructors;
-- options that select policy for one call;
-- framework values confined to their Adapter;
-- wrappers that only rename or forward another service.
-
-A service seam represents real ownership or variability in production. When injection is the only need, keep the injected data as a value or local fixture. Record the production evidence for the service-or-value decision and the rejected alternative.
-
-## Authority and requirements
-
-The application module identified by [`modules-services-and-adapters.md`](modules-services-and-adapters.md) owns the capability's interface and tag. A technology Adapter owns its concrete `make` and Layer only after translation, mechanics, reuse, or real implementation variation earns that seam. The composition root selects top-level concrete Layers; a service module assembles only dependency implementations it truthfully owns. Reusable policy remains in its owning application service.
-
-Yield stable runtime capabilities and implementation dependencies while building the Layer and close over them in service methods. Yield request-, fiber-, or operation-scoped context inside the method that uses it. Let requirements propagate until the module that truthfully chooses an implementation provides them.
-
-Authorization evidence, scoped handles, and other operation-specific capability values remain explicit inputs when they are part of the request or domain contract. Passing an external library's constructor options remains correct after the owning Adapter has yielded the relevant runtime capability. React props, request values, domain inputs, and framework constructors remain explicit values rather than Effect dependencies.
-
-## Module shape
-
-Follow the project's established equivalent of this shape:
-
-```ts
-export interface Interface {
-  readonly operation: (input: Input) => Effect.Effect<Output, OperationError>
-}
-
-export class Service extends Context.Service<Service, Interface>()(
-  "@app/Capability",
-) {}
-
-export const make: Effect.Effect<
-  Service["Service"],
-  never,
-  Dependency.Service
-> = Effect.gen(function* () {
-  const dependency = yield* Dependency.Service
-
-  const operation = Effect.fn("Capability.operation")(function* (input: Input) {
-    return yield* dependency.operation(input)
-  })
-
-  return Service.of({ operation })
-})
-
-export const layerWithoutDependencies = Layer.effect(Service, make)
-
-export const layer = layerWithoutDependencies.pipe(
-  Layer.provide([Dependency.layer]),
-)
-```
-
-`Interface`, `Service`, `make`, `layerWithoutDependencies`, and `layer` are canonical role names within an Effect capability module. The owning module namespace and service tag identify the capability. `layerWithoutDependencies` preserves requirements for composition. `layer` is the ready production assembly and provides the concrete dependency Layers chosen by this module.
-
-Choose the Layer constructor that matches acquisition: `Layer.succeed` for an existing value, `Layer.sync` for lazy synchronous construction, and `Layer.effect` for effectful acquisition. Use `Layer.effectContext` when one acquisition intentionally supplies several tags, especially a production service and its test-control service. Use `Layer.unwrap` when configuration or runtime discovery builds the Layer. Use `Layer.fresh` or `Effect.provide(layer, { local: true })` only when an operation or test requires isolated acquisition. Reserve `Context.Reference` for ambient runtime values with a safe, truthful default.
-
-Keep the interface cohesive and domain-shaped. Inject dependencies as yielded service objects rather than callback functions; a function capability fits only when higher-order behavior is itself the capability.
+Tests should use the production interface. Provide an in-memory implementation that honors the observable contract, or a real local substitute when persistence, transactions, serialization, or protocols matter. A narrow fake used by one test can stay in that test. Name reusable fakes by behavior (`InMemoryStore`, `RecordingNotifier`). More in [Effect testing notes](effect-testing.md).
 
 ## Module surface
 
-One valid module surface gives the ES module one canonical namespace while keeping file-local role names:
+Expose one namespace per module and keep schemas, codecs, and internals private. If the toolchain permits it, `export * as Notifier from "./notifier.js"` gives uniform access; otherwise use plain named exports.
+
+## Naming operations
+
+Wrap public and significant methods in `Effect.fn("Module.operation")` for spans and clean stack traces; use `Effect.fnUntraced` for small internal helpers. Concerns that need both the arguments and the finished effect (error mapping, annotations, timeouts) can be passed as trailing functions:
 
 ```ts
-export interface Interface {
-  readonly getUserById: (id: UserId) => Effect.Effect<User, NotFound | PersistenceError>
-}
-
-export class Service extends Context.Service<Service, Interface>()(
-  "@app/UserStore",
-) {}
-
-export * as UserStore from "./user-store.js"
-```
-
-Consumers import the owning leaf directly and yield `UserStore.Service`. A folder or package entrypoint may relay the leaf's established identity with `export { UserStore } from "./user-store.js"`. Use this self-export style only where the runtime and toolchain support it; otherwise use ordinary named exports or a separate public entrypoint. Keep schemas, row codecs, helpers, and implementation details private.
-
-## Runtime wiring
-
-- Use `Layer.provide` when the current module truthfully chooses and hides an implementation dependency.
-- Use `Layer.provideMerge` only when downstream consumers should still receive that dependency.
-- Use `Layer.mergeAll` for independent exposed Layers.
-- Keep runtime Layer values flat, named, and topologically ordered.
-- Provide dependencies at their owning boundaries so application authority and lifecycle requirements remain visible.
-
-A Layer that owns a stream, listener, worker, subscription, or long-lived fiber forks it into the Layer scope so acquisition can complete. Read [`effect-streams.md`](effect-streams.md) for the lifecycle pattern.
-
-## Named operation boundaries
-
-Use `Effect.fn("Capability.operation")` for public and non-trivial internal service methods. Reserve `Effect.fnUntraced` for internal helpers whose stack-frame and span metadata are intentionally unnecessary. Keep the generator focused on the operation and use one or two whole-function transforms for concerns that need the complete effect and original arguments, such as error classification, logging annotations, spans, bounded retry, timeout, cleanup, or result mapping. Each transform receives `(effect, ...originalArgs)`:
-
-```ts
-const readAttachment = Effect.fn("Attachment.read")(
-  function* (ref: AttachmentRef) {
-    return yield* client.read(ref)
+const read = Effect.fn("Docs.read")(
+  function* (id: DocId) {
+    return yield* store.get(id);
   },
-  (effect, ref) =>
-    effect.pipe(
-      attachmentError("Attachment.read", { attachmentId: ref.id }),
-    ),
-)
+  (effect, id) => effect.pipe(Effect.mapError(toDocsError("read", id))),
+);
 ```
 
-For operation-labelled boundary errors, a shared curried mapper earns its place when callers share the complete error meaning and it retains exact error/requirement types. Apply [boundary translation](errors.md#boundary-translation) before choosing it; use explicit tagged cases when failures need distinct policies:
+Share an error-mapping helper only when many operations mean the same thing by it; otherwise map errors explicitly ([error guide](errors.md#boundary-translation)).
+
+## Choosing layer constructors
+
+| Acquisition | Constructor |
+| --- | --- |
+| Value already in hand | `Layer.succeed` |
+| Cheap synchronous build | `Layer.sync` |
+| Effectful build | `Layer.effect` |
+| Needs cleanup | `Layer.scoped` |
+| Config picks the layer | `Layer.unwrapEffect` |
+
+`Layer.provide` hides a dependency your module owns; `Layer.provideMerge` also forwards it; `Layer.mergeAll` joins independent layers. Layers are shared by identity, so name them as constants and compose them flat at the entrypoint. `Layer.fresh` forces separate instances and should be rare. Anything that starts a listener, stream, or worker should fork it into the layer's scope ([stream notes](effect-streams.md)).
+
+## A typical module
 
 ```ts
-const persistenceError = operationError(PersistenceError.make)
+export class Notifier extends Context.Tag("app/Notifier")<
+  Notifier,
+  {
+    readonly notify: (
+      user: UserId,
+      text: string,
+    ) => Effect.Effect<void, DeliveryFailed>;
+  }
+>() {}
 
-const row = yield* query.pipe(
-  persistenceError("UserStore.findById"),
-)
+export const NotifierLive = Layer.effect(
+  Notifier,
+  Effect.gen(function* () {
+    const transport = yield* Transport;
+    const notify = Effect.fn("Notifier.notify")(function* (user: UserId, text: string) {
+      yield* transport.deliver({ user, body: text });
+    });
+    return Notifier.of({ notify });
+  }),
+);
 ```
 
-Name an earned helper for the error it creates. Pair structured error fields with `Effect.fn` boundaries and spans for observability. Keep a direct pipeable transform direct; an `(effect) => effect.pipe(...)` wrapper is useful only when it combines policies or needs original arguments.
+Some projects use `Effect.Service` to bundle tag and default layer. Follow what exists.
 
-## Test Layers
+- Interface, tag, and expected errors live in the module that owns the capability.
+- Yield dependencies once, while building the layer; yield per-request context in the method that needs it.
+- Leave unmet requirements in the type until the module that actually decides the implementation supplies them.
+- Operation-specific values (credentials, scoped handles) stay as parameters.
+- Inject service objects, not individual callbacks; keep interfaces cohesive and domain-shaped.
 
-When tests or reusable test implementations change, read [`effect-testing.md`](effect-testing.md) for static implementations, test-control services, shared backing objects, and focused local mocks.
+## Quick review
 
-Tests cross the same service interface as production callers. Use `layerMemory` for a faithful in-memory implementation of the observable contract. Prefer a real local substitute when persistence, transactions, serialization, or protocol behavior matters. Keep a narrow one-off fake in its test when promoting it would create production surface solely for that test.
-
-Name reusable implementations for their observable behavior, such as `InMemoryCache`, `RecordingEmailSender`, or `TestClock`.
-
-## Completion check
-
-Complete when:
-
-- the service-or-value decision cites production ownership or variability and the rejected alternative;
-- every applicable interface, tag, construction effect, expected error, method, production Layer, and reusable test implementation has exactly one owner;
-- stable runtime capabilities and implementation dependencies are captured during Layer construction, operation-specific capability values remain explicit inputs, scoped context is yielded where used, and requirements remain visible until the module that selects an implementation provides them;
-- each Layer constructor matches acquisition, each provided dependency is an implementation the provider truthfully owns, and long-lived work is scoped;
-- public and non-trivial service operations have named boundaries, with whole-operation concerns applied at those boundaries;
-- the module surface exposes only service API intended for callers, follows local naming conventions, and preserves complete error/requirement channels through extracted helpers; and
-- the test strategy exercises the production interface at the fidelity required by the observable contract.
+Is the service-or-value decision justified? Does every piece have a single owner? Are dependencies acquired at build time and request context where it is used? Do constructors fit the acquisition? Is background work scoped? Are helpers keeping full error and requirement types? Do tests hit the production interface?

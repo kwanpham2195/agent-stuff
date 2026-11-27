@@ -5,136 +5,129 @@ description: Reference standards for writing and maintaining local or remote iss
 
 # Writing and maintaining issues
 
-Before drafting or materially revising the issue's human-facing prose, read and apply [Writing reviewable artifacts](../references/writing.md).
+Before you draft or substantially revise an issue's prose, read and apply [Writing reviewable artifacts](../references/writing.md).
 
-Read and apply [unslop](../unslop/SKILL.md) whenever writing or revising an issue title or body. Before presenting a draft or saving an issue, scan, rewrite, and self-audit the prose you authored. Preserve verbatim user descriptions and quoted evidence.
+Also apply [unslop](../unslop/SKILL.md) to every issue title and body you write or revise. Before you show a draft or save the issue, scan your own text, rewrite what needs it, and audit the result. Leave the user's own words and any quoted evidence exactly as given.
 
-These content standards apply to local and remote issues. Destination-specific APIs, types, labels, milestones, and automation apply only when that remote tracker supports them. Local mode uses the metadata and lifecycle in the [issue skill](../issue/SKILL.md) and never requires GitHub, `gh`, or network access.
+These standards cover local and remote issues alike. Types, labels, milestones, and automation depend on the tracker, so use them only where the tracker offers them. Local mode follows the metadata and lifecycle in the [issue skill](../issue/SKILL.md). It never needs GitHub, `gh`, or a network connection.
 
-## Title standards
+## Titles
 
-- **Sentence case** - Capitalize only the first word and proper nouns
-- **No type prefixes** - Use the destination's type metadata when supported; do not prefix titles with `Bug:`, `Feature:`, `[Bug]`, etc.
-- **Imperative mood for enhancements** - "Add padding option" not "Adding padding option"
-- **Descriptive for bugs** - Describe the symptom: "Arrow bindings break with rotated shapes"
-- **Specific** - Readable without opening the issue body
+A good title reads on its own, in a list, without the body.
 
-### Good titles
+- Use sentence case. Capitalize the first word and proper nouns only.
+- Leave out type prefixes such as `Bug:`, `Feature:`, or `[Bug]`. Put the type in the tracker's type field when it has one.
+- For a request to change something, write an imperative: "Add a timeout option", not "Adding a timeout option".
+- For a defect, describe what the user sees: "Export fails on filenames with spaces".
+- Be specific enough that the title alone tells the reader what the issue is about.
 
-- `Arrow bindings break with rotated shapes`
-- `Add padding option to zoomToFit method`
-- `Pinch zoom resets selection on Safari`
+Good titles:
 
-### Bad titles
+- `Export fails on filenames with spaces`
+- `Add a timeout option to the sync command`
+- `Dark theme resets after restarting on Windows`
 
-- `Bug: arrow bug` (prefix, vague)
-- `[Feature] Add new feature` (prefix, vague)
-- `Not working` (vague)
+Weak titles:
 
-### Title cleanup transformations
+- `Bug: export bug` (has a prefix, says nothing)
+- `[Feature] Add new feature` (has a prefix, says nothing)
+- `Not working` (says nothing)
 
-1. Remove prefixes: `Bug: X` → `X`
-2. Fix capitalization: `Add Padding Option` → `Add padding option`
-3. Use imperative: `Adding feature X` → `Add feature X`
-4. Be specific: `Problem` → `[Describe the actual problem]`
-5. Translate non-English titles to English
+### Cleaning up a title
+
+1. Strip any prefix: `Bug: X` becomes `X`.
+2. Fix the case: `Add Timeout Option` becomes `Add timeout option`.
+3. Switch to the imperative: `Adding feature X` becomes `Add feature X`.
+4. Replace a vague title with the actual problem.
+5. Translate a non-English title into English.
 
 ## GitHub issue types
 
-Set via the GitHub GraphQL API after creating the issue (the `--type` flag is not reliably supported):
+Set the type through the GitHub GraphQL API after you create the issue. The `--type` flag of the CLI is unreliable.
 
-| Type      | Use for                             |
-| --------- | ----------------------------------- |
-| `Bug`     | Something isn't working as expected |
-| `Feature` | New capability or improvement       |
-| `Example` | Request for a new SDK example       |
-| `Task`    | Internal task or chore              |
+| Type      | Use for                                  |
+| --------- | ---------------------------------------- |
+| `Bug`     | Behavior that differs from what is expected |
+| `Feature` | A new capability or an improvement       |
+| `Task`    | Internal work or a chore                 |
 
 ## GitHub labels
 
-Use sparingly (1-2 per issue) for metadata, not categorization.
+Labels carry metadata, not categories. Give an issue one or two.
 
 ### Common labels
 
-| Label              | Use for                          |
-| ------------------ | -------------------------------- |
-| `good first issue` | Well-scoped issues for newcomers |
-| `More Info Needed` | Requires additional information  |
-| `sdk`              | Affects the SDK                  |
-| `a11y`             | Accessibility                    |
-| `performance`      | Performance improvement          |
-| `api`              | API change                       |
+| Label              | Use for                                    |
+| ------------------ | ------------------------------------------ |
+| `good first issue` | A well-scoped issue a newcomer can take    |
+| `More Info Needed` | The report lacks details needed to act     |
+| `accessibility`    | Affects users of assistive technology      |
+| `performance`      | Speed or resource use                      |
+| `api`              | Changes a public interface                 |
 
-### Recurring-work labels
+### Labels for recurring work
 
-Use `recurring` for a standing issue that remains open across repeated runs. Add at most one work label beside it:
+Mark a standing issue that stays open across repeated runs with `recurring`. Pair it with at most one of the labels below.
 
-| Label          | Use for                                                |
-| -------------- | ------------------------------------------------------ |
-| `recurring`    | Standing work repeated on a cadence or for each release |
-| `maintenance`  | Dependency, tooling, performance, or code-health work   |
-| `verification` | Repeated product or release verification                |
-| `release`      | Work tied to preparing or validating a release          |
-| `blocked`      | Work cannot continue until a named condition changes    |
+| Label          | Use for                                                   |
+| -------------- | --------------------------------------------------------- |
+| `recurring`    | Work that repeats on a schedule or once per release       |
+| `maintenance`  | Dependencies, tooling, performance, or code health        |
+| `verification` | Repeated checks of the product or of a release            |
+| `release`      | Preparing or validating a release                         |
+| `blocked`      | Cannot proceed until a named condition changes            |
 
-Keep standing recurring issues open. Record each completed run in a dated comment with its evidence, follow-ups, and next due date. Apply `blocked` only while a concrete condition prevents the next run, and remove it when that condition clears.
+Leave a standing recurring issue open. After each run, add a dated comment with the evidence, any follow-ups, and when the next run is due. Add `blocked` only while a specific condition stops the next run, and remove it once the condition clears.
 
-### Automation labels (do not apply manually)
+### Labels that automation owns
 
-`keep`, `stale`, `update-snapshots`, `publish-packages`, `major`, `minor`, `skip-release`, deploy triggers
+Do not apply these by hand: `keep`, `stale`, snapshot-update or package-publish triggers, version-bump labels, labels that skip a release, and deploy triggers.
 
-## Issue body standards
+## Issue bodies
 
 ### Bug reports
 
-1. Clear description of what's wrong
-2. Steps to reproduce
-3. Expected vs actual behavior
-4. Environment details (browser, OS, version) when relevant
-5. Screenshots/recordings when applicable
+1. What is wrong, stated plainly.
+2. Steps to reproduce.
+3. What you expected and what happened instead.
+4. Environment (browser, OS, version) when it matters.
+5. Screenshots or recordings if they help.
 
 ### Feature requests
 
-1. Problem statement - What problem does this solve?
-2. Proposed solution - How should it work?
-3. Alternatives considered
-4. Use cases
+1. The problem: what does this solve, and for whom?
+2. The proposal: how should it work?
+3. Alternatives you considered.
+4. Use cases.
 
-### Example requests
+### Request-intake issues
 
-1. What API/pattern to demonstrate
-2. Why it's useful
-3. Suggested approach
-4. Which example category it belongs to
+A request-intake issue records what the user wants. Under the user's verbatim description it holds a short readback, any open questions, and a statement of readiness.
 
-### Request-intake issues (problem readback and open questions)
+- **Readback.** One paragraph, with no heading, giving your reading of the problem, the behavior the user expects, and the scope. Write it so the user can correct it quickly. Describe the product, not the code. Leave out code blocks, file paths, function names, line numbers, and implementation analysis. Do not propose a fix unless the user asks for one.
+- **Open questions.** A numbered list of the gaps in intent or context that are still worth asking about. Write each answer under its question when the user replies, and revise the readback after every round. Begin a question with `Critical:` only if nobody can work on the issue until it is answered. Most issues have no such question. Mark a question the user chose not to answer with `_Deferred by user; not blocking implementation._`.
+- **Readiness.** Say whether the issue has enough intent to start, or name the decision that is missing. Do not put a percentage on it, and do not invent questions to fill space. If the request is already clear, leave out the open questions.
 
-Request-intake issues preserve the user's intent with an unheaded readback beneath the verbatim description, any unresolved questions, and a plain readiness statement:
+When the issue is done, keep the final readback and the readiness statement in it. Keep the answered questions too, marked resolved in place, because they record how the intent was settled. A clear request needs no question round.
 
-- **Problem readback** - A brief, unheaded paragraph that states the agent's interpretation of the problem, expected behavior, and scope. It should be easy for the user to correct. Keep it product-facing: no code blocks, no long implementation analysis, no file paths, no function names, no line numbers, and no fix recipes unless the user explicitly asks for them.
-- **Open questions** - A numbered list of the specific gaps in intent or context still worth asking the user about. Answers are written beneath each question as the user replies, and the readback is revised each round. A question prefixed with `Critical:` is genuinely blocking — the issue cannot be worked on until it is answered. Most issues have none. Non-critical questions the user chooses not to answer are marked `_Deferred by user; not blocking implementation._`.
-- **Readiness line** - State whether the issue has enough intent to proceed or name the missing decision. Do not invent confidence percentages or ask questions to fill the template. Omit open questions when the supplied request is sufficient.
-
-Keep the final readback and readiness statement in the issue. Preserve actual answered questions as the intent record, marking them resolved in place. Do not require a question round before finishing a clear issue request.
-
-## GitHub triage workflow
+## Triaging on GitHub
 
 ### New issues
 
-1. Verify sufficient information to act on
-2. Set appropriate issue type
-3. Clean up title if needed
-4. Add `More Info Needed` label and comment if details missing
-5. Add `good first issue` if appropriate
+1. Check that the report has enough detail to act on.
+2. Set the issue type.
+3. Fix the title if it needs it.
+4. If details are missing, comment and add `More Info Needed`.
+5. Add `good first issue` if the work suits a newcomer.
 
 ### Stale issues
 
-1. Review if still relevant
-2. Close if no longer applicable
-3. Add `keep` label if should remain open
-4. Request updates if waiting on information
+1. Decide whether the issue still matters.
+2. Close it if it no longer applies.
+3. Add `keep` if it should stay open.
+4. If you are waiting on the reporter, ask for an update.
 
-## Important
+## Always
 
-- Never include AI attribution unless the issue directly relates to AI tooling
-- Never use title case for descriptions - use sentence case
+- Do not credit AI tools unless the issue is about AI tooling.
+- Write sentence case in descriptions, never title case.

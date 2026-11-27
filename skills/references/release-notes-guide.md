@@ -1,277 +1,281 @@
-# Release notes style guide
+# Writing release notes
 
-This document defines general rules and conventions for software release notes.
+Rules for writing release notes for a versioned software project: what to cover, how to sort changes, and how to lay the notes out.
 
-**Prerequisite**: Apply [Writing reviewable artifacts](writing.md) for shared writing standards. This guide adds release-notes-specific patterns.
+**Prerequisite**: Read [Writing reviewable artifacts](writing.md) first. It sets the shared writing standards. This guide adds what is specific to release notes.
 
-## Editorial guidance
+## Editorial choices
 
-### What to include
+### What to cover
 
-- Breaking changes that require user action
-- New features that solve common pain points
-- API additions that unlock new capabilities
-- Changes that affect how users integrate the product
-- Bug fixes for user-reported issues
+Write for someone deciding whether to upgrade. Include a change when it affects that decision or their code:
 
-### What to omit
+- Breaking changes that need action from the user.
+- New features that remove a common pain point.
+- New public APIs that make something possible that was not before.
+- Changes to how people integrate or deploy the product.
+- Fixes for bugs that users reported.
 
-- Internal performance optimizations (unless user-visible)
-- Fixes for bugs introduced in the same release cycle
-- Implementation details that don't affect public API
-- Pure code quality improvements
+### What to leave out
 
-### When to create a featured section
+- Performance work that nobody can observe.
+- Fixes for bugs that were introduced and fixed within the same release cycle.
+- Internal details that do not touch the public API.
+- Cleanups that change code quality but not behavior.
 
-Promote changes to the "What's new" section when:
+### When a change gets its own featured section
 
-- It's a breaking change requiring a migration guide
-- It introduces a major new capability
-- It is an interesting or significant new feature, possibly the result of multiple PRs
-- Users need detailed guidance (migration guides, platform tables)
+Give a change a subsection under "What's new" when any of these is true:
 
-Featured sections should include:
+- It breaks existing code and needs a migration guide.
+- It adds a major capability.
+- It is a notable feature, even if several pull requests built it.
+- Readers need detailed guidance, such as upgrade steps or a compatibility table.
 
-- Clear description of what changed and why it matters
-- Code examples where helpful
-- Migration guides in collapsible `<details>` blocks for breaking changes
-- Links to relevant documentation
+A featured section should contain:
 
-## PR categorization
+- What changed and why a reader should care.
+- Code samples where they help.
+- For breaking changes, a migration guide inside a collapsible `<details>` block.
+- Links to the relevant documentation.
 
-| Category     | Labels                       | Indicators                       |
-| ------------ | ---------------------------- | -------------------------------- |
-| API changes  | `api`, `feature`, `major`    | Adds/removes/modifies public API |
-| Improvements | `improvement`, `enhancement` | Enhances existing functionality  |
-| Bug fixes    | `bugfix`, `bug`,             | Fixes issues                     |
+## Sorting pull requests
 
-Look for release-note and API-change sections in change descriptions. Search for "breaking" to identify breaking changes. Search for "deprecat" to identify deprecated APIs, and follow the project's established markers for each.
+| Category     | Typical labels                  | Signals                                      |
+| ------------ | ------------------------------- | -------------------------------------------- |
+| API changes  | `api`, `feature`, `major`       | Adds, removes, or alters something public    |
+| Improvements | `improvement`, `enhancement`    | Makes an existing capability better          |
+| Bug fixes    | `bugfix`, `bug`                 | Corrects wrong behavior                      |
 
-### PRs to skip
+Check each change description for a release-note section or an API-change section. Search for "breaking" to find breaking changes and for "deprecat" to find deprecations. If the project has its own markers for either, use them.
 
-Skip changes with labels or categories that the project marks as non-release work. Common examples include:
+### Changes to skip
 
-- internal maintenance
-- documentation-only changes
-- test-only changes
-- changes explicitly marked to skip release notes
+Skip any change carrying a label that the project treats as non-release work. Typical cases:
+
+- Internal maintenance
+- Docs-only changes
+- Test-only changes
+- Changes marked to be left out of release notes
 
 Also skip:
 
-- Reverts, unless they fix something user-facing
-- Fixes for bugs introduced in the same release cycle, unless the fix is user-facing and should be called out
+- Reverts, unless the revert fixes something users can see.
+- Fixes for bugs from the same release cycle, unless users can see the fix and it deserves a mention.
 
-When a change is reverted, also remove its original release-note entry if it is still present in the unreleased notes.
+If a change is reverted and its entry is still in the unreleased notes, delete that entry.
 
-Credit community contributors with:
+Credit outside contributors like this:
 
 ```markdown
-(contributed by [@username](https://github.com/username))
+Thanks to [@username](https://github.com/username) for the contribution.
 ```
 
-## General notes
+## Ground rules
 
-- Do not include AI attribution
-- Write as if the release has already happened
-- Omit empty sections
-- Keep the release listing or changelog index in sync with the project's release process.
+- Never mention AI authorship.
+- Write in the past tense, as if the release has shipped.
+- Drop any section that has no entries.
+- Keep the release index or changelog listing in step with the project's release process.
 
 ---
 
-## Formatting conventions
+## Layout
 
 ### Section order
 
-Use these sections in order (omit empty sections):
+Use these sections, in this order, and leave out the empty ones:
 
-1. **Introduction paragraph** - 1-2 sentence summary of the release highlights
-2. **What's new** (`## What's new`) - Featured sections (H3s) for major features and breaking changes
-3. **API changes** (`## API changes`) - New methods, properties, options, deprecations, and breaking changes
-4. **Improvements** (`## Improvements`) - Enhancements to existing functionality
-5. **Bug fixes** (`## Bug fixes`) - Fixed issues
-6. **Patch releases** (`## Patch releases`) - Separated by `---`, contains bulleted changes for each patch version
+1. **Intro paragraph.** One or two sentences on the highlights.
+2. **What's new** (`## What's new`). One H3 per headline feature or breaking change.
+3. **API changes** (`## API changes`). New or changed methods, properties, and options, plus deprecations and breaking changes.
+4. **Improvements** (`## Improvements`). Upgrades to existing behavior.
+5. **Bug fixes** (`## Bug fixes`). Corrected problems.
+6. **Patch releases** (`## Patch releases`). Follows a `---` rule. One bulleted list per patch version.
 
-### Introduction paragraph
+### Intro paragraph
 
-Start each release with a 1-2 sentence summary highlighting the most significant changes. Lead with concrete features, then mention infrastructure and performance:
+Summarize the release in one or two sentences. Name the user-facing features first, then mention infrastructure and performance work.
 
 ```markdown
-This release introduces several significant changes: a new pattern for defining custom shape/binding typings, pluggable storage for `TLSocketRoom` with a new SQLite option, reactive `editor.inputs`, and optimized draw shape encoding. It also adds various other API improvements, performance optimizations, and bug fixes.
+This release adds a plugin system for custom exporters, a new SQLite option for the job queue, and a rewritten config loader. It also includes smaller API improvements, speedups, and bug fixes.
 ```
 
 ### Entry format
 
-Start entries with a verb: "Add", "Fix", "Improve", "Remove". Keep descriptions concise but informative.
+Begin each entry with a verb such as "Add", "Fix", "Improve", or "Remove". Be brief, but say enough that a reader knows what changed. End with the pull request link.
 
 ```markdown
-- Add `Editor.newMethod()` for doing something useful. ([#7123](https://github.com/tldraw/tldraw/pull/7123))
+- Add `client.retry()` to resend a failed request. ([#123](https://github.com/example/app/pull/123))
 ```
 
-For multiple related PRs:
+If several pull requests contributed:
 
 ```markdown
-- Improve arrow snapping performance. ([#7145](https://github.com/tldraw/tldraw/pull/7145), [#7150](https://github.com/tldraw/tldraw/pull/7150))
+- Speed up config loading. ([#131](https://github.com/example/app/pull/131), [#135](https://github.com/example/app/pull/135))
 ```
 
-With code examples:
+If a sample helps:
 
 ````markdown
-- Add `localStorageAtom` to `@tldraw/state`. ([#6876](https://github.com/tldraw/tldraw/pull/6876))
+- Add `persistedValue()` for values that survive a restart. ([#140](https://github.com/example/app/pull/140))
 
-  ```tsx
-  const myAtom = localStorageAtom('my-key', defaultValue)
+  ```ts
+  const theme = persistedValue('theme', 'light')
   ```
 ````
 
-### Breaking changes
+### Breaking changes and deprecations
 
-Mark breaking API changes with a 💥 prefix. Mark deprecations (APIs that still work but will be removed in a future release) with a 🔜 prefix. Place breaking changes at the top of the API changes section, followed by deprecations:
+Prefix a breaking change with 💥. Prefix a deprecation with 🔜. A deprecated API still works but will go away later. In "API changes", list breaking changes first, then deprecations, then everything else:
 
 ```markdown
 ## API changes
 
-- 💥 **`ShapeUtil.canEdit()`** signature changed to accept a `TLEditStartInfo` parameter. ([#7361](https://github.com/tldraw/tldraw/pull/7361))
-- 💥 **`oldMethod`** renamed to `newMethod`. ([#7400](https://github.com/tldraw/tldraw/pull/7400))
-- 🔜 **`Editor.legacyMethod()`** is deprecated. Use `Editor.newMethod()` instead. ([#7450](https://github.com/tldraw/tldraw/pull/7450))
-- Add `Editor.newMethod()` for doing something useful. ([#7123](https://github.com/tldraw/tldraw/pull/7123))
+- 💥 **`Plugin.load()`** now takes an options object instead of a path. ([#150](https://github.com/example/app/pull/150))
+- 💥 **`oldName`** is now `newName`. ([#152](https://github.com/example/app/pull/152))
+- 🔜 **`client.send()`** is deprecated. Use `client.request()` instead. ([#155](https://github.com/example/app/pull/155))
+- Add `client.request()` for sending typed requests. ([#120](https://github.com/example/app/pull/120))
 ```
 
-### What's new section
+### The What's new section
 
-The `## What's new` section contains featured subsections (H3s) for headline features and major breaking changes.
+Each H3 under `## What's new` covers a headline feature or a major breaking change.
 
-**Basic structure:**
+Simple form:
 
 ```markdown
 ## What's new
 
-### Feature name ([#7320](https://github.com/tldraw/tldraw/pull/7320))
+### Feature name ([#160](https://github.com/example/app/pull/160))
 
-Brief description of what this feature does and why it matters.
+One short paragraph on what the feature does and why it matters.
 ```
 
-**Multiple related PRs:**
+With several pull requests:
 
 ```markdown
-### Pluggable storage for TLSocketRoom ([#7320](https://github.com/tldraw/tldraw/pull/7320), [#7123](https://github.com/tldraw/tldraw/pull/7123))
+### Pluggable job queue ([#160](https://github.com/example/app/pull/160), [#162](https://github.com/example/app/pull/162))
 ```
 
-**Deprecation featured sections** - add 🔜 to the heading:
+A deprecation gets 🔜 in its heading:
 
 ```markdown
-### 🔜 Deprecation of old API ([#0000](https://github.com/tldraw/tldraw/pull/0000))
+### 🔜 Old config format is deprecated ([#170](https://github.com/example/app/pull/170))
 
-Brief description of what is deprecated and what to use instead.
+What is deprecated and what to use instead.
 ```
 
-**Breaking change featured sections** - add 💥 to the heading and include a migration guide:
+A breaking change gets 💥 in its heading plus a migration guide:
 
-```markdown
-### 💥 Feature name ([#0000](https://github.com/tldraw/tldraw/pull/0000))
+````markdown
+### 💥 Feature name ([#180](https://github.com/example/app/pull/180))
 
-Brief description of what this feature does and why it matters.
+What the change does and why it matters.
 
 <details>
-<summary>Migration guide</summary>
+<summary>How to migrate</summary>
 
 Before:
-\`\`\`ts
+
+```ts
 // old code
-\`\`\`
+```
 
 After:
-\`\`\`ts
+
+```ts
 // new code
-\`\`\`
-
-</details>
 ```
 
-**Collapsible explanations** - use for supplementary context:
+</details>
+````
+
+Use a collapsible block for background that not every reader needs:
 
 ```markdown
 <details>
-<summary>Why SQLite?</summary>
+<summary>Why use a database file?</summary>
 
-- **Automatic persistence**: Data survives process restarts
-- **Lower memory usage**: No need to keep entire documents in memory
+- **Durable by default**: jobs survive a restart.
+- **Smaller footprint**: the queue does not have to sit in memory.
 
 </details>
 ```
 
-**Platform support tables:**
+Use one for compatibility tables:
 
 ```markdown
 <details>
-<summary>Platform support</summary>
+<summary>Supported platforms</summary>
 
-| Platform                   | Wrapper                          | Library                           |
-| -------------------------- | -------------------------------- | --------------------------------- |
-| Cloudflare Durable Objects | `DurableObjectSqliteSyncWrapper` | Built-in `ctx.storage`            |
-| Node.js/Deno               | `NodeSqliteWrapper`              | `better-sqlite3` or `node:sqlite` |
+| Platform | Adapter         | Package          |
+| -------- | --------------- | ---------------- |
+| Node.js  | `NodeAdapter`   | `better-sqlite3` |
+| Bun      | `BunAdapter`    | built in         |
 
 </details>
 ```
 
-### GitHub release link
+### Release link
 
-Add a link to the project's release page or changelog at the end of each release section:
+Close each release section with a link to the project's release page or changelog.
 
-- **For grouped releases**: Place after the last content section and before the next `---` separator
-- **For patch releases**: Place after the bulleted list of changes
+- For a grouped release, put it after the last content section and before the next `---`.
+- For a patch release, put it after that patch's bullet list.
 
 ```markdown
-[View release on GitHub](https://github.com/tldraw/tldraw/releases/tag/v4.3.0)
+[View release on GitHub](https://github.com/example/app/releases/tag/v2.4.0)
 ```
 
 ### Patch releases
 
-Add patch releases at the bottom of the grouped release file, after a horizontal rule. List them in chronological order:
+Put patch releases at the bottom of the grouped release file, under a horizontal rule, oldest first:
 
 ```markdown
 ---
 
 ## Patch releases
 
-### v4.2.1
+### v2.3.1
 
-- Fix text selection flakiness when clicking into text shapes. ([#3643](https://github.com/tldraw/tldraw/pull/3643))
+- Fix a crash when the config file is empty. ([#190](https://github.com/example/app/pull/190))
 
-[View release on GitHub](https://github.com/tldraw/tldraw/releases/tag/v4.2.1)
+[View release on GitHub](https://github.com/example/app/releases/tag/v2.3.1)
 
-### v4.2.2
+### v2.3.2
 
-- Fix arrow binding when target shape is rotated. ([#3650](https://github.com/tldraw/tldraw/pull/3650))
+- Fix retries ignoring the timeout setting. ([#195](https://github.com/example/app/pull/195))
 
-[View release on GitHub](https://github.com/tldraw/tldraw/releases/tag/v4.2.2)
+[View release on GitHub](https://github.com/example/app/releases/tag/v2.3.2)
 ```
 
 ### Horizontal rules
 
-Use `---` only before the `## Patch releases` section. Do not use horizontal rules elsewhere.
+The only place for `---` is directly before `## Patch releases`.
 
 ### Headings
 
-Use sentence case: "API changes" not "API Changes", "Bug fixes" not "Bug Fixes".
+Use sentence case: "API changes", not "API Changes".
 
 ### Frontmatter
 
 ```yaml
 ---
-title: 'v4.3.0'
-created_at: 12/19/2024
-updated_at: 12/19/2024
+title: 'v2.4.0'
+created_at: 03/14/2025
+updated_at: 03/14/2025
 keywords:
   - changelog
   - release
-  - v4.3
-  - v4.3.0
-  - v4.3.1
-  - feature-keyword
+  - v2.4
+  - v2.4.0
+  - v2.4.1
+  - topic-keyword
 ---
 ```
 
-- Dates in MM/DD/YYYY format
-- Always include `changelog` and `release` as keywords
-- Include the minor version without patch (e.g., `v4.3`), the `.0` release, and all patch versions
-- Add 2-5 content-relevant keywords (lowercase, hyphens for multi-word)
+- Write dates as MM/DD/YYYY.
+- Always list `changelog` and `release` as keywords.
+- Add the minor version without a patch number (`v2.4`), the `.0` release, and every patch version.
+- Then add two to five keywords about the content, in lowercase with hyphens between words.

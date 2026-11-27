@@ -47,5 +47,5 @@
   "schema_version": 1,
   "skill": "typescript-coding-standards",
   "stop_when": "applicable references are read and applied to the changed behavior",
-  "provenance": "Derived from github.com/dmmulroy/.dotfiles home/.agents/skills/coding-standards at 574e1f2; locally adapted to extract shared engineering policy into coding-standards while retaining TypeScript and Effect additions"
+  "provenance": "Originally inspired by github.com/dmmulroy/.dotfiles; the guidance has since been rewritten in original wording, with shared engineering policy kept in coding-standards"
 }

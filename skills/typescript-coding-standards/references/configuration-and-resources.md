@@ -1,9 +1,9 @@
 # TypeScript configuration and resources
 
-Apply [shared configuration and resources](../../coding-standards/references/configuration-and-resources.md). Keep `process.env` and platform bindings at startup/composition, not scattered through services. Use typed configuration with [redacted secrets](sensitive-data-and-observability.md).
+The [shared configuration and resources guidance](../../coding-standards/references/configuration-and-resources.md) applies. Confine `process.env` and platform bindings to startup or the composition root; services should receive typed settings. Secrets use [redacted wrappers](sensitive-data-and-observability.md).
 
 ```ts
-type AppConfig = { readonly databaseUrl: Url; readonly apiToken: Redacted<string> };
+type Settings = { readonly dbUrl: Url; readonly signingKey: Redacted<string> };
 ```
 
-For Effect configuration, resources, time, or randomness, load [Effect](effect.md) and every matching branch. Managed Layers/scopes own acquisition and release. Plain TypeScript uses explicit constructor capabilities and resource owners; security/consequential randomness uses Web Crypto or runtime-equivalent crypto, not `Math.random()`.
+In Effect code, load the [Effect entry point](effect.md) and every branch that matches the work; managed layers and scopes handle acquiring and releasing resources. In plain TypeScript, pass capabilities through constructors and give each resource an explicit owner. For anything security-related or consequential, draw randomness from Web Crypto or the runtime's crypto equivalent, never `Math.random()`.

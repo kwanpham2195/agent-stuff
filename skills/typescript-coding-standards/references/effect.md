@@ -1,31 +1,29 @@
 # Effect
 
-These defaults target Effect v4.
+Read this before touching Effect code, then open whichever of the files indexed at the end apply to your change.
 
-## Source rule
+## Defaults
 
-Inspect the project's pinned `effect` package version and source before selecting APIs. Prefer vendored or pinned examples over remembered APIs. Consult current upstream source only when the pinned package does not answer the question.
+1. Sequence work with `Effect.gen`, and label service operations with `Effect.fn`, matching the surrounding code.
+2. Deal with expected failures from the typed error channel at the closest place that can respond meaningfully. Defects and interruption pass through untouched.
+3. Wrap Promise-based and platform calls once, in the module that owns that dependency, so business logic stays in Effect.
 
-## Branch chooser
+If you depart from one of these, say why.
 
-Read every branch that matches the changed behavior:
+## Trust the installed version
 
-- Data models, schemas, brands, variants, optional keys, or decoders: [`effect-schema-and-data.md`](effect-schema-and-data.md).
-- Services, module surfaces, Layers, runtime wiring, `Effect.fn`, or test services: [`effect-services.md`](effect-services.md).
-- Alchemy Workers, Durable Objects, Workflows, bindings, or two-phase Effectful Constructors: [`effect-alchemy.md`](effect-alchemy.md).
-- Runtime config, environment variables, `ConfigProvider`, or `layerConfig`: [`effect-configuration.md`](effect-configuration.md).
-- Retry, repeat, polling, backoff, jitter, rate limits, timeouts, or pass loops: [`effect-scheduling-and-retry.md`](effect-scheduling-and-retry.md).
-- Memoization, TTL caches, concurrent lookup deduplication, or request batching: [`effect-caching.md`](effect-caching.md).
-- Streams, event sources, async iterables, queues, pubsubs, pagination, backpressure, or stream consumers: [`effect-streams.md`](effect-streams.md).
-- Outgoing HTTP, Effect `HttpClient`, status handling, or HTTP rate limiting: [`effect-http-clients.md`](effect-http-clients.md).
-- Effect tests, time, sleeps, concurrency synchronization, fakes, or test Layers: [`effect-testing.md`](effect-testing.md).
+Effect renames and relocates APIs between releases, and some modules are flagged unstable. Snippets in these notes illustrate a pattern, not guaranteed spellings. Before relying on any function, locate it in the project's installed `effect` package and check its signature there.
 
-## Cross-cutting defaults
+## Index
 
-- Compose workflows with `Effect.gen(function* () { ... })` and the project's established `Effect.fn` patterns.
-- Recover from the typed error channel at the narrowest boundary with a truthful response; preserve defects and interruption.
-- Use native Effect workflows. Isolate unavoidable Promise or platform APIs in their owning Adapter.
-
-## Completion check
-
-Every matching branch has been read, every chosen Effect API has been verified in the pinned package source, and every cross-cutting default has been checked against each changed Effect path. Report any exception with concrete evidence.
+| File | Open it when you are... |
+| --- | --- |
+| [effect-schema-and-data.md](effect-schema-and-data.md) | defining models, brands, unions, or decoders |
+| [effect-services.md](effect-services.md) | defining services or layers, or wiring an app |
+| [effect-testing.md](effect-testing.md) | testing anything involving time, fibers, or fakes |
+| [effect-streams.md](effect-streams.md) | handling event feeds, queues, or paginated data |
+| [effect-http-clients.md](effect-http-clients.md) | calling a remote HTTP API |
+| [effect-scheduling-and-retry.md](effect-scheduling-and-retry.md) | retrying, polling, backing off, or timing out |
+| [effect-configuration.md](effect-configuration.md) | reading settings or secrets |
+| [effect-caching.md](effect-caching.md) | memoizing, expiring, deduplicating, or batching lookups |
+| [effect-alchemy.md](effect-alchemy.md) | composing Alchemy infrastructure with runtime code |

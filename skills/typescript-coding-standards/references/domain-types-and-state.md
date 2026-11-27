@@ -1,31 +1,39 @@
 # TypeScript domain types and state
 
-Apply [shared domain policy](../../coding-standards/references/domain-types-and-state.md).
+Apply the [shared domain policy](../../coding-standards/references/domain-types-and-state.md).
 
-Use brands/refined types for domain IDs, mixable units, and constrained scalars. Prefer the owning schema's branding/refinement over handwritten casts. Keep ordinary display strings and counters primitive.
+## Branded and refined types
+
+Give brands or refined types to domain identifiers, quantities that could be mixed up (such as units), and constrained scalars. When the owning schema library can brand or refine, let it do so rather than casting by hand. Ordinary display text and plain counters stay primitive.
 
 ```ts
-function parseUserId(input: string): Result<UserId, InvalidUserId> {
-  if (!isCanonicalUserId(input)) return err(new InvalidUserId(input));
-  // SAFETY: the parser established the invariant; TypeScript cannot express the brand.
-  return ok(input as UserId);
+function parseOrderId(input: string): Result<OrderId, InvalidOrderId> {
+  if (!looksLikeOrderId(input)) return err(new InvalidOrderId(input));
+  // SAFETY: the check above establishes the invariant the brand stands for.
+  return ok(input as OrderId);
 }
-// Avoid: const id = body.userId as UserId;
+// Never: const id = request.orderId as OrderId;
 ```
 
-A value class is immutable, constructs through private constructors plus parsers/smart constructors, and owns only pure value behavior. Do not put database reservation or hidden dependencies on a value object.
+## Inputs and options
 
-Use `Partial<T>` only for actual domain partiality, not convenient command inputs. Keep primary input positional; add a named options object for earned policies, such as `createUser(input, { emailVerification: "skip" })`. Predicates such as `isExpired(token): boolean` remain appropriate.
+`Partial<T>` expresses real partiality in the domain, not a shortcut for command arguments. Keep the primary input positional and add a named options object for deliberate policy knobs, for example `placeOrder(draft, { notify: false })`. Boolean predicates such as `isOverdue(invoice)` are fine.
 
-Prefer string-literal/discriminated unions over TypeScript `enum`; numeric enums require external interop. Use `_tag` unless another discriminant is actual domain vocabulary.
+## Variants
+
+Prefer string-literal or discriminated unions over TypeScript `enum`s; numeric enums are only for external interoperability. Use `_tag` as the discriminant unless another field is already domain vocabulary. Model lifecycle stages as separate variants, so impossible combinations cannot be represented:
 
 ```ts
-type Invoice =
-  | { readonly _tag: "Draft"; readonly id: InvoiceId; readonly lines: NonEmptyArray<LineItem> }
-  | { readonly _tag: "Sent"; readonly id: InvoiceId; readonly sentAt: Instant }
-  | { readonly _tag: "Paid"; readonly id: InvoiceId; readonly paidAt: Instant };
-// Avoid: { isSent: boolean; isPaid: boolean; sentAt?: Date; paidAt?: Date }
-function markPaid(invoice: SentInvoice, paidAt: Instant): PaidInvoice;
+type Shipment =
+  | { readonly _tag: "Pending"; readonly id: ShipmentId; readonly parcels: NonEmptyArray<Parcel> }
+  | { readonly _tag: "InTransit"; readonly id: ShipmentId; readonly departedAt: Instant }
+  | { readonly _tag: "Delivered"; readonly id: ShipmentId; readonly deliveredAt: Instant };
+// Not: { inTransit: boolean; delivered: boolean; departedAt?: Date; deliveredAt?: Date }
+function markDelivered(shipment: InTransitShipment, at: Instant): DeliveredShipment;
 ```
 
-Prefer `switch` for three or more closed variants. Use the established exhaustive `never` helper described in [errors](errors.md); do not swallow new variants in a default. External open protocols instead need the shared tested fallback policy. In Effect, intentional absence may use `Option`.
+Use `switch` for three or more closed variants, finishing with the `never` helper described in the [error guide](errors.md) so a new variant is a compile error and is not swallowed by `default`. Open external protocols need the shared, tested fallback policy instead. Within Effect, `Option` may represent deliberate absence.
+
+## Value classes
+
+An immutable value class has a private constructor, is created through parsers or smart constructors, and contains only pure behavior on the value. It must not reserve rows in a database or hide dependencies.

@@ -19,6 +19,6 @@ await mapConcurrentBounded(users, { concurrency: emailProviderConcurrency }, sen
 
 Detached work uses a runtime/project owner such as `ctx.waitUntil` or `runDetached`, with rejection handling and observability. Cloudflare/Alchemy durable workflows and two-phase runtime composition follow [Effect Alchemy](effect-alchemy.md).
 
-## Uncertain outcomes and compensation
+## When the outcome is unknown
 
 The [shared uncertainty contract](../../coding-standards/references/workflows-transactions-and-idempotency.md#uncertain-outcomes-and-compensation) owns timeout/lost-response semantics and durable compensation evidence. A rejected Promise after a remote mutation does not prove rollback.

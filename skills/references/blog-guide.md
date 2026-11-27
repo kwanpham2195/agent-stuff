@@ -1,189 +1,191 @@
 # Blog style guide
 
-This document defines general rules and conventions for technical blog posts.
+Rules for technical blog posts: short engineering write-ups about a problem the team solved.
 
-**Prerequisite**: Apply [Writing reviewable artifacts](writing.md) for shared writing standards. This guide adds blog-specific patterns.
+**Prerequisite**: Read [Writing reviewable artifacts](writing.md) first. It sets the shared writing standards. This guide adds what is specific to blog posts.
 
-## What technical blog posts are
+## What makes a post worth writing
 
-Technical blog posts are short articles about how we solved interesting problems. They need to be _interesting_ as well as informative—if the content isn't interesting or can't be made interesting, there's no point in writing it.
+A post has to earn its reader's time. If you cannot find an angle that makes the material interesting, do not write it up.
 
-A technical blog post can be interesting for a number of reasons:
+Good posts usually have at least one of these angles:
 
-- It may describe a journey from discovery, investigation, and solution
-- The problem area it describes may be hard, unintuitive, or notorious
-- It reveals something curious about the implementation of a common feature
-- It describes iteration and design decisions behind a feature
+- A story with a beginning: something surprising turned up, we investigated, and we found a fix.
+- A problem that is hard, counterintuitive, or known for causing trouble.
+- A look inside a feature that most people use without thinking about how it works.
+- The design choices and failed attempts that led to the current behavior.
 
-The best content combines many of these reasons into a single article.
+The strongest posts combine several angles.
 
-An evergreen approach is to root the technical article in some anecdotal context. These problems don't just emerge from nowhere—they come from details, behaviors, conventions, or general "what feels right" expectations within the relevant product or technical domain. The real problem is how to write the code and convince the computer to do the thing that makes the experience feel right. Often times, that work is unintuitive and interesting in that it reveals something about the interaction or about the technologies involved.
+Anchor the post in something a user or developer has actually experienced. Problems rarely appear out of nowhere. They start with an expectation about how a product should behave, a convention, or a plain sense that something feels off. The engineering story is how we got the software to match that expectation, and the details along the way are usually what readers remember.
 
-## Opening pattern
+## Opening
 
-Technical blog posts start by **framing the problem**—a sentence or two that tells the reader what this is about and why it's interesting before diving in.
+Start by framing the problem in a sentence or two. Tell the reader what the post is about and why it matters before you explain anything.
 
-**Example opening:**
+Do three things in the opening:
 
-> The tldraw SDK is all about making the little details work. If you've ever used dashed lines in tldraw, you might have noticed that the dashes always line up with the corners of your shape, the handles of a spline, or the start and end of an arrow. While this might seem like the obvious way that dashes _should_ work, you might be surprised to learn that SVG offers no such feature. We implement these perfect dashes entirely ourselves.
->
-> Here's how it works.
+1. Set the context: what feature or system this is about.
+2. Name the tension: what did not work, or what expectation was not met.
+3. Show the stakes: why the reader should keep going.
 
-The opening establishes context (what we're talking about), tension (there's a problem or unmet expectation), and stakes (why you should care) before getting into the solution.
+An opening for a post about progress bars in a command-line tool:
 
-### Concrete vs abstract tension
+> Every package manager prints a progress bar, and every one of them flickers when a download finishes. Fixing that in our CLI turned out to be a lot harder than redrawing a line. This post covers what the terminal gives you, what it does not, and how we got a stable display anyway.
 
-The tension needs to be concrete and specific, not an abstract problem statement.
+### Make the tension concrete
 
-**Too abstract:**
+A concrete tension names one thing that fails, one surprising limit, or one unexpected behavior. An abstract tension only names a category of difficulty.
 
-> How do you render ephemeral, performant drawing feedback that needs to behave differently depending on the tool?
+Abstract:
 
-**Concrete:**
+> Rendering live status output that stays correct across many terminal types is a hard problem.
 
-> SVG's `stroke-dasharray` doesn't give you complete dashes at both ends. We had to calculate them ourselves.
+Concrete:
 
-Abstract tension describes a category of problem. Concrete tension names a specific thing that doesn't work, a surprising limitation, or an unexpected behavior. Concrete tension makes the reader think "oh, I didn't know that" or "huh, I've never thought about that."
+> Terminals have no way to tell you how many lines you wrote, so when output wraps, the cursor ends up in the wrong place.
 
-### Example openings
+The concrete version makes a reader think "I never knew that." The abstract version makes them skim.
 
-**Too abrupt:**
+### Three openings compared
 
-> Tldraw calculates dash patterns that fit paths exactly. Complete dashes at both ends, even spacing throughout.
+Too abrupt, because it states the result without any reason to care:
 
-**Better (starts with our experience):**
+> Our CLI computes the redraw region from wrapped line counts and rewrites it in one write.
 
-> When we added dashed lines to tldraw, we wanted them to look right—complete dashes at both ends, even spacing, corners that line up on rectangles. SVG's `stroke-dasharray` doesn't do this.
+Better, because it starts from what we wanted:
 
-**Also good (frames the problem):**
+> We wanted the install command to show one steady progress display. Terminals redraw lines in place, but they do not report how far text has wrapped, so our first version left stray lines behind.
 
-> Arrow routing sounds simple until you try it. Given two shapes, draw a line between them that doesn't pass through anything else. We spent a while getting this right.
+Also good, because it frames a problem the reader already knows:
+
+> Retrying a failed request sounds easy: wait, then try again. Then you have ten thousand clients that all wait the same amount of time. We hit exactly that.
 
 ## Structure
 
-Technical blog posts typically follow this arc:
+Most posts follow this arc:
 
-1. **Frame the problem** — What's this about? What problem did we encounter and solve? Why was it hard, unintuitive, or interesting?
-2. **Show the insight** — What's the key idea that makes the solution work?
-3. **Walk through the implementation** — Code and explanation, building up complexity
-4. **Wrap up** — Where this lives in the codebase, tradeoffs, links to files. Also unexplored areas, more we could do, or related problems.
+1. **Frame the problem.** What did we run into, and why was it hard or interesting?
+2. **Give the key insight.** Name the one idea that makes the solution work.
+3. **Walk through the implementation.** Mix code and explanation. Add complexity in steps.
+4. **Close.** Say where the code lives, what the trade-offs are, and what is left undone or worth exploring next.
 
-Wrap-ups can end with an opinion ("that's worth the complexity") but avoid promotional language. Don't summarize with adjective lists like "fast, flexible, and powerful" or "performant but smooth"—these read like marketing copy.
+You may end with an opinion, for example "we think the extra code is worth it." Do not end with promotional language. A closing line like "fast, flexible, and powerful" reads as marketing copy, so leave it out.
 
 ## Tone
 
-Technical blog posts have warmth and personality. They:
+A blog post has a voice. Write it like an engineer explaining a problem to a colleague.
 
-- Use phrases like "the trick is..." or "the insight is..." to signal key ideas
-- Include brief asides about why something is hard or interesting
-- Show the journey, not just the destination ("we tried X, but Y worked better")
-- End with opinions ("that's worth the tradeoff")
-- Use "we" narratively throughout
+Do:
 
-They still shouldn't:
+- Flag the important idea with a phrase such as "the trick is" or "the key observation is".
+- Add a short aside when it explains why something is hard.
+- Show the path, including the attempts that failed ("we tried X, then found Y worked better").
+- Give an honest opinion about the trade-off.
+- Write "we" throughout, as one team telling its own story.
 
-- Ramble or over-explain
-- Use hollow importance claims ("this is crucial for...")
-- Get too casual or jokey
-- Overdo the storytelling at the expense of the technical content
+Do not:
 
-## Describe what we did, not what to do
+- Ramble or explain the same point twice.
+- Claim that something is important without showing why.
+- Joke so much that the technical content gets lost.
+- Let the story crowd out the engineering.
 
-Technical blog posts explain how a team or project solved a problem. Frame solutions as "here's what we do" rather than prescriptive instructions.
+## Say what we did, not what you should do
 
-**Don't:**
+A post describes how this team solved a problem. It is not a how-to. Write "we do this" instead of instructing the reader.
 
-> The solution: don't decide immediately. Watch what the fingers do, then commit once the pattern is clear.
+Instructional (avoid):
 
-> Instead of guessing, implement a state machine that starts undecided.
+> Don't retry immediately. Wait a random amount of time, then retry.
 
-**Do:**
+> Use a queue so that jobs never block the request.
 
-> Since we don't have enough information to know either way, we defer the decision. The gesture handler watches what the pointers do, then commits once we know enough to recognize the interaction pattern.
+Descriptive (prefer):
 
-> Instead of guessing, we use a state machine that starts undecided and resolves as more information comes in.
+> We did not want every client to retry at once, so each client waits a random delay before its next attempt.
 
-The reader learns from seeing our approach, not from being told what to do.
+> Jobs go into a queue, which keeps slow work out of the request path.
 
-## Code in technical blog posts
+Readers learn more from watching a decision unfold than from being given a command.
 
-Code examples illustrate our solution and build understanding. They show how we approached the problem, not just the final answer.
+## Code
 
-### Show progression
+Use code to show how we reached the solution, not just the final version.
 
-Build up complexity to reveal the insight:
+### Show the steps
+
+Start with the simple version, explain where it breaks, then show what ships.
 
 ```ts
-// First attempt: simple but wrong
-function getDashOffset(length: number, dashSize: number) {
- return length % dashSize
+// First attempt: fixed delay
+function retryDelay(attempt: number) {
+	return 1000
 }
 ```
 
-Then explain why that doesn't work, and show what we actually do:
+Then explain the failure: every client retries on the same schedule, so they all hit the server together.
 
 ```ts
-// What we actually do: account for both ends
-function getDashOffset(length: number, dashSize: number, gapSize: number) {
- const dashCount = Math.ceil(length / (dashSize + gapSize))
- const totalDashLength = dashCount * dashSize
- const totalGapLength = (dashCount - 1) * gapSize
- return (length - totalDashLength - totalGapLength) / 2
+// What we ship: exponential backoff with jitter
+function retryDelay(attempt: number) {
+	const base = Math.min(1000 * 2 ** attempt, 30_000)
+	return base / 2 + Math.random() * (base / 2)
 }
 ```
 
-### Link to the actual code
+### Link to the real code
 
-End with links to where this lives in the codebase:
+Finish by pointing to where the code lives in the repository, with a link readers can open:
 
-> You can find this implementation in [`packages/editor/src/lib/utils/dashes.ts`](https://github.com/tldraw/tldraw/blob/main/packages/editor/src/lib/utils/dashes.ts).
+> The full implementation is in [`src/net/retry.ts`](https://example.com/org/repo/blob/main/src/net/retry.ts).
 
-## Length and depth
+## Length
 
-Technical blog posts should be:
+A good post is:
 
-- **Long enough** to fully explain the problem and solution
-- **Short enough** to read in one sitting (5-10 minutes)
-- **Deep enough** to be interesting to developers who've faced similar problems
-- **Accessible enough** that someone unfamiliar with the project can follow along
+- Long enough to explain both the problem and the solution.
+- Short enough to read in one sitting, about 5 to 10 minutes.
+- Deep enough that a developer who has hit the same problem learns something.
+- Clear enough that someone who has never used the project can follow it.
 
-A typical technical blog post is 800-1500 words, but length should follow from the complexity of the topic.
+Most posts run 800 to 1500 words. Let the complexity of the topic decide.
 
-## Topics that make good technical blog posts
+## Choosing topics
 
-Good technical blog post topics share these traits:
+Look for subjects with these traits:
 
-- **Unintuitive solutions** — The obvious approach didn't work, so we had to think differently
-- **Hidden complexity** — Something that looks simple has interesting depth
-- **Canvas-specific problems** — Challenges unique to building visual, interactive software
-- **Platform/browser quirks** — Working around limitations in SVG, Canvas, browsers
-- **Performance insights** — How we made something fast (with measurements)
+- **A counterintuitive fix.** The obvious approach failed, so we had to rethink it.
+- **Hidden depth.** Something that looks simple turned out to be intricate.
+- **Domain-specific constraints.** Problems that come from the kind of software we build.
+- **Platform and browser quirks.** Workarounds for limits in the runtime or platform.
+- **Measured performance work.** How we made something faster, with numbers.
 
-### Examples of good topics
+### Example topics
 
-- How we calculate perfect dash patterns for arbitrary paths
-- Why arrow routing is harder than it looks
-- How we detect whether a pinch gesture is zoom or rotate
-- Making text editing feel right on an infinite canvas
-- How we handle undo/redo across multiplayer sessions
+- How we keep a progress bar stable when terminal output wraps
+- Why retry logic is harder than a loop and a sleep
+- How we detect whether a file change came from the user or from a sync
+- Making keyboard shortcuts work across different keyboard layouts
+- How we merge edits from two offline clients
 
-### Topics that aren't technical blog posts
+### What does not belong in a post
 
-- Feature announcements (better as release notes or marketing content)
-- Tutorials teaching how to use the SDK (better as docs)
-- General programming wisdom unconnected to the project or its users
-- Internal refactoring without user-facing interest
+- Feature announcements. Use release notes or marketing material.
+- Tutorials on using the product. Use the docs.
+- General programming advice with no link to the project or its users.
+- Internal refactors that no outside reader would care about.
 
-## Evaluation checklist
+## Review checklist
 
-When reviewing a technical blog post, check:
+Check a draft against these questions:
 
-- [ ] **Opening** — Does it frame a problem before diving into solution?
-- [ ] **Insight** — Is there a clear "aha" moment or key idea?
-- [ ] **Specificity** — Is this grounded in the project's actual implementation?
-- [ ] **Code** — Do examples build understanding, not just show syntax?
-- [ ] **Tone** — Warm and personal, but not rambling?
-- [ ] **Links** — Points to actual code in the repo?
-- [ ] **Length** — Appropriate depth for the topic?
+- [ ] **Opening.** Does it frame a problem before it explains the solution?
+- [ ] **Insight.** Can the reader point to the key idea?
+- [ ] **Specificity.** Is it grounded in how this project actually works?
+- [ ] **Code.** Does it build understanding instead of only showing syntax?
+- [ ] **Tone.** Personal and warm without rambling?
+- [ ] **Links.** Does it point to real code in the repository?
+- [ ] **Length.** Is the depth right for the topic?
 
-For voice and clarity, use the [Writing reviewable artifacts](writing.md) clarity rules.
+For voice and clarity, also apply the clarity rules in [Writing reviewable artifacts](writing.md).

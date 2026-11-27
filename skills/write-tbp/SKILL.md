@@ -3,56 +3,64 @@ name: write-tbp
 description: Write technical blog posts explaining how a project solves a problem through its implementation.
 ---
 
-# Write technical blog post
+# Writing a technical blog post
 
-## Process
+## Steps
 
-### 1. Create the workspace
+### 1. Set up a folder for the topic
 
-Create an assets folder for this topic in the target project workspace, not in the installed skill directory:
+Make the folder in the workspace of the project you are writing about. Do not put it inside the installed skill directory.
 
 ```
 assets/<topic>/
-├── research.md   # Gathered context and notes
-└── draft.md      # The blog post draft
+├── research.md   # what you found while researching
+└── draft.md      # the post itself
 ```
 
-Use a short, kebab-case name for the topic (e.g., `cache-invalidation`, `query-planning`, `dash-patterns`).
+Name the topic with a short kebab-case slug, such as `job-retries`, `index-rebuilds`, or `log-rotation`.
 
-### 2. Research the topic
+### 2. Research
 
-Delegate thorough research before drafting, using [delegated-execution](../delegated-execution/SKILL.md) and the active harness's native exploration role and launch protocol. Supplied source does not waive this research step. If delegation is unavailable or prohibited, report the blocker rather than silently skipping it.
+Research the topic thoroughly before you write. Delegate it with [delegated-execution](../delegated-execution/SKILL.md), using the active harness's native exploration role and its launch protocol. Having source material handed to you does not excuse this step. If delegation is unavailable or forbidden, say that it blocks the work. Do not skip the research quietly.
 
-Bound the read-only brief to the topic and target codebase. Gather implementation files, types/schemas, examples/demos, documentation, behavior-revealing tests, and comments explaining decisions. Return a comprehensive source-linked summary of how the feature works, each relevant file's responsibility and key functions/classes, interesting details, non-obvious decisions, and evidence gaps for the drafting agent. Stop at unrelated areas; do not modify code or delegate further.
+Keep the brief read-only and limited to the topic and the target codebase. Ask the researcher to collect:
 
-Save the research output to the target workspace's `assets/<topic>/research.md`.
+- implementation files, types, and schemas,
+- examples and demos,
+- documentation,
+- tests that show how the code behaves,
+- comments that explain a decision.
 
-### 3. Identify the interesting angle
+The researcher returns one summary, with links to sources, covering how the feature works, what each relevant file does and which functions or classes matter, interesting details, decisions that are not obvious, and what the evidence does not cover. It should leave unrelated areas alone, change no code, and not delegate further.
 
-Before writing, answer these questions from the research:
+Save the result as `assets/<topic>/research.md` in the target workspace.
 
-- **What problem does this solve?** Not "what does it do" but "what would go wrong without it?"
-- **What's surprising or unintuitive?** The obvious approach that doesn't work, or the hidden complexity.
-- **What's the key insight?** The "aha" that makes the solution work.
-- **What did we try first?** Include a journey or iteration only when evidenced by code, comments, or other sources. Do not fabricate history.
+### 3. Find the angle
 
-If you can't find an interesting angle, the topic may not be suitable for a technical blog post.
+Read the research, then answer:
 
-### 4. Write the draft
+- **What problem does this solve?** Ask what would go wrong without it, not what it does.
+- **What is surprising?** Look for the obvious approach that fails, or for complexity that is hidden.
+- **What is the key insight?** Name the idea that makes the solution work.
+- **What did we try first?** Tell a story of attempts only if the code, comments, or other sources show it. Never invent history.
 
-Read [blog-guide](../references/blog-guide.md) and [Writing reviewable artifacts](../references/writing.md). Create `assets/<topic>/draft.md` in the target workspace using the blog-guide's structure and shared writing standards.
+If you find no interesting angle, the topic may not suit a technical blog post.
 
-Target 800-1500 words.
+### 4. Draft
 
-### 5. Self-evaluate
+Read [blog-guide](../references/blog-guide.md) and [Writing reviewable artifacts](../references/writing.md). Write `assets/<topic>/draft.md` in the target workspace, following the guide's structure and the shared writing standards.
 
-Review the draft against the blog-guide evaluation checklist and revise any gaps.
+Aim for 800 to 1500 words.
 
-### 6. Output
+### 5. Check your own draft
 
-Present the final draft to the user for review. The draft remains in the target workspace's `assets/<topic>/draft.md` until the user accepts it. Do not promote or move it before acceptance; the user can then move it to the appropriate location.
+Go through the evaluation checklist at the end of the blog guide. Revise wherever the draft falls short.
+
+### 6. Hand it over
+
+Show the finished draft to the user. It stays at `assets/<topic>/draft.md` in the target workspace until the user accepts it. Do not move or publish it first. After acceptance, the user can place it where it belongs.
 
 ## References
 
-- **Style guide**: See `../references/blog-guide.md` for voice, tone, and structure.
-- **Shared writing standards**: See [Writing reviewable artifacts](../references/writing.md).
+- **Style guide**: `../references/blog-guide.md` covers voice, tone, and structure.
+- **Shared writing standards**: [Writing reviewable artifacts](../references/writing.md).
